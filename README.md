@@ -1,1 +1,1 @@
-# CS482-Project-Triangle
+# CS482-Triangle-Project-GoFish
