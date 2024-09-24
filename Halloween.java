@@ -4,6 +4,8 @@ public class Halloween {
 
     // Silas fav Halloween Costume
     System.out.println("Silas' favorite Halloween costume of all-time is Miles Morales (Spider-Man)!\n");
+    // Marley's favorite Halloween Costume
+    System.out.println("Marley's favorite Halloween costume of all-time is Batman!!!!!\n");
 
   }
 }
