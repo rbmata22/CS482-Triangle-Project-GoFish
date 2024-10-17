@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
+import {  Dices, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, VenetianMask, LogIn, Plus } from 'lucide-react';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="app-container">
+      {/* Animated Background Aura */}
+      <div className="aura-background"></div>
+
+      {/* Main Logo Icon on Top */}
+      <div className="icon-on-top">
+        <Dices className="glowing-dice" size={160} /> {/* Adjusted size directly */}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+
+      {/* Main Title with Aura Glow */}
+      <h1 className="main-title">Bui's Bayside Inn</h1>
+
+      {/* Login Buttons with Icons */}
+      <div className="login-buttons">
+        <button className="login-btn"><LogIn size={30} /> Login</button>
+        <button className="create-btn"><Plus size={30} /> Create</button>
+        <button className="guest-btn"><VenetianMask size={30} /> Guest</button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+
+      {/* Rotating and Glowing Dice Icons Under Buttons */}
+      <div className="dice-container">
+        <Dice1 className="icon glowing-dice rotating" size={80} />
+        <Dice2 className="icon glowing-dice rotating" size={80} />
+        <Dice3 className="icon glowing-dice rotating" size={80} />
+        <Dice4 className="icon glowing-dice rotating" size={80} />
+        <Dice5 className="icon glowing-dice rotating" size={80} />
+        <Dice6 className="icon glowing-dice rotating" size={80} />
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;

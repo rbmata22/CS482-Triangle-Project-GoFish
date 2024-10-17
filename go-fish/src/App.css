@@ -1,3 +1,4 @@
+/* Root and General Layout */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -5,38 +6,137 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Aura Background - Fullscreen */
+.aura-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 1) 100%);
+  z-index: -1;
 }
 
-@keyframes logo-spin {
-  from {
+/* Main Logo Icon on Top */
+.icon-on-top {
+  margin-bottom: 3rem;
+}
+.glowing-mask {
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.7));
+  transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+}
+.glowing-mask:hover {
+  filter: drop-shadow(0 0 30px rgba(255, 255, 255, 1));
+  transform: scale(1.1);
+}
+
+/* Main Title - Smooth Glow */
+.main-title {
+  font-size: 6rem;
+  color: white;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+  margin-bottom: 2.5rem;
+  transition: text-shadow 0.3s ease-in-out;
+}
+.main-title:hover {
+  text-shadow: 0 0 30px rgba(255, 255, 255, 1);
+}
+
+/* Rotating Dice Container */
+.dice-container {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-top: 3rem;
+}
+.icon {
+  font-size: 6rem;
+}
+.glowing-dice {
+  color: white;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.rotating {
+  animation: rotate 6s linear infinite;
+}
+@keyframes rotate {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+  100% {
     transform: rotate(360deg);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Futuristic Login Buttons */
+.login-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
-.card {
-  padding: 2em;
+/* Base Styling for Buttons */
+button {
+  background-color: #222;
+  color: white;
+  border: 2px solid #444;
+  padding: 1.5rem 3rem;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
 }
 
-.read-the-docs {
-  color: #888;
+/* Button Glow Effect */
+button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+  z-index: -1;
+}
+
+/* Hover Expansion and Glow */
+button:hover::before {
+  width: 400%;
+  height: 400%;
+}
+
+button:hover {
+  background-color: #333;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.7);
+  transform: scale(1.1);
+}
+
+/* Handle Other Buttons When Hovered */
+button:not(:hover) {
+  transform: scale(0.9);
+  opacity: 0.7;
+}
+
+/* Hover Effects for Specific Buttons */
+.login-btn:hover {
+  background-color: #00ff7f;
+  box-shadow: 0 0 30px #00ff7f;
+}
+.create-btn:hover {
+  background-color: #0077ff;
+  box-shadow: 0 0 30px #0077ff;
+}
+.guest-btn:hover {
+  background-color: #ff0077;
+  box-shadow: 0 0 30px #ff0077;
 }
