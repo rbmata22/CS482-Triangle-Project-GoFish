@@ -129,8 +129,8 @@ button:not(:hover) {
 
 /* Hover Effects for Specific Buttons */
 .login-btn:hover {
-  background-color: #00ff7f;
-  box-shadow: 0 0 30px #00ff7f;
+  background-color: #00d343;
+  box-shadow: 0 0 30px #00d343;
 }
 .create-btn:hover {
   background-color: #0077ff;

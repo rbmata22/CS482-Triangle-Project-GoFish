@@ -1,0 +1,112 @@
+/* Overall Signup Container */
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;  /* Ensures full width */
+    background-color: #121212;  /* Dark background */
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  /* Title Styling */
+  .signup-title {
+    font-size: 64px;
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  
+  /* Form Styling */
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 40px;
+  }
+  
+  .signup-input {
+    padding: 15px;
+    margin: 10px 0;
+    width: 100%;
+    font-size: 18px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    transition: 0.3s;
+    background: #333;
+    color: #fff;
+  }
+  
+  .signup-input:focus {
+    box-shadow: 0 0 10px 2px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Team Selection Title */
+  .team-selection-title {
+    font-size: 28px;
+    margin: 20px 0;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  
+  /* Logo Container */
+  .logo-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 40px;
+  }
+  
+  /* Each Team Logo */
+  .team-logo {
+    display: inline-block;
+    margin: 15px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+  }
+  
+  .glowing-logo {
+    width: 90px;
+    height: auto;
+    filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.6)); /* Customize glow color */
+    transition: all 0.3s ease;
+  }
+  
+  .team-logo:hover .glowing-logo {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 25px rgba(0, 255, 255, 1)); /* Intense glow on hover */
+  }
+  
+  .selected {
+    box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.8); /* Highlight around selected logo */
+  }
+  
+  /* Button Styling */
+  .signup-button {
+    padding: 15px 30px;
+    font-size: 20px;
+    text-transform: uppercase;
+    background-color: #0a74da;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .signup-button:hover {
+    background-color: #0056a3;
+  }
+  

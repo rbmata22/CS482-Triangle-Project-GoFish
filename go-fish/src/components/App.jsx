@@ -1,7 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import './App.css';
-import {  Dices, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, VenetianMask, LogIn, Plus } from 'lucide-react';
+import { Dices, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, VenetianMask, LogIn, Plus } from 'lucide-react';
 
 function App() {
+  const navigate = useNavigate();
+
   return (
     <div className="app-container">
       {/* Animated Background Aura */}
@@ -13,13 +16,19 @@ function App() {
       </div>
 
       {/* Main Title with Aura Glow */}
-      <h1 className="main-title">Bui's Bayside Inn</h1>
+      <h1 className="main-title">Bui&apos;s Bayside Inn</h1>
 
       {/* Login Buttons with Icons */}
       <div className="login-buttons">
-        <button className="login-btn"><LogIn size={30} /> Login</button>
-        <button className="create-btn"><Plus size={30} /> Create</button>
-        <button className="guest-btn"><VenetianMask size={30} /> Guest</button>
+        <button className="login-btn" onClick={() => navigate('/login')}>
+          <LogIn size={30} /> Login
+        </button>
+        <button className="create-btn" onClick={() => navigate('/signup')}>
+          <Plus size={30} /> Create
+        </button>
+        <button className="guest-btn" onClick={() => navigate('/guest')}>
+          <VenetianMask size={30} /> Guest
+        </button>
       </div>
 
       {/* Rotating and Glowing Dice Icons Under Buttons */}
