@@ -8,7 +8,9 @@ import './Home.css';
 
 const Home = () => {
   const [userData, setUserData] = useState({});
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
+  const [userInput, setUserInput] = useState('');
+  const [chatLog, setChatLog] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,6 +35,17 @@ const Home = () => {
     setIsVisible(!isVisible);
   }
 
+  const handleInputChange = (event) => {
+    setUserInput(event.target.value);
+  };
+
+  const handleInputSubmit = (event) => {
+    if (event.key === 'Enter' && userInput.trim() !== '') {
+      setChatLog([...chatLog, userInput]);
+      setUserInput('');
+    }
+  };
+
   return (
     <div className="home-container">
       <div className="sidebar">
@@ -45,6 +58,7 @@ const Home = () => {
         </div>
         <div className="sidebar-options">
           <button className="sidebar-button" onClick={() => handleNavigate('/friends')}>Friends</button>
+          <button className="sidebar-button" onClick={() => handleNavigate('/messages')}>Messages</button>
           <button className="sidebar-button" onClick={() => handleNavigate('/shop')}>Shop</button>
         </div>
       </div>
@@ -65,7 +79,12 @@ const Home = () => {
           Admin Support
         </button>
         {isVisible && (
-          <Support />
+          <Support 
+            userInput={userInput}
+            onInputChange={handleInputChange}
+            onInputSubmit={handleInputSubmit}
+            chatLog={chatLog}
+          />
         )}
       </div>
     </div>
