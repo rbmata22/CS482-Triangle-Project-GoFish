@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { getDoc, doc } from 'firebase/firestore';
 import { db, auth } from '../config/firebase';
 import { Dices } from 'lucide-react';
+import Support from './Support/Support';
 import './Home.css';
 
 const Home = () => {
   const [userData, setUserData] = useState({});
+  const [isVisible, setIsVisible] = useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +28,10 @@ const Home = () => {
   const handleNavigate = (path) => {
     navigate(path);
   };
+
+  const handleSupportClick = () => {
+    setIsVisible(!isVisible);
+  }
 
   return (
     <div className="home-container">
@@ -52,6 +58,15 @@ const Home = () => {
           <button className="main-button" onClick={() => handleNavigate('/join-lobby')}>Join Lobby</button>
           <button className="main-button" onClick={() => handleNavigate('/tutorial')}>Tutorial</button>
         </div>
+      </div>
+
+      <div className="support">
+        <button className="support-button" onClick={handleSupportClick}>
+          Admin Support
+        </button>
+        {isVisible && (
+          <Support />
+        )}
       </div>
     </div>
   );
