@@ -6,6 +6,11 @@
 5. npm install firebase
 6. cd go-fish
 7. npm install lucide
-8. npm install framer-motion (trying to add this)
-9. npm install react-icons
-10. npm install react-nba-logos --legacy-peer-deps
+
+
+## If 'go-fish' file already exists
+1. cd go-fish
+2. npm install --legacy-peer-deps
+3. npm install firebase --legacy-peer-deps
+4. npm run dev
+
