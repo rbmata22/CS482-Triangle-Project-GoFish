@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc, deleteDoc } from 'firebase/firestore'; // Import deleteDoc from Firebase
 import { db, auth } from '../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign } from 'lucide-react';
 import { signOut } from 'firebase/auth';
@@ -17,10 +17,12 @@ const Home = () => {
         // Fetch guest data from local storage
         const guestUsername = localStorage.getItem('username');
         const guestLogo = localStorage.getItem('logo');
+        const guestId = localStorage.getItem('guestId'); // Fetch guest ID from local storage
         setUserData({
           username: guestUsername,
           logo: guestLogo,
-          virtualCurrency: 500, // Default for guests
+          guestId: guestId, // Store guest ID for later deletion
+          virtualCurrency: 500, // Default currency for guests
         });
       } else {
         // Fetch signed-in user data from Firestore
@@ -43,9 +45,19 @@ const Home = () => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth); // Log the user out
-      localStorage.clear(); // Clear local storage
-      navigate('/'); // Redirect to the main page
+      if (authType === 'Guest') {
+        // Delete guest document from Firestore
+        const guestId = localStorage.getItem('guestId'); // Fetch guest ID from local storage
+        if (guestId) {
+          await deleteDoc(doc(db, 'Guests', guestId)); // Delete guest document
+        }
+        localStorage.clear(); // Clear local storage for guest users
+      }
+
+      // Log the user out and navigate to the main page
+      await signOut(auth);
+      navigate('/'); // Redirect to the main page (App.jsx)
+
     } catch (error) {
       console.error('Logout failed: ', error);
     }
@@ -76,13 +88,14 @@ const Home = () => {
           {renderUserLogo()}
           <p className="username">{userData.username}</p>
           <p className="currency">
-            <BadgeDollarSign className="currency-icon" />
+            <BadgeDollarSign className="currency-icon" style={{ stroke: 'black', fill: 'green' }} />
             <span className="currency-value">{userData.virtualCurrency}</span>
           </p>
         </div>
         <div className="sidebar-options">
           <button className="sidebar-button" onClick={() => handleNavigate('/friends')}>Friends</button>
           <button className="sidebar-button" onClick={() => handleNavigate('/shop')}>Shop</button>
+          {/* Add Logout Button */}
           <button className="sidebar-button" onClick={handleLogout}>Logout</button>
         </div>
       </div>
