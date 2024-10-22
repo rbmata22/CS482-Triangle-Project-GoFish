@@ -13,7 +13,7 @@ const Guest = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Clear local storage on visiting Guest login to prevent previous user data from being retained
+    // Clear local storage when visiting Guest login to prevent previous user data from being retained
     localStorage.clear();
   }, []);
 
@@ -38,6 +38,7 @@ const Guest = () => {
 
       // Store session type and guest info in local storage
       localStorage.setItem('authType', 'Guest');
+      localStorage.setItem('guestId', guestId); // Store guest ID for deletion later
       localStorage.setItem('username', username);
       localStorage.setItem('logo', selectedLogo);
 
