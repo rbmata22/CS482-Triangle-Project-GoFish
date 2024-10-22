@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import UserChats from "../Messages/UserChats/UserChats"
+import ChatScreen from "../Messages/ChatScreen/ChatScreen"
 import './Messages.css';
 
 const Messages = () => {
     return (
-        <div className='message'>Testing</div>
-    )
+        <div className="container">
+            <UserChats/>
+            <ChatScreen/>
+        </div>
+    );
 }
 
-export default Messages
+export default Messages;

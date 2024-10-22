@@ -58,7 +58,7 @@ const Home = () => {
         </div>
         <div className="sidebar-options">
           <button className="sidebar-button" onClick={() => handleNavigate('/friends')}>Friends</button>
-          <button className="sidebar-button" onClick={() => handleNavigate('/messages')}>Messages</button>
+          <button className="sidebar-button" onClick={() => handleNavigate('/Messages')}>Messages</button>
           <button className="sidebar-button" onClick={() => handleNavigate('/shop')}>Shop</button>
         </div>
       </div>

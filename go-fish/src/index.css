@@ -86,3 +86,14 @@ body {
   background-color: #000; /* black background */
   color: white;
 }
+
+.container {
+  width: 70vw;
+  height: 80vh;
+  background-color: #75757595;
+  border-radius: 40px;
+  background-color: #333;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.7));
+  color: #fff;
+  display: flex;
+}

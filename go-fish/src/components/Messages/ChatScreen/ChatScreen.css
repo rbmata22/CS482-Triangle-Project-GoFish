@@ -1,0 +1,59 @@
+.chatscreen {
+    flex: 1;
+    border-left: 2px solid rgb(255, 255, 255);
+
+    .top {
+        padding: 20px;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 2px solid #696969;
+    }
+
+    .middle {
+        display: flex;
+        flex-direction: column;
+        height: 52vh;
+        padding: 20px;
+        flex: 1;
+        overflow-y: auto;
+        gap: 15px;
+
+        .message {
+            max-width: 80%;
+            display: flex;
+
+            .text{
+                display: flex;
+                flex: 0.5;
+                flex-direction: column;
+                gap: 5px;
+                background-color: rgb(31, 31, 31);
+            }
+        }
+
+        .own-message {
+            max-width: 50%;
+            align-self: flex-end;
+
+            .text{
+                display: flex;
+                flex: 0.5;
+                flex-direction: column;
+                gap: 5px;
+                background-color: rgb(55, 165, 120);
+            }
+        }
+    }
+
+    .bottom {
+        padding: 20px;
+        display: flex;
+        align-items: center;
+
+        .send-button {
+            width: 5vw;
+            flex: 1;
+            justify-content: center;
+        }
+    }
+}

@@ -19,7 +19,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/signup" element={<SignUp />} />
         <Route path="/guest" element={<Guest />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/messages" element={<Messages />} />
+        <Route path="/Messages" element={<Messages />} />
       </Routes>
     </Router>
   </StrictMode>
