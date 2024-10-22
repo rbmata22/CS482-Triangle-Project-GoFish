@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getDoc, doc } from 'firebase/firestore';
 import { db, auth } from '../config/firebase';
-import { Dices, BadgeDollarSign, Cat, Ghost, Dog, Bird } from 'lucide-react';
+import { Dices, Bot, Cat, Ghost, Dog, Bird } from 'lucide-react';
 import { signOut } from 'firebase/auth';  // Import signOut from Firebase
 import './Home.css';
 
@@ -49,7 +49,7 @@ const Home = () => {
       case '/mnt/data/Bird.png':
         return <Bird className="user-logo" />;
       case '/mnt/data/BadgeDollarSign.png':
-        return <BadgeDollarSign className="user-logo" />;
+        return <Bot className="user-logo" />;
       default:
         return <Dices className="user-logo" />; // Default to Dice if no logo is selected
     }
@@ -62,7 +62,7 @@ const Home = () => {
           {renderUserLogo()}
           <p className="username">{userData.username}</p>
           <p className="currency">
-            <BadgeDollarSign className="currency-icon" />
+            <Bot className="currency-icon" />
             <span className="currency-value">{userData.virtualCurrency}</span>
           </p>
         </div>

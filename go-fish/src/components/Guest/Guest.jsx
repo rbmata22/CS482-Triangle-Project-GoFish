@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { Cat, Ghost, Dog, BadgeDollarSign, Bird } from 'lucide-react';
+import { Cat, Ghost, Dog, Bot, Bird } from 'lucide-react';
 import './Guest.css';
 
 const Guest = () => {
@@ -83,8 +83,8 @@ const Guest = () => {
             <div className={`team-logo ${selectedLogo === 'Dog' ? 'selected' : ''}`} onClick={() => handleLogoClick('Dog')}>
               <Dog className="glowing-icon" />
             </div>
-            <div className={`team-logo ${selectedLogo === 'BadgeDollarSign' ? 'selected' : ''}`} onClick={() => handleLogoClick('BadgeDollarSign')}>
-              <BadgeDollarSign className="glowing-icon" />
+            <div className={`team-logo ${selectedLogo === 'Bot' ? 'selected' : ''}`} onClick={() => handleLogoClick('BadgeDollarSign')}>
+              <Bot className="glowing-icon" />
             </div>
             <div className={`team-logo ${selectedLogo === 'Bird' ? 'selected' : ''}`} onClick={() => handleLogoClick('Bird')}>
               <Bird className="glowing-icon" />
