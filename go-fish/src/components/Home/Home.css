@@ -1,99 +1,120 @@
-/* Full-screen layout */
-body, html {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #000;
-  }
-  
-  .home-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    height: 100vh;
-    color: #fff;
-  }
-  
-  /* User Info section */
-  .user-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .team-logo {
-    width: 100px;
-    height: 100px;
-  }
-  
-  .username {
-    font-size: 2rem;
-    margin-top: 10px;
-  }
-  
-  .currency {
-    font-size: 1.5rem;
-    color: #f0d90d;
-  }
-  
-  /* Main Dice Icon */
-  .main-icon {
-    margin: 20px 0;
-  }
-  
-  .main-image {
-    width: 150px;
-    height: 150px;
-  }
-  
-  /* Button container */
-  .button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-  
-  .home-button {
-    padding: 15px 30px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 10px;
-    background-color: #333;
-    color: #fff;
-    cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.2s ease;
-  }
-  
-  .home-button:hover {
-    transform: scale(1.05);
-  }
+/* General container */
+.home-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #0e0b16;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+}
 
-  .support-button {
-    padding: 15px 30px;
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    width: 125px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 10px;
-    background-color: #333;
-    color: #fff;
-    cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.2s ease;
-  }
+/* Sidebar styling */
+.sidebar {
+  width: 20vw;
+  background-color: #111;
+  padding: 2rem;
+}
 
-  .support-button:hover {
-    transform: scale(1.05);
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.team-logo {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 1rem;
+}
+
+.username {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.currency {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+}
+
+.currency-icon {
+  color: green;
+  width: 30px;
+  height: 30px;
+  margin-right: 0.5rem;
+}
+
+.currency-value {
+  color: green;
+}
+
+/* Sidebar buttons */
+.sidebar-button {
+  background-color: #1E90FF;
+  color: white;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sidebar-button:hover {
+  background-color: #00FFFF;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+}
+
+/* Main content */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.central-image {
+  margin-bottom: 2rem;
+}
+
+.central-dice {
+  width: 150px; /* Increase the size */
+  height: 150px; /* Same size for width and height */
+  color: white;
+  animation: dice-spin 2s infinite;
+}
+
+@keyframes dice-spin {
+  0% {
+    transform: rotate(0deg);
   }
-  
-  .friends-button:hover { background-color: green; }
-  .shop-button:hover { background-color: purple; }
-  .create-lobby-button:hover { background-color: blue; }
-  .join-lobby-button:hover { background-color: red; }
-  .tutorial-button:hover { background-color: orange; }
-  
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Main buttons */
+.main-options {
+  display: flex;
+  gap: 2rem;
+}
+
+.main-button {
+  background-color: #1E90FF;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.main-button:hover {
+  background-color: #00FFFF;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+}

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { LAL, MIA, GSW, NYK, BOS } from 'react-nba-logos';
+import { Cat, Ghost, Dog, BadgeDollarSign, Bird } from 'lucide-react';
 import './Signup.css';
 
 const Signup = () => {
@@ -31,10 +31,13 @@ const Signup = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Create user document in Firestore with logo stored as 3-letter symbol
-      await setDoc(doc(db, 'Users', user.uid), {
+      // Save selectedLogo image URL to Firestore
+      const logoUrl = `/mnt/data/${selectedLogo}.png`; // Use uploaded PNG files for logos
+
+      // Create user document in Firestore with logo stored as the image URL
+      await setDoc(doc(db, 'Users', res.user.uid), {
         username: username,
-        logo: selectedLogo, // Store 3-letter team code (e.g., 'LAL', 'MIA')
+        logo: logoUrl, // Store the logo URL here
         emailAccount: true,
         googleAccount: false,
         virtualCurrency: 500,
@@ -43,6 +46,10 @@ const Signup = () => {
         gamesPlayed: 0,
         gamesWon: 0,
         bets: []
+      });
+
+      await setDoc(doc(db, 'UserMessages', res.user.uid), {
+        messages: [],
       });
 
       // Navigate to the Home page after successful account creation
@@ -61,7 +68,7 @@ const Signup = () => {
       // Create Google user in Firestore
       await setDoc(doc(db, 'Users', user.uid), {
         username: user.displayName || 'GoogleUser',
-        logo: 'LAL', // Set a default logo for Google sign-in
+        logo: '/mnt/data/Cat.png', // Default logo for Google sign-in
         emailAccount: false,
         googleAccount: true,
         virtualCurrency: 500,
@@ -87,7 +94,7 @@ const Signup = () => {
     }
   };
 
-  // Define click handlers for each logo
+  // Handle logo click to set the selected logo
   const handleLogoClick = (logoCode) => {
     setSelectedLogo(logoCode);
   };
@@ -120,7 +127,7 @@ const Signup = () => {
         </>
       ) : (
         <>
-          <h2 className="team-selection-title">Enter Username and Select Team Logo</h2>
+          <h2 className="team-selection-title">Enter Username and Select Your Icon</h2>
           <input 
             type="text" 
             placeholder="Username" 
@@ -128,21 +135,21 @@ const Signup = () => {
             onChange={(e) => setUsername(e.target.value)} 
             className="signup-input"
           />
-          <div className="logo-container-horizontal">
-            <div className={`team-logo ${selectedLogo === 'LAL' ? 'selected' : ''}`} onClick={() => handleLogoClick('LAL')}>
-              <LAL className="glowing-logo" />
+          <div className="icon-container">
+            <div className={`team-logo ${selectedLogo === 'Cat' ? 'selected' : ''}`} onClick={() => handleLogoClick('Cat')}>
+              <Cat className="glowing-icon" />
             </div>
-            <div className={`team-logo ${selectedLogo === 'MIA' ? 'selected' : ''}`} onClick={() => handleLogoClick('MIA')}>
-              <MIA className="glowing-logo" />
+            <div className={`team-logo ${selectedLogo === 'Ghost' ? 'selected' : ''}`} onClick={() => handleLogoClick('Ghost')}>
+              <Ghost className="glowing-icon" />
             </div>
-            <div className={`team-logo ${selectedLogo === 'GSW' ? 'selected' : ''}`} onClick={() => handleLogoClick('GSW')}>
-              <GSW className="glowing-logo" />
+            <div className={`team-logo ${selectedLogo === 'Dog' ? 'selected' : ''}`} onClick={() => handleLogoClick('Dog')}>
+              <Dog className="glowing-icon" />
             </div>
-            <div className={`team-logo ${selectedLogo === 'NYK' ? 'selected' : ''}`} onClick={() => handleLogoClick('NYK')}>
-              <NYK className="glowing-logo" />
+            <div className={`team-logo ${selectedLogo === 'BadgeDollarSign' ? 'selected' : ''}`} onClick={() => handleLogoClick('BadgeDollarSign')}>
+              <BadgeDollarSign className="glowing-icon" />
             </div>
-            <div className={`team-logo ${selectedLogo === 'BOS' ? 'selected' : ''}`} onClick={() => handleLogoClick('BOS')}>
-              <BOS className="glowing-logo" />
+            <div className={`team-logo ${selectedLogo === 'Bird' ? 'selected' : ''}`} onClick={() => handleLogoClick('Bird')}>
+              <Bird className="glowing-icon" />
             </div>
           </div>
           <button className="signup-button" onClick={handleSignup}>Create Account</button>

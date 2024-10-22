@@ -2,30 +2,33 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { LAL, MIA, GSW, NYK, BOS } from 'react-nba-logos';
+import { Cat, Ghost, Dog, BadgeDollarSign, Bird } from 'lucide-react';
 import './Guest.css';
 
 const Guest = () => {
   const [username, setUsername] = useState('');
   const [selectedLogo, setSelectedLogo] = useState('');
+  const [step, setStep] = useState(1); // Multi-step form step
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // Handle guest account creation
   const handleGuestSignup = async (e) => {
     e.preventDefault();
 
     if (!selectedLogo || !username) {
-      setError('Please choose a logo and enter a username');
+      setError('Please choose an icon and enter a username');
       return;
     }
 
     try {
       const guestId = 'guest_' + Math.random().toString(36).substr(2, 9); // Generate a random guest ID
+      const logoUrl = `/mnt/data/${selectedLogo}.png`; // Use uploaded PNG files for logos
 
       // Create guest document in Firestore
       await setDoc(doc(db, 'Guests', guestId), {
         username: username,
-        logo: selectedLogo, // Store 3-letter team code
+        logo: logoUrl, // Store the logo URL here
         virtualCurrency: 500,
       });
 
@@ -36,41 +39,61 @@ const Guest = () => {
     }
   };
 
-  // Define click handlers for each logo
+  const handleNextStep = () => {
+    if (username) {
+      setStep(2);
+    } else {
+      setError('Please enter your username');
+    }
+  };
+
+  // Handle logo selection
   const handleLogoClick = (logoCode) => {
     setSelectedLogo(logoCode);
   };
 
   return (
     <div className="guest-container">
-      <h2 className="team-selection-title">Enter Username and Select Team Logo</h2>
-      {error && <p className="error-message">{error}</p>}
-      <input 
-        type="text" 
-        placeholder="Username" 
-        value={username} 
-        onChange={(e) => setUsername(e.target.value)} 
-        className="guest-input"
-      />
-      <div className="logo-container-horizontal">
-        <div className={`team-logo ${selectedLogo === 'LAL' ? 'selected' : ''}`} onClick={() => handleLogoClick('LAL')}>
-          <LAL className="glowing-logo" />
-        </div>
-        <div className={`team-logo ${selectedLogo === 'MIA' ? 'selected' : ''}`} onClick={() => handleLogoClick('MIA')}>
-          <MIA className="glowing-logo" />
-        </div>
-        <div className={`team-logo ${selectedLogo === 'GSW' ? 'selected' : ''}`} onClick={() => handleLogoClick('GSW')}>
-          <GSW className="glowing-logo" />
-        </div>
-        <div className={`team-logo ${selectedLogo === 'NYK' ? 'selected' : ''}`} onClick={() => handleLogoClick('NYK')}>
-          <NYK className="glowing-logo" />
-        </div>
-        <div className={`team-logo ${selectedLogo === 'BOS' ? 'selected' : ''}`} onClick={() => handleLogoClick('BOS')}>
-          <BOS className="glowing-logo" />
-        </div>
-      </div>
-      <button className="guest-button" onClick={handleGuestSignup}>Join as Guest</button>
-      <button className="back-button" onClick={() => navigate(-1)}>Back</button>
+      {step === 1 ? (
+        <>
+          <h1 className="guest-title">Join as Guest</h1>
+          {error && <p className="error-message">{error}</p>}
+          <div className="guest-form">
+            <input 
+              type="text" 
+              placeholder="Username" 
+              value={username} 
+              onChange={(e) => setUsername(e.target.value)} 
+              className="guest-input" 
+            />
+          </div>
+          <button className="guest-button" onClick={handleNextStep}>Submit</button>
+          <button className="back-button" onClick={() => navigate(-1)}>Back</button>
+        </>
+      ) : (
+        <>
+          <h2 className="icon-selection-title">Select Your Icon</h2>
+          <div className="icon-container">
+            <div className={`team-logo ${selectedLogo === 'Cat' ? 'selected' : ''}`} onClick={() => handleLogoClick('Cat')}>
+              <Cat className="glowing-icon" />
+            </div>
+            <div className={`team-logo ${selectedLogo === 'Ghost' ? 'selected' : ''}`} onClick={() => handleLogoClick('Ghost')}>
+              <Ghost className="glowing-icon" />
+            </div>
+            <div className={`team-logo ${selectedLogo === 'Dog' ? 'selected' : ''}`} onClick={() => handleLogoClick('Dog')}>
+              <Dog className="glowing-icon" />
+            </div>
+            <div className={`team-logo ${selectedLogo === 'BadgeDollarSign' ? 'selected' : ''}`} onClick={() => handleLogoClick('BadgeDollarSign')}>
+              <BadgeDollarSign className="glowing-icon" />
+            </div>
+            <div className={`team-logo ${selectedLogo === 'Bird' ? 'selected' : ''}`} onClick={() => handleLogoClick('Bird')}>
+              <Bird className="glowing-icon" />
+            </div>
+          </div>
+          <button className="guest-button" onClick={handleGuestSignup}>Join as Guest</button>
+          <button className="back-button" onClick={() => setStep(1)}>Back</button>
+        </>
+      )}
     </div>
   );
 };

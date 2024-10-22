@@ -1,7 +1,24 @@
 import { CircleUserRound } from 'lucide-react';
 import './ListChats.css';
+import { useEffect, useState } from 'react';
 
 const ListChats = () => {
+    const [messages, setMessages] = useState([]);
+
+    const {currentUser} = useUserStore();
+
+    useEffect (() => {
+        const unsub = onSnapshot(doc(db, "UserMessages", currentUser.id), (doc) => {
+            setMessages(doc.data());
+        });
+
+        return () => {
+            unsub();
+        }
+    }, [currentUser.id]);
+
+    console.log(messages);
+
     return (
         <div className='listchats'>
             <div className='user'>
