@@ -11,7 +11,7 @@ const Guest = () => {
   const [step, setStep] = useState(1); // Multi-step form step
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     // Clear local storage when visiting Guest login to prevent previous user data from being retained
     localStorage.clear();
@@ -28,11 +28,14 @@ const Guest = () => {
 
     try {
       const guestId = 'guest_' + Math.random().toString(36).substr(2, 9); // Generate a random guest ID
+      const logoUrl = `/mnt/data/${selectedLogo}.png`; // Use uploaded PNG files for logos
 
       // Save guest data to Firestore
       await setDoc(doc(db, 'Guests', guestId), {
         username: username,
+
         logo: selectedLogo, // Store the selected logo identifier
+        
         virtualCurrency: 500,
       });
 

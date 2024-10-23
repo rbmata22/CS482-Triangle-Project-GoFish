@@ -6,6 +6,7 @@ import Login from './components/Login/Login'
 import SignUp from './components/SignUp/SignUp'
 import Guest from './components/Guest/Guest'
 import Home from './components/Home/Home'
+import Messages from './components/Messages/Messages';
 import './index.css'
 
 
@@ -18,6 +19,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/signup" element={<SignUp />} />
         <Route path="/guest" element={<Guest />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/Messages" element={<Messages />} />
       </Routes>
     </Router>
   </StrictMode>
