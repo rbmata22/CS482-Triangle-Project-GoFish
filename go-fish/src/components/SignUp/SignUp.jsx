@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -44,6 +44,10 @@ const Signup = () => {
         gamesWon: 0,
       });
 
+      await setDoc(doc(db, 'UserMessages', user.uid), {
+        messages: [],
+      });
+      
       // Store session type as 'Signup' in local storage
       localStorage.setItem('authType', 'Signup');
 

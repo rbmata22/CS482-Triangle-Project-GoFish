@@ -1,0 +1,25 @@
+.headchats {
+    margin: 10px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .username {
+        display: flex;
+        align-items: center;
+    }
+
+    .newmessage {
+        display: flex;
+        margin-left: 1vh;
+        justify-content: left;
+
+        button{
+            width: 10vh;
+            flex: 1;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+        }
+    }
+}
