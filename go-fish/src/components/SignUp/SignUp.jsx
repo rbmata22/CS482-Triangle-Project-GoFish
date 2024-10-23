@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -11,9 +11,10 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [selectedLogo, setSelectedLogo] = useState('');
-  const [step, setStep] = useState(1); // Multi-step form step
+  const [step, setStep] = useState(1); // Using 2 steps for this, when you login with google
+                                      // it would bypass the username and logo credentials, this fixes that
   const [error, setError] = useState('');
-  const [isGoogleUser, setIsGoogleUser] = useState(false); // To track if it's a Google signup
+  const [isGoogleUser, setIsGoogleUser] = useState(false); // Tracks the Google Sign Ups for us
   const navigate = useNavigate();
 
   const auth = getAuth();
@@ -23,6 +24,7 @@ const Signup = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
 
+    // Prompts user to input their info for a logo and username
     if (!selectedLogo || !username) {
       setError('Please choose a logo and enter a username');
       return;
@@ -32,8 +34,8 @@ const Signup = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Save user details in Firestore
-      await setDoc(doc(db, 'Users', user.uid), {
+      // Save user details in our Firestore DB
+      await setDoc(doc(db, 'Users', user.uid), { // Our attributes per user
         username: username,
         logo: selectedLogo,
         emailAccount: true,
@@ -51,14 +53,14 @@ const Signup = () => {
       // Store session type as 'Signup' in local storage
       localStorage.setItem('authType', 'Signup');
 
-      // Navigate to the home page after successful signup
+      // Navigates to the Home/HUB after successful signup
       navigate('/home');
     } catch (error) {
       setError(error.message);
     }
   };
 
-  // Handle Google signup
+  // Handles Google signup for users that want to sign up that way
   const handleGoogleSignup = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
@@ -68,19 +70,24 @@ const Signup = () => {
       const userDoc = await getDoc(doc(db, 'Users', user.uid));
 
       if (!userDoc.exists()) {
+
         // If the user is new, they need to pick a username and logo
         setIsGoogleUser(true);
-        setStep(2); // Move to the username and logo selection step
+        setStep(2); // Move to the username and logo selection step (part 2 of our process)
+
       } else {
+
         // If the user already exists, skip to home
         navigate('/home');
       }
+
+      // Error checking
     } catch (error) {
       setError('Failed to sign up with Google: ' + error.message);
     }
   };
 
-  // Continue to the next step (username and logo selection) for non-Google users
+  // Continue to the next step (username and logo selection) for normal email users
   const handleNextStep = () => {
     if (email && password) {
       setStep(2);
@@ -90,8 +97,8 @@ const Signup = () => {
   };
 
   // Handle logo selection
-  const handleLogoClick = (logoCode) => {
-    setSelectedLogo(logoCode);
+  const handleLogoClick = (logo) => {
+    setSelectedLogo(logo);
   };
 
   // Submit the username and logo for Google users
@@ -106,7 +113,7 @@ const Signup = () => {
 
       // Store Google user details in Firestore
       await setDoc(doc(db, 'Users', user.uid), {
-        username: username,
+        username: username, // Same logic as before
         logo: selectedLogo,
         emailAccount: false,
         googleAccount: true,
@@ -142,18 +149,26 @@ const Signup = () => {
             />
             <input 
               type="password" 
-              placeholder="Password" 
+              placeholder="Password"
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
               className="signup-input" 
             />
           </div>
+
+          {/* Handles our Sign in (with normal email) Logic */}
           <button className="signup-button" onClick={handleNextStep}>Submit</button>
+
+          {/* Handles our Google Sign in Logic */}
           <button className="google-signup-button" onClick={handleGoogleSignup}>Sign Up with Google</button>
+          
+          {/* Handles our redirection back to App.jsx */}
           <button className="back-button" onClick={() => navigate(-1)}>Back</button>
         </>
       ) : (
         <>
+
+        {/* Handles our User and Logo input Logic */}
           <h2 className="team-selection-title">Enter Username and Select Your Icon</h2>
           {error && <p className="error-message">{error}</p>}
           <input 
