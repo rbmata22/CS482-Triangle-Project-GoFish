@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { Cat, Ghost, Dog, BadgeDollarSign, Bird } from 'lucide-react';
+import { Cat, Ghost, Dog, Bot, Bird } from 'lucide-react'; // Using Bot instead of Dollar Sign
 import './Signup.css';
 
 const Signup = () => {
@@ -13,12 +13,13 @@ const Signup = () => {
   const [selectedLogo, setSelectedLogo] = useState('');
   const [step, setStep] = useState(1); // Multi-step form step
   const [error, setError] = useState('');
+  const [isGoogleUser, setIsGoogleUser] = useState(false); // To track if it's a Google signup
   const navigate = useNavigate();
 
   const auth = getAuth();
   const googleProvider = new GoogleAuthProvider();
 
-  // Handle signup with email and password
+  // Handle email and password signup
   const handleSignup = async (e) => {
     e.preventDefault();
 
@@ -31,28 +32,26 @@ const Signup = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Save selectedLogo image URL to Firestore
-      const logoUrl = `/mnt/data/${selectedLogo}.png`; // Use uploaded PNG files for logos
-
-      // Create user document in Firestore with logo stored as the image URL
-      await setDoc(doc(db, 'Users', res.user.uid), {
+      // Save user details in Firestore
+      await setDoc(doc(db, 'Users', user.uid), {
         username: username,
-        logo: logoUrl, // Store the logo URL here
+        logo: selectedLogo,
         emailAccount: true,
         googleAccount: false,
         virtualCurrency: 500,
         friends: [],
-        friendRequests: [],
         gamesPlayed: 0,
         gamesWon: 0,
-        bets: []
       });
 
-      await setDoc(doc(db, 'UserMessages', res.user.uid), {
+      await setDoc(doc(db, 'UserMessages', user.uid), {
         messages: [],
       });
 
-      // Navigate to the Home page after successful account creation
+      // Store session type as 'Signup' in local storage
+      localStorage.setItem('authType', 'Signup');
+
+      // Navigate to the home page after successful signup
       navigate('/home');
     } catch (error) {
       setError(error.message);
@@ -65,27 +64,23 @@ const Signup = () => {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
 
-      // Create Google user in Firestore
-      await setDoc(doc(db, 'Users', user.uid), {
-        username: user.displayName || 'GoogleUser',
-        logo: '/mnt/data/Cat.png', // Default logo for Google sign-in
-        emailAccount: false,
-        googleAccount: true,
-        virtualCurrency: 500,
-        friends: [],
-        friendRequests: [],
-        gamesPlayed: 0,
-        gamesWon: 0,
-        bets: []
-      });
+      // Check if the user already exists in Firestore
+      const userDoc = await getDoc(doc(db, 'Users', user.uid));
 
-      // Navigate to the Home page after successful Google sign-in
-      navigate('/home');
+      if (!userDoc.exists()) {
+        // If the user is new, they need to pick a username and logo
+        setIsGoogleUser(true);
+        setStep(2); // Move to the username and logo selection step
+      } else {
+        // If the user already exists, skip to home
+        navigate('/home');
+      }
     } catch (error) {
       setError('Failed to sign up with Google: ' + error.message);
     }
   };
 
+  // Continue to the next step (username and logo selection) for non-Google users
   const handleNextStep = () => {
     if (email && password) {
       setStep(2);
@@ -94,9 +89,41 @@ const Signup = () => {
     }
   };
 
-  // Handle logo click to set the selected logo
+  // Handle logo selection
   const handleLogoClick = (logoCode) => {
     setSelectedLogo(logoCode);
+  };
+
+  // Submit the username and logo for Google users
+  const handleGoogleUsernameLogoSubmit = async () => {
+    if (!selectedLogo || !username) {
+      setError('Please choose a logo and enter a username');
+      return;
+    }
+
+    try {
+      const user = auth.currentUser;
+
+      // Store Google user details in Firestore
+      await setDoc(doc(db, 'Users', user.uid), {
+        username: username,
+        logo: selectedLogo,
+        emailAccount: false,
+        googleAccount: true,
+        virtualCurrency: 500,
+        friends: [],
+        gamesPlayed: 0,
+        gamesWon: 0,
+      });
+
+      // Store session type as 'Signup' in local storage
+      localStorage.setItem('authType', 'Signup');
+
+      // Navigate to the Home page
+      navigate('/home');
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -128,6 +155,7 @@ const Signup = () => {
       ) : (
         <>
           <h2 className="team-selection-title">Enter Username and Select Your Icon</h2>
+          {error && <p className="error-message">{error}</p>}
           <input 
             type="text" 
             placeholder="Username" 
@@ -145,14 +173,14 @@ const Signup = () => {
             <div className={`team-logo ${selectedLogo === 'Dog' ? 'selected' : ''}`} onClick={() => handleLogoClick('Dog')}>
               <Dog className="glowing-icon" />
             </div>
-            <div className={`team-logo ${selectedLogo === 'BadgeDollarSign' ? 'selected' : ''}`} onClick={() => handleLogoClick('BadgeDollarSign')}>
-              <BadgeDollarSign className="glowing-icon" />
+            <div className={`team-logo ${selectedLogo === 'Bot' ? 'selected' : ''}`} onClick={() => handleLogoClick('Bot')}>
+              <Bot className="glowing-icon" />
             </div>
             <div className={`team-logo ${selectedLogo === 'Bird' ? 'selected' : ''}`} onClick={() => handleLogoClick('Bird')}>
               <Bird className="glowing-icon" />
             </div>
           </div>
-          <button className="signup-button" onClick={handleSignup}>Create Account</button>
+          <button className="signup-button" onClick={isGoogleUser ? handleGoogleUsernameLogoSubmit : handleSignup}>Create Account</button>
           <button className="back-button" onClick={() => setStep(1)}>Back</button>
         </>
       )}

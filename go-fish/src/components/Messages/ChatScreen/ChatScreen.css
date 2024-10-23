@@ -7,6 +7,21 @@
         align-items: center;
         justify-content: space-between;
         border-bottom: 2px solid #696969;
+          
+        .back-button {
+        display: flex;
+        align-items: center;
+        background-color: #ff0000;
+        border: none;
+        cursor: pointer;
+        width: auto;
+        padding: 8px;
+        border-radius: 5px;
+        }
+        
+        .back-icon {
+        margin-right: 5px;
+        }          
     }
 
     .middle {
@@ -46,7 +61,9 @@
     }
 
     .bottom {
-        padding: 20px;
+        padding: 20px; 
+        bottom: 10vh;
+        position: relative;
         display: flex;
         align-items: center;
 

@@ -97,3 +97,10 @@ body {
   color: #fff;
   display: flex;
 }
+
+.loading {
+  padding: 50px;
+  font-size: 30px;
+  border-radius: 10px;
+  background-color: #535bf2;
+}
