@@ -28,7 +28,6 @@ const Guest = () => {
 
     try {
       const guestId = 'guest_' + Math.random().toString(36).substr(2, 9); // Generate a random guest ID
-      const logoUrl = `/mnt/data/${selectedLogo}.png`; // Use uploaded PNG files for logos
 
       // Save guest data to Firestore
       await setDoc(doc(db, 'Guests', guestId), {
