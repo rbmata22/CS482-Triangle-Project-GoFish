@@ -91,7 +91,7 @@ const Login = () => {
       const user = auth.currentUser;
 
       // Save Google user data in Firestore
-      await setDoc(doc(db, 'Users', user.uid), {
+      await getDoc(doc(db, 'Users', user.uid), {
         username: username,
         logo: selectedLogo,
         emailAccount: false,

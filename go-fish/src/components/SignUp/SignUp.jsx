@@ -47,7 +47,7 @@ const Signup = () => {
       await setDoc(doc(db, 'UserMessages', user.uid), {
         messages: [],
       });
-
+      
       // Store session type as 'Signup' in local storage
       localStorage.setItem('authType', 'Signup');
 

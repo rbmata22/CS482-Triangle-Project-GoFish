@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
@@ -11,6 +11,11 @@ const Guest = () => {
   const [step, setStep] = useState(1); // Multi-step form step
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Clear local storage when visiting Guest login to prevent previous user data from being retained
+    localStorage.clear();
+  }, []);
 
   // Handle guest account creation
   const handleGuestSignup = async (e) => {
@@ -25,12 +30,20 @@ const Guest = () => {
       const guestId = 'guest_' + Math.random().toString(36).substr(2, 9); // Generate a random guest ID
       const logoUrl = `/mnt/data/${selectedLogo}.png`; // Use uploaded PNG files for logos
 
-      // Create guest document in Firestore
+      // Save guest data to Firestore
       await setDoc(doc(db, 'Guests', guestId), {
         username: username,
-        logo: logoUrl, // Store the logo URL here
+
+        logo: selectedLogo, // Store the selected logo identifier
+        
         virtualCurrency: 500,
       });
+
+      // Store session type and guest info in local storage
+      localStorage.setItem('authType', 'Guest');
+      localStorage.setItem('guestId', guestId); // Store guest ID for deletion later
+      localStorage.setItem('username', username);
+      localStorage.setItem('logo', selectedLogo);
 
       // Navigate to the Home page after joining as a guest
       navigate('/home');
@@ -73,6 +86,7 @@ const Guest = () => {
       ) : (
         <>
           <h2 className="icon-selection-title">Select Your Icon</h2>
+          {error && <p className="error-message">{error}</p>}
           <div className="icon-container">
             <div className={`team-logo ${selectedLogo === 'Cat' ? 'selected' : ''}`} onClick={() => handleLogoClick('Cat')}>
               <Cat className="glowing-icon" />
@@ -83,7 +97,7 @@ const Guest = () => {
             <div className={`team-logo ${selectedLogo === 'Dog' ? 'selected' : ''}`} onClick={() => handleLogoClick('Dog')}>
               <Dog className="glowing-icon" />
             </div>
-            <div className={`team-logo ${selectedLogo === 'Bot' ? 'selected' : ''}`} onClick={() => handleLogoClick('BadgeDollarSign')}>
+            <div className={`team-logo ${selectedLogo === 'Bot' ? 'selected' : ''}`} onClick={() => handleLogoClick('Bot')}>
               <Bot className="glowing-icon" />
             </div>
             <div className={`team-logo ${selectedLogo === 'Bird' ? 'selected' : ''}`} onClick={() => handleLogoClick('Bird')}>
