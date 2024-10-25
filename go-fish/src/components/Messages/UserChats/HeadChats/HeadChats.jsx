@@ -5,7 +5,7 @@ import { MessageSquarePlus } from 'lucide-react';
 import AddUser from '../ListChats/AddUser/AddUser';
 import './HeadChats.css';
 
-const HeadChats = () => {
+const HeadChats = ({ onNewConversation }) => {
     const [userData, setUserData] = useState({}); // Initialize state with useState
     const [isAddUser, setIsAddUser] = useState(false);
 
@@ -30,14 +30,14 @@ const HeadChats = () => {
     return (
         <div className='headchats'>
             <div className='username'>
-                <h6>{userData.username}</h6> {/* Display username */}
+                <h6>{userData.username}</h6>
             </div>
             <div className='newmessage'>
                 <button onClick={handleAddUserClick}>
                     <MessageSquarePlus />
                 </button>
             </div>
-            {isAddUser && <AddUser />}
+            {isAddUser && <AddUser onNewConversation={onNewConversation} />}
         </div>
     );
 }

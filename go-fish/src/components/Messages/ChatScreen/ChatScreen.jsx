@@ -12,7 +12,7 @@ import { getAuth } from 'firebase/auth';
 import { db } from '../../config/firebase';
 import './ChatScreen.css';
 
-const ChatScreen = () => {
+const ChatScreen = ({ selectedConversation }) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(true);
@@ -46,11 +46,22 @@ const ChatScreen = () => {
 
     // Scroll to bottom when messages update
     useEffect(() => {
-        const messageContainer = document.querySelector('.middle');
-        if (messageContainer) {
-            messageContainer.scrollTop = messageContainer.scrollHeight;
-        }
-    }, [messages]);
+        if (!selectedConversation) return;
+
+        const conversationRef = doc(db, 'Conversations', selectedConversation);
+        const unsubscribe = onSnapshot(conversationRef, (doc) => {
+            if (doc.exists()) {
+                const data = doc.data();
+                const sortedMessages = [...(data.messages || [])].sort((a, b) => 
+                    new Date(a.timestamp) - new Date(b.timestamp)
+                );
+                setMessages(sortedMessages);
+            }
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
+    }, [selectedConversation]);
 
     const handleInputChange = (e) => {
         setNewMessage(e.target.value);
@@ -61,25 +72,21 @@ const ChatScreen = () => {
     };
 
     const handleSendMessage = async () => {
-        if (!newMessage.trim() || !auth.currentUser) return;
+        if (!newMessage.trim() || !auth.currentUser || !selectedConversation) return;
 
         try {
-            const userMessageRef = doc(db, 'UserMessages', auth.currentUser.uid);
+            const conversationRef = doc(db, 'Conversations', selectedConversation);
             
-            // Create new message object
             const newMessageObj = {
                 text: newMessage,
-                sender: "self",
-                timestamp: new Date().toISOString(),
-                userId: auth.currentUser.uid
+                sender: auth.currentUser.uid,
+                timestamp: new Date().toISOString()
             };
 
-            // Add message to Firestore array
-            await updateDoc(userMessageRef, {
+            await updateDoc(conversationRef, {
                 messages: arrayUnion(newMessageObj)
             });
 
-            // Clear input (no need to update local state as the listener will handle it)
             setNewMessage('');
         } catch (error) {
             console.error("Error sending message: ", error);

@@ -1,21 +1,38 @@
-import { CircleUserRound } from 'lucide-react';
-import './ListChats.css';
 import { useEffect, useState } from 'react';
-import { onSnapshot } from 'firebase/firestore';
-import { db } from '../../../config/firebase';
+import { CircleUserRound } from 'lucide-react';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { db, auth } from '../../../config/firebase';
+import './ListChats.css';
 
-const ListChats = () => {
-    const [addMode, setAddMode] = useState(false);
+const ListChats = ({ onSelectConversation }) => {
+    const [conversations, setConversations] = useState([]);
+
+    useEffect(() => {
+        const conversationsRef = collection(db, 'Conversations');
+        const q = query(conversationsRef, where('participants', 'array-contains', auth.currentUser.uid));
+        
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const conversationsData = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setConversations(conversationsData);
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     return (
         <div className='listchats'>
-            <div className='user'>
-                <CircleUserRound />
-                <div className='chats'>
-                    <span>UserUser123</span>
-                    <p>Hello there!</p>
+            {conversations.map(conversation => (
+                <div key={conversation.id} className='user' onClick={() => onSelectConversation(conversation.id)}>
+                    <CircleUserRound />
+                    <div className='chats'>
+                        <span>{conversation.participants.find(id => id !== auth.currentUser.uid)}</span>
+                        <p>{conversation.messages[conversation.messages.length - 1]?.text || 'No messages yet'}</p>
+                    </div>
                 </div>
-            </div>
+            ))}
         </div>
     );
 }
