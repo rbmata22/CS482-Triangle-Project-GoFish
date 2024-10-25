@@ -57,7 +57,6 @@ const Home = () => {
       // Log the user out and navigate to the main page
       await signOut(auth);
       navigate('/'); // Redirect to the main page (App.jsx)
-
     } catch (error) {
       console.error('Logout failed: ', error);
     }
@@ -94,6 +93,7 @@ const Home = () => {
         </div>
         <div className="sidebar-options">
           <button className="sidebar-button" onClick={() => handleNavigate('/friends')}>Friends</button>
+          <button className="sidebar-button" onClick={() => handleNavigate('/Messages')}>Messages</button>
           <button className="sidebar-button" onClick={() => handleNavigate('/shop')}>Shop</button>
           {/* Add Logout Button */}
           <button className="sidebar-button" onClick={handleLogout}>Logout</button>
