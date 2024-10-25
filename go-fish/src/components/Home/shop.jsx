@@ -4,6 +4,7 @@ import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useNavigate } from 'react-router-dom';
 
 const shopItems = [
     {
@@ -27,6 +28,7 @@ const Shop = () => {
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const auth = getAuth();
+    const navigate = useNavigate(); // Initialize useNavigate
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -75,6 +77,9 @@ const Shop = () => {
             setUserCurrency(newBalance);
             setSuccessMessage(`You bought it! ${item.name}!`);
             setTimeout(() => setSuccessMessage(''), 3000);
+
+            // Navigate to shape page with the selected item
+            navigate('/shape', { state: { selectedItem: item } });
 
         } catch (error) {
             setError("Something went wrong");
@@ -161,5 +166,4 @@ const Shop = () => {
         </div>
     );
 };
-
 export default Shop;
