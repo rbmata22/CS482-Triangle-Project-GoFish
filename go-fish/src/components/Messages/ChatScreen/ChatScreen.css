@@ -47,6 +47,40 @@
             }
         }
 
+        .message-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 10px;
+          }
+          
+          .message-container.sent {
+            align-items: flex-end;
+          }
+          
+          .message-bubble {
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 20px;
+            word-wrap: break-word;
+          }
+          
+          .received .message-bubble {
+            background-color: #e5e5ea;
+            color: black;
+          }
+          
+          .sent .message-bubble {
+            background-color: #0b93f6;
+            color: white;
+          }
+          
+          .message-timestamp {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 5px;
+          }
+
         .loading-messages, .no-messages {
             text-align: center;
             padding: 20px;

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, CircleUserRound, Send } from 'lucide-react';
 import { 
-    doc,
+    doc as firestoreDoc,
     getDoc,
     updateDoc,
     arrayUnion,
@@ -16,6 +16,7 @@ const ChatScreen = ({ selectedConversation }) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(true);
+    const [otherUser, setOtherUser] = useState(null);
     const navigate = useNavigate();
     const auth = getAuth();
 
@@ -24,10 +25,10 @@ const ChatScreen = ({ selectedConversation }) => {
         if (!auth.currentUser) return;
 
         // Set up real-time listener
-        const userMessageRef = doc(db, 'UserMessages', auth.currentUser.uid);
-        const unsubscribe = onSnapshot(userMessageRef, (doc) => {
-            if (doc.exists()) {
-                const data = doc.data();
+        const userMessageRef = firestoreDoc(db, 'UserMessages', auth.currentUser.uid);
+        const unsubscribe = onSnapshot(userMessageRef, (docSnapshot) => {
+            if (docSnapshot.exists()) {
+                const data = docSnapshot.data();
                 // Sort messages by timestamp
                 const sortedMessages = [...(data.messages || [])].sort((a, b) => 
                     new Date(a.timestamp) - new Date(b.timestamp)
@@ -46,12 +47,17 @@ const ChatScreen = ({ selectedConversation }) => {
 
     // Scroll to bottom when messages update
     useEffect(() => {
-        if (!selectedConversation) return;
-
-        const conversationRef = doc(db, 'Conversations', selectedConversation);
-        const unsubscribe = onSnapshot(conversationRef, (doc) => {
-            if (doc.exists()) {
-                const data = doc.data();
+        if (!selectedConversation || !auth.currentUser) return;
+    
+        const conversationRef = firestoreDoc(db, 'Conversations', selectedConversation);
+        const unsubscribe = onSnapshot(conversationRef, async (docSnapshot) => {
+            if (docSnapshot.exists()) {
+                const data = docSnapshot.data();
+                const otherUserId = data.participants.find(id => id !== auth.currentUser.uid);
+                const userDocRef = firestoreDoc(db, 'Users', otherUserId);
+                const userDocSnapshot = await getDoc(userDocRef);
+                const userData = userDocSnapshot.data();
+                setOtherUser(userData);
                 const sortedMessages = [...(data.messages || [])].sort((a, b) => 
                     new Date(a.timestamp) - new Date(b.timestamp)
                 );
@@ -59,9 +65,9 @@ const ChatScreen = ({ selectedConversation }) => {
             }
             setLoading(false);
         });
-
+    
         return () => unsubscribe();
-    }, [selectedConversation]);
+    }, [selectedConversation, auth.currentUser]);
 
     const handleInputChange = (e) => {
         setNewMessage(e.target.value);
@@ -73,20 +79,20 @@ const ChatScreen = ({ selectedConversation }) => {
 
     const handleSendMessage = async () => {
         if (!newMessage.trim() || !auth.currentUser || !selectedConversation) return;
-
+    
         try {
-            const conversationRef = doc(db, 'Conversations', selectedConversation);
+            const conversationRef = firestoreDoc(db, 'Conversations', selectedConversation);
             
             const newMessageObj = {
                 text: newMessage,
                 sender: auth.currentUser.uid,
                 timestamp: new Date().toISOString()
             };
-
+    
             await updateDoc(conversationRef, {
                 messages: arrayUnion(newMessageObj)
             });
-
+    
             setNewMessage('');
         } catch (error) {
             console.error("Error sending message: ", error);
@@ -101,7 +107,7 @@ const ChatScreen = ({ selectedConversation }) => {
                 </button>
                 <CircleUserRound />
                 <div className='usermessage'>
-                    <span>UserUser123</span>
+                    <span>{otherUser ? otherUser.username : 'Waiting for User...'}</span>
                 </div>
             </div>
             <div className='middle'>
@@ -113,13 +119,13 @@ const ChatScreen = ({ selectedConversation }) => {
                     messages.map((message, index) => (
                         <div
                             key={`${message.timestamp}-${index}`}
-                            className={message.sender === "self" ? 'own-message' : 'message'}
+                            className={`message-container ${message.sender === auth.currentUser.uid ? 'sent' : 'received'}`}
                         >
-                            <div className='text'>
-                                <p>{message.text}</p>
+                            <div className="message-bubble">
+                            <p>{message.text}</p>
                             </div>
                             <div className="message-timestamp">
-                                {new Date(message.timestamp).toLocaleTimeString()}
+                            {new Date(message.timestamp).toLocaleTimeString()}
                             </div>
                         </div>
                     ))

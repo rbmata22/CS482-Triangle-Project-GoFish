@@ -18,12 +18,17 @@ const AddUser = ({ onNewConversation }) => {
     };
 
     const createConversation = async (userId) => {
-        const conversationsRef = collection(db, 'UserMessages');
-        const newConversation = await addDoc(conversationsRef, {
-            participants: [auth.currentUser.uid, userId],
-            messages: []
-        });
-        onNewConversation(newConversation.id);
+        try {
+            const conversationsRef = collection(db, 'Conversations');
+            const newConversation = await addDoc(conversationsRef, {
+                participants: [auth.currentUser.uid, userId],
+                messages: []
+            });
+            console.log("New conversation created:", newConversation.id);
+            onNewConversation(newConversation.id);
+        } catch (error) {
+            console.error("Error creating conversation:", error);
+        }
     };
 
     return (
