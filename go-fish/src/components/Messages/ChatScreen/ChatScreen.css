@@ -27,10 +27,11 @@
     .middle {
         display: flex;
         flex-direction: column;
-        height: 52vh;
+        height: 42vh;
         padding: 20px;
         flex: 1;
         overflow-y: auto;
+        margin-bottom: 8vh;
         gap: 15px;
 
         .message {
@@ -44,6 +45,18 @@
                 gap: 5px;
                 background-color: rgb(31, 31, 31);
             }
+        }
+
+        .loading-messages, .no-messages {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        
+        .message-timestamp {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 4px;
         }
 
         .own-message {

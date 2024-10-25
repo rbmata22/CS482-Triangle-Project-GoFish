@@ -16,20 +16,6 @@ const ListChats = () => {
                     <p>Hello there!</p>
                 </div>
             </div>
-            <div className='user'>
-                <CircleUserRound />
-                <div className='chats'>
-                    <span>123UserTest</span>
-                    <p>Hey</p>
-                </div>
-            </div>
-            <div className='user'>
-                <CircleUserRound />
-                <div className='chats'>
-                    <span>Testing</span>
-                    <p>Hi how are you</p>
-                </div>
-            </div>
         </div>
     );
 }
