@@ -20,7 +20,7 @@ createRoot(document.getElementById('root')).render(
                 <Route path="/guest" element={<Guest />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/messages" element={<Messages />} />
-                <Route path="/shop" element={<Shop />} />  {/* Add this route */}
+                <Route path="/shop" element={<Shop />} />
             </Routes>
         </Router>
     </StrictMode>
