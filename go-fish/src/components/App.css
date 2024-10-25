@@ -51,10 +51,48 @@
 .icon {
   font-size: 6rem;
 }
-.glowing-dice {
-  color: white;
-  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
+/* Glowing Diamond (Blue) */
+.glowing-diamond {
+  color: rgb(16, 63, 255);
+  filter: drop-shadow(0 0 30px rgba(33, 70, 255, 0.7));
   transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.glowing-diamond:hover {
+  filter: drop-shadow(0 0 50px rgba(33, 70, 255, 1));
+}
+
+/* Glowing Heart (Red) */
+.glowing-heart {
+  color: rgb(255, 0, 0);
+  filter: drop-shadow(0 0 30px rgba(255, 0, 0, 0.7));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.glowing-heart:hover {
+  filter: drop-shadow(0 0 50px rgba(255, 0, 0, 1));
+}
+
+/* Glowing Club (Green) */
+.glowing-club {
+  color: rgb(0, 255, 0);
+  filter: drop-shadow(0 0 30px rgba(0, 255, 0, 0.7));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.glowing-club:hover {
+  filter: drop-shadow(0 0 50px rgba(0, 255, 0, 1));
+}
+
+/* Glowing Spade (Black) */
+.glowing-spade {
+  color: rgb(255, 255, 255);
+  filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.7));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.glowing-spade:hover {
+  filter: drop-shadow(0 0 50px rgba(0, 0, 0, 1));
 }
 .rotating {
   animation: rotate 6s linear infinite;
