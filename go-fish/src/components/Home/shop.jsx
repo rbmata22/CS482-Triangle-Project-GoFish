@@ -9,14 +9,14 @@ const shopItems = [
     {
         id: 1,
         name: "NBA Card Theme",
-        image: "add image here later",
+        image: "https://external-preview.redd.it/4XfJcJFWh7usKB-htKE7QdoiW2GupdFiIhqNU0X7dns.jpg?width=640&crop=smart&auto=webp&s=42be24e79f0e031252dc83454987f7f78ed2a44e",
         price: 75,
         featured: false
     },
     {
         id: 2,
         name: "SpongeBob Theme",
-        image: "add image here later",
+        image: "https://ae01.alicdn.com/kf/S92677255435745c0bc3fe8fba1a127e5Z.jpg_960x960.jpg",
         price: 250,
         featured: true
     }
