@@ -1,12 +1,12 @@
-import HeadChats from './HeadChats/HeadChats';
-import ListChats from './ListChats/ListChats';
-import './UserChats.css';
+import HeadChats from "./HeadChats/HeadChats";
+import ListChats from "./ListChats/ListChats";
+import "./UserChats.css";
 
-const UserChats = () => {
+const UserChats = ({ onSelectConversation }) => {
     return (
-        <div className='userchats'>
-            <HeadChats/>
-            <ListChats/>
+        <div className="userchats">
+            <HeadChats onNewConversation={onSelectConversation} />
+            <ListChats onSelectConversation={onSelectConversation} />
         </div>
     );
 }

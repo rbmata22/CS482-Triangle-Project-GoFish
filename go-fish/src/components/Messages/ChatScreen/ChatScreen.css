@@ -3,7 +3,7 @@
     border-left: 2px solid rgb(255, 255, 255);
 
     .top {
-        padding: 20px;
+        padding: 2vh;
         align-items: center;
         justify-content: space-between;
         border-bottom: 2px solid #696969;
@@ -11,7 +11,7 @@
         .back-button {
         display: flex;
         align-items: center;
-        background-color: #ff0000;
+        background-color: #006eff;
         border: none;
         cursor: pointer;
         width: auto;
@@ -27,37 +27,63 @@
     .middle {
         display: flex;
         flex-direction: column;
-        height: 52vh;
+        height: 42vh;
         padding: 20px;
         flex: 1;
         overflow-y: auto;
+        margin-bottom: 8vh;
         gap: 15px;
 
-        .message {
-            max-width: 80%;
+        .message-container {
             display: flex;
-
-            .text{
-                display: flex;
-                flex: 0.5;
-                flex-direction: column;
-                gap: 5px;
-                background-color: rgb(31, 31, 31);
-            }
-        }
-
-        .own-message {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 10px;
+          }
+          
+          .message-container.sent {
+            align-items: flex-end;
+          }
+          
+          .message-bubble {
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 20px;
+            word-wrap: break-word;
+          }
+          
+          .received .message-bubble {
+            max-width: 50%;
+            align-self: flex-start;
+            display: flex;
+            flex: 0.5;
+            flex-direction: column;
+            gap: 5px;
+            background-color: #6c6c6c;
+          }
+          
+          .sent .message-bubble {
             max-width: 50%;
             align-self: flex-end;
-
-            .text{
-                display: flex;
-                flex: 0.5;
-                flex-direction: column;
-                gap: 5px;
-                background-color: #50389e;
-            }
+            display: flex;
+            flex: 0.5;
+            flex-direction: column;
+            gap: 5px;
+            background-color: #50389e;
+          }
+          
+        .message-timestamp {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 0.2vh;
         }
+
+        .loading-messages, .no-messages {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
     }
 
     .bottom {
