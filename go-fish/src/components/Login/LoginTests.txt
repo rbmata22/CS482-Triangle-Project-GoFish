@@ -1,0 +1,8 @@
+Test Case 1: Logging into a Google account thats not there
+Input: "Login with Google"
+Expected Output: "Failed to log in with Google"
+
+
+Test Case 1: Logging into an account by emails thats not there
+Input: "", "", "Login"
+Expected Output: "Please enter email and password"

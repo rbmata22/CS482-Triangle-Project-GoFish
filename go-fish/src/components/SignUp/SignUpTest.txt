@@ -1,0 +1,9 @@
+Test Case 1: No Email and password
+Input: "", ""
+Expected Output: "Please enter your email and password"
+
+
+(Doesnt work yet, but planning to by Sprint 2)
+Test Case 2: Email with no @
+Input: "spongebob", "squarepants"
+Expected Output: "Invalid Email"

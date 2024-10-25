@@ -1,0 +1,9 @@
+Test 1: User doesnt input a username
+Input: ""
+Expected Output: "Please enter your username"
+
+
+
+Test 2: User inputs a username, but not a logo
+Input: "kobe24", ""
+Expected Output: "Please choose an icon and enter a username"
