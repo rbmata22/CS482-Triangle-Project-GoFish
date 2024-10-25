@@ -1,16 +1,15 @@
-/* General Global Styles */
 html, body {
   margin: 0;
   padding: 0;
   width: 100vw;
   height: 100vh;
   font-family: 'Roboto', sans-serif;
-  background-color: #0e0b16; /* Ensure consistent background color */
+  background-color: #0e0b16;
   color: white;
-  overflow: hidden; /* Prevent unwanted scrolling */
+  overflow: hidden;
 }
 
-/* General Container for Sign-up */
+/* general container for Sign up */
 .signup-container {
   display: flex;
   flex-direction: column;
@@ -22,23 +21,25 @@ html, body {
   color: white;
 }
 
+/* the big 'Signup' in middle */
 .signup-title {
-  font-size: 3.5rem; /* Increased size for better visibility */
+  font-size: 3.5rem; 
   margin-bottom: 2rem;
   color: #fff;
 }
 
+/* input boxes */
 .signup-input {
   margin-bottom: 1.5rem;
   padding: 1rem;
-  width: 400px; /* Increased width for better layout */
+  width: 400px; 
   border-radius: 10px;
   border: none;
   outline: none;
-  font-size: 1.2rem; /* Increased font size */
+  font-size: 1.2rem; 
 }
 
-/* Button Styles for Submission */
+/* Buttons */
 .signup-button, .google-signup-button, .back-button {
   padding: 1.2rem 3rem; /* More padding for larger buttons */
   margin-top: 1.2rem;
@@ -67,24 +68,32 @@ html, body {
 }
 
 .team-logo {
-  padding: 1.5rem; /* Increased padding for larger icons */
+  padding: 1.5rem; 
   border-radius: 50%;
   background-color: transparent;
   cursor: pointer;
+  font-size: 4rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+
 .team-logo:hover {
-  transform: scale(1.15); /* Slightly larger hover scaling */
+  transform: scale(1.15); 
+
 }
 
 .selected {
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+  box-shadow: 0 0 200px rgba(0, 255, 255, 0.8);
+  font-size: 4rem;
+  transform: translateY(15px); /* Slide the selected icon down */
+
 }
 
-/* Glowing Icon */
+
 .glowing-icon {
-  font-size: 5.5rem; /* Further increased the size of the icons */
+  font-size: 7rem; 
   color: white;
+  width: 50px; /* Set the desired width */
+  height: 50px; /* Set the desired height */
   transition: all 0.3s ease;
 }

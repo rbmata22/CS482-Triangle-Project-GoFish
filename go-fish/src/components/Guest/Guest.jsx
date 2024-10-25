@@ -11,7 +11,7 @@ const Guest = () => {
   const [step, setStep] = useState(1); // Multi-step form step
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     // Clear local storage when visiting Guest login to prevent previous user data from being retained
     localStorage.clear();
@@ -32,7 +32,9 @@ const Guest = () => {
       // Save guest data to Firestore
       await setDoc(doc(db, 'Guests', guestId), {
         username: username,
+
         logo: selectedLogo, // Store the selected logo identifier
+        
         virtualCurrency: 500,
       });
 

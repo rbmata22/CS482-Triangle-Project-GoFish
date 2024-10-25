@@ -1,0 +1,13 @@
+Silas - I've been to HopHacks and HackUMBC where i made web apps, so i 
+used a lot of the logic i used in those experiences as my terminology when it came to
+the creation of the App, SignUp, Login and Guest. I also created side 
+projects that handled route redirection using "react-router-dom", hence why
+I used that to handle the redirection of the pages.
+
+The results from AI was wrong 99% of the time, so i did a lot of editing/research
+on my own then sent it the code that i updated, and i would incrementally
+make process on the files based on that back and forth. For example,
+Home would incorrectly prioritize logged in users that were previously logged
+in versus someone who logs in as a guest. So i did research on my own trying
+to figure out how to handle the homepage for ANY OPTION, and removed the 
+priority of some entry points over others

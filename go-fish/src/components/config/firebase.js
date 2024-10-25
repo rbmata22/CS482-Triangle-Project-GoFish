@@ -22,4 +22,4 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider(); // For Google Sign-In
 const db = getFirestore(app);
 
-export { auth, provider, db, }; 
+export { auth, provider, db }; 
