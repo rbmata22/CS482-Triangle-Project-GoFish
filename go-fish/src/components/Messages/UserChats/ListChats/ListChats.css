@@ -6,6 +6,7 @@
     .user {
         display: flex;
         align-items: center;
+        max-width: 10vw;
         gap: 20px;
         padding: 20px;
         cursor: pointer;
