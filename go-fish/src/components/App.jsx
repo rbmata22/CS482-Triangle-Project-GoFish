@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import './App.css';
-import { Dices, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, VenetianMask, LogIn, Plus } from 'lucide-react';
+import { Dices, Diamond, Heart, Club, Spade, LogIn, Plus, VenetianMask } from 'lucide-react';
 
 function App() {
   const navigate = useNavigate();
@@ -31,14 +31,12 @@ function App() {
         </button>
       </div>
 
-      {/* Rotating and Glowing Dice Icons Under Buttons */}
+      {/* Glowing and Rotating Card Suit Icons Under Buttons */}
       <div className="dice-container">
-        <Dice1 className="icon glowing-dice rotating" size={80} />
-        <Dice2 className="icon glowing-dice rotating" size={80} />
-        <Dice3 className="icon glowing-dice rotating" size={80} />
-        <Dice4 className="icon glowing-dice rotating" size={80} />
-        <Dice5 className="icon glowing-dice rotating" size={80} />
-        <Dice6 className="icon glowing-dice rotating" size={80} />
+        <Diamond className="icon glowing-diamond rotating" size={80} />
+        <Heart className="icon glowing-heart rotating" size={80} />
+        <Club className="icon glowing-club rotating" size={80} />
+        <Spade className="icon glowing-spade rotating" size={80} />
       </div>
     </div>
   );
