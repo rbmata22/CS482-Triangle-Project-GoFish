@@ -1,0 +1,169 @@
+/* Container for the entire lobby page */
+.go-fish-lobby-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+  }
+  
+  /* Lobby title */
+  .go-fish-lobby-container h2 {
+    font-size: 2.5em;
+    margin-bottom: 1rem;
+    color: #007bff;
+  }
+  
+  /* Lobby creation section */
+  .lobby-creation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .create-lobby-btn, 
+  .join-lobby-btn {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+  }
+  
+  .create-lobby-btn:hover, 
+  .join-lobby-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .create-lobby-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+  
+  /* Input field for joining lobby */
+  .join-lobby input[type="text"] {
+    padding: 10px;
+    font-size: 1.2em;
+    border: 2px solid #ced4da;
+    border-radius: 5px;
+    margin-top: 10px;
+    width: 250px;
+  }
+  .lobby-type-selector {
+    margin-top: 10px;
+    font-size: 1.2em;
+    padding: 8px;
+    border-radius: 5px;
+    border: 2px solid #ced4da;
+    background-color: #ffffff;
+  }
+  .available-lobbies ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .available-lobbies li {
+    background-color: #f1f3f5;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .available-lobbies li span {
+    font-size: 1.1em;
+    color: #333;
+  }
+  .alert-message {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .lobby-details {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .lobby-details h3 {
+    font-size: 1.8em;
+    margin-bottom: 1rem;
+    color: #007bff;
+  }
+  
+  .lobby-details h4 {
+    font-size: 1.4em;
+    margin-bottom: 0.5rem;
+    color: #6c757d;
+  }
+  
+  .requests-list {
+    margin-top: 1rem;
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .request-item {
+    background-color: #f1f3f5;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+  }
+  
+  .start-game-btn {
+    margin-top: 20px;
+    padding: 12px 24px;
+    font-size: 1.2em;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .start-game-btn:hover {
+    background-color: #218838;
+  }
+  
+  /* Media Queries */
+  @media (max-width: 600px) {
+    .go-fish-lobby-container h2 {
+      font-size: 2em;
+    }
+  
+    .create-lobby-btn, 
+    .join-lobby-btn {
+      font-size: 1em;
+      padding: 8px 16px;
+    }
+  
+    .lobby-details h3 {
+      font-size: 1.5em;
+    }
+  
+    .lobby-details h4 {
+      font-size: 1.2em;
+    }
+  }
+  

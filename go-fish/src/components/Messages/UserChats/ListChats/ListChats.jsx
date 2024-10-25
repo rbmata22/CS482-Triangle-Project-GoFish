@@ -1,37 +1,82 @@
-import { CircleUserRound } from 'lucide-react';
-import './ListChats.css';
-import { useEffect, useState } from 'react';
-import { onSnapshot } from 'firebase/firestore';
-import { db } from '../../../config/firebase';
+import { useEffect, useState } from "react";
+import { CircleUserRound } from "lucide-react";
+import { collection, query, where, onSnapshot, getDoc, doc as firestoreDoc } from "firebase/firestore";
+import { db, auth } from "../../../config/firebase";
+import "./ListChats.css";
 
-const ListChats = () => {
-    const [addMode, setAddMode] = useState(false);
+const ListChats = ({ onSelectConversation }) => {
+    const [conversations, setConversations] = useState([]);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    // Effect to check and update authentication status
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            setIsAuthenticated(!!user);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    // Effect to fetch and listen for changes in conversations
+    useEffect(() => {
+        if (!isAuthenticated) return; // Exit if user is not authenticated
+
+        // Reference to the Conversations collection
+        const conversationsRef = collection(db, "Conversations");
+        const q = query(conversationsRef, where("participants", "array-contains", auth.currentUser.uid));
+        
+        // Set up real-time listener
+        const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+            const conversationsData = await Promise.all(querySnapshot.docs.map(async (docSnapshot) => {
+                const data = docSnapshot.data();
+                // Find the ID of the other participant and their data
+                const otherUserId = data.participants.find(id => id !== auth.currentUser.uid);
+                const userDocRef = firestoreDoc(db, "Users", otherUserId);
+                const userDocSnapshot = await getDoc(userDocRef);
+                const userData = userDocSnapshot.data();
+
+                // Return conversation data with other user's info
+                return {
+                    id: docSnapshot.id,
+                    ...data,
+                    otherUser: userData ? userData.username : "Unknown User"
+                };
+
+            }));
+
+            setConversations(conversationsData);
+        });
+
+        return () => unsubscribe();
+    }, [isAuthenticated]);
+
+    // Used for showing only the first few characters of the previous message in a conversation
+    const truncateMessage = (text, maxLength) => {
+        if (text.length <= maxLength) return text;
+        return text.substr(0, maxLength) + '...';
+    };
+
+    if (!isAuthenticated) {
+        return <div>Loading...</div>;
+    }
 
     return (
-        <div className='listchats'>
-            <div className='user'>
-                <CircleUserRound />
-                <div className='chats'>
-                    <span>UserUser123</span>
-                    <p>Hello there!</p>
+        <div className="listchats">
+            {conversations.map(conversation => (
+                <div key={conversation.id} className="user" onClick={() => onSelectConversation(conversation.id)}>
+                    <CircleUserRound />
+                    <div className="chats">
+                        <span>{conversation.otherUser}</span>
+                        <p>
+                            {conversation.messages.length > 0
+                                ? truncateMessage(conversation.messages[conversation.messages.length - 1].text, 12)
+                                : "No messages yet"}
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div className='user'>
-                <CircleUserRound />
-                <div className='chats'>
-                    <span>123UserTest</span>
-                    <p>Hey</p>
-                </div>
-            </div>
-            <div className='user'>
-                <CircleUserRound />
-                <div className='chats'>
-                    <span>Testing</span>
-                    <p>Hi how are you</p>
-                </div>
-            </div>
+            ))}
         </div>
     );
 }
 
-export default ListChats;
+export default ListChats

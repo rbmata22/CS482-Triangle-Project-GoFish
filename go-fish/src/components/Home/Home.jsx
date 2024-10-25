@@ -4,9 +4,11 @@ import { getDoc, doc, deleteDoc } from 'firebase/firestore'; // Import deleteDoc
 import { db, auth } from '../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign } from 'lucide-react';
 import { signOut } from 'firebase/auth';
+import Support from './Support/Support';
 import './Home.css';
 
 const Home = () => {
+  const [showSupport, setShowSupport] = useState(false);
   const [userData, setUserData] = useState({});
   const navigate = useNavigate();
   const authType = localStorage.getItem('authType'); // Check if user is Guest or regular user
@@ -62,6 +64,10 @@ const Home = () => {
     }
   };
 
+  const toggleSupport = () => {
+    setShowSupport(!showSupport);
+  };
+
   // Render user logo based on the stored value
   const renderUserLogo = () => {
     switch (userData.logo) {
@@ -97,6 +103,15 @@ const Home = () => {
           <button className="sidebar-button" onClick={() => handleNavigate('/shop')}>Shop</button>
           {/* Add Logout Button */}
           <button className="sidebar-button" onClick={handleLogout}>Logout</button>
+
+          <button 
+            className="support-button" 
+            onClick={toggleSupport}
+          >
+            Admin Support
+          </button>
+        
+          {showSupport && <Support onClose={() => setShowSupport(false)} />}
         </div>
       </div>
 
