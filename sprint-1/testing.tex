@@ -1,0 +1,138 @@
+\section{Testing}
+While we do not have Jest working, we have planned out the different testcases we would have tested had we been able to get Jest working properly with our repository. We have tested a majority of these testcases in Jest, however, we were unable to add Jest to our GitHub repository and have it working.
+
+\noindent
+\textbf{Account Creation/Signing in and out}
+\begin{itemize}
+    \item Testcase 1: User doesn't input a username
+    \begin{itemize}
+        \item Input: ""
+        \item Expected Output: "Please enter your username"
+    \end{itemize}
+
+    \item Testcase 2: User inputs a username, but not a logo
+    \begin{itemize}
+        \item Input: "kobe24", ""
+        \item Expected Output: "Please choose an icon and enter a username"
+    \end{itemize}
+
+    \item Testcase 3: Logging into a Google account that's not there
+    \begin{itemize}
+        \item Input: "Login with Google"
+        \item Expected Output: "Failed to log in with Google"
+    \end{itemize}
+
+    \item Testcase 4: Logging into an account by email that's not there
+    \begin{itemize}
+        \item Input: "", "", "Login"
+        \item Expected Output: "Please enter email and password"
+    \end{itemize}
+
+    \item Testcase 5: No Email and password
+    \begin{itemize}
+        \item Input: "", ""
+        \item Expected Output: "Please enter your email and password"
+    \end{itemize}
+
+    \item Testcase 6: Email with no @ symbol (Planned for Sprint 2)
+    \begin{itemize}
+        \item Input: "spongebob", "squarepants"
+        \item Expected Output: "Invalid Email"
+    \end{itemize}
+\end{itemize}
+
+\noindent
+\textbf{Searching for Users to Message}
+\begin{itemize}
+    \item Testcase 1: User searches for a nonexistent username
+    \begin{itemize}
+        \item Input: Username = "NonexistentUser"
+        \item Expected Output: "User not found"
+    \end{itemize}
+
+    \item Testcase 2: User searches for themselves (currently logged-in user)
+    \begin{itemize}
+        \item Input: Username = Current user’s username
+        \item Expected Output: "You cannot search for yourself"
+    \end{itemize}
+
+    \item Testcase 3: User searches with an empty search field
+    \begin{itemize}
+        \item Input: Username = ""
+        \item Expected Output: "Please enter a username to search"
+    \end{itemize}
+
+    \item Testcase 4: User searches for an existing username
+    \begin{itemize}
+        \item Input: Username = "existingUser"
+        \item Expected Output: Display the user’s username and button to start a new conversation
+    \end{itemize}
+\end{itemize}
+
+\noindent
+\textbf{Sending Messages}
+\begin{itemize}
+    \item Testcase 1: User sends an empty message
+    \begin{itemize}
+        \item Input: Message = ""
+        \item Expected Output: "Message cannot be empty"
+    \end{itemize}
+
+    \item Testcase 2: User sends a message to a valid conversation
+    \begin{itemize}
+        \item Input: Message = "Hello!" and existing conversation is selected
+        \item Expected Output: Message successfully sent and appears in chat history
+    \end{itemize}
+
+    \item Testcase 3: User attempts to send a message without a selected conversation
+    \begin{itemize}
+        \item Input: Message = "Hello!" but no selected conversation
+        \item Expected Output: "No conversation selected"
+    \end{itemize}
+\end{itemize}
+
+\noindent
+\textbf{Game Mechanics of Go Fish}
+\begin{itemize}
+    \item Testcase 1: Game setup with correct card distribution
+    \begin{itemize}
+        \item Input: Start a game with 4 players
+        \item Expected Output: Each player is dealt 5 cards, and the remaining cards are placed in the middle of the table as the deck.
+    \end{itemize}
+
+    \item Testcase 2: Player asks another player for a card they have
+    \begin{itemize}
+        \item Input: Player A has 2 Aces and asks Player B for Aces (Player B has 1 Ace)
+        \item Expected Output: Player B gives 1 Ace to Player A, resulting in Player A holding 3 Aces.
+    \end{itemize}
+
+    \item Testcase 3: Player asks another player for a card they don’t have
+    \begin{itemize}
+        \item Input: Player A asks Player C for Kings (Player C has no Kings)
+        \item Expected Output: Player A draws a card from the deck. If it’s a King, Player A goes again. Otherwise, Player A's turn ends.
+    \end{itemize}
+
+    \item Testcase 4: Player completes a set
+    \begin{itemize}
+        \item Input: Player B collects all 4 Queens
+        \item Expected Output: Player B places the set of 4 Queens face-up on the table.
+    \end{itemize}
+
+    \item Testcase 5: Player runs out of cards during their turn
+    \begin{itemize}
+        \item Input: Player A has 1 card, gives it away, leaving them with 0 cards
+        \item Expected Output: Player A draws 5 new cards from the deck.
+    \end{itemize}
+
+    \item Testcase 6: Player draws the last card from the deck
+    \begin{itemize}
+        \item Input: Deck contains 1 remaining card, Player A goes fishing
+        \item Expected Output: Player A draws the final card, deck is now empty.
+    \end{itemize}
+
+    \item Testcase 7: Game ends and calculates winner
+    \begin{itemize}
+        \item Input: All cards from the deck are used and players run out of cards
+        \item Expected Output: Game ends, and the player with the most sets wins.
+    \end{itemize}
+\end{itemize}
