@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, CircleUserRound, Send } from "lucide-react";
+import { ArrowLeft, Send, Cat, Ghost, Dog, Bot, Bird, CircleUserRound } from "lucide-react";
 import { doc as firestoreDoc, getDoc, updateDoc, arrayUnion, onSnapshot } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../../config/firebase";
@@ -104,13 +104,30 @@ const ChatScreen = ({ selectedConversation }) => {
         }
     };
 
+    const renderUserLogo = (logo) => {
+        switch (logo) {
+            case 'Cat':
+                return <Cat className="user-logo" />;
+            case 'Ghost':
+                return <Ghost className="user-logo" />;
+            case 'Dog':
+                return <Dog className="user-logo" />;
+            case 'Bot':
+                return <Bot className="user-logo" />;
+            case 'Bird':
+                return <Bird className="user-logo" />;
+            default:
+                return <CircleUserRound className="user-logo" />;
+        }
+    };
+
     return (
         <div className="chatscreen">
             <div className="top">
                 <button className="back-button" onClick={() => handleNavigate("/home")}>
                     <ArrowLeft className="back-icon" /> Home
                 </button>
-                <CircleUserRound />
+                {otherUser ? renderUserLogo(otherUser.logo) : <CircleUserRound className="user-logo" />}
                 <div className="other-username">
                     <span>{otherUser ? otherUser.username : "Waiting for User..."}</span>
                 </div>

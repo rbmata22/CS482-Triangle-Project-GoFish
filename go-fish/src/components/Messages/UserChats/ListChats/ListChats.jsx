@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CircleUserRound } from "lucide-react";
+import { CircleUserRound, Cat, Ghost, Dog, Bot, Bird } from "lucide-react";
 import { collection, query, where, onSnapshot, getDoc, doc as firestoreDoc } from "firebase/firestore";
 import { db, auth } from "../../../config/firebase";
 import "./ListChats.css";
@@ -17,31 +17,44 @@ const ListChats = ({ onSelectConversation }) => {
         return () => unsubscribe();
     }, []);
 
+    const renderUserLogo = (logo) => {
+        switch (logo) {
+            case 'Cat':
+                return <Cat className="user-logo" />;
+            case 'Ghost':
+                return <Ghost className="user-logo" />;
+            case 'Dog':
+                return <Dog className="user-logo" />;
+            case 'Bot':
+                return <Bot className="user-logo" />;
+            case 'Bird':
+                return <Bird className="user-logo" />;
+            default:
+                return <CircleUserRound className="user-logo" />;
+        }
+    };
+
     // Effect to fetch and listen for changes in conversations
     useEffect(() => {
-        if (!isAuthenticated) return; // Exit if user is not authenticated
+        if (!isAuthenticated) return;
 
-        // Reference to the Conversations collection
         const conversationsRef = collection(db, "Conversations");
         const q = query(conversationsRef, where("participants", "array-contains", auth.currentUser.uid));
         
-        // Set up real-time listener
         const unsubscribe = onSnapshot(q, async (querySnapshot) => {
             const conversationsData = await Promise.all(querySnapshot.docs.map(async (docSnapshot) => {
                 const data = docSnapshot.data();
-                // Find the ID of the other participant and their data
                 const otherUserId = data.participants.find(id => id !== auth.currentUser.uid);
                 const userDocRef = firestoreDoc(db, "Users", otherUserId);
                 const userDocSnapshot = await getDoc(userDocRef);
                 const userData = userDocSnapshot.data();
 
-                // Return conversation data with other user's info
                 return {
                     id: docSnapshot.id,
                     ...data,
-                    otherUser: userData ? userData.username : "Unknown User"
+                    otherUser: userData ? userData.username : "Unknown User",
+                    userLogo: userData ? userData.logo : null // Add the logo information
                 };
-
             }));
 
             setConversations(conversationsData);
@@ -50,7 +63,6 @@ const ListChats = ({ onSelectConversation }) => {
         return () => unsubscribe();
     }, [isAuthenticated]);
 
-    // Used for showing only the first few characters of the previous message in a conversation
     const truncateMessage = (text, maxLength) => {
         if (text.length <= maxLength) return text;
         return text.substr(0, maxLength) + '...';
@@ -64,7 +76,7 @@ const ListChats = ({ onSelectConversation }) => {
         <div className="listchats">
             {conversations.map(conversation => (
                 <div key={conversation.id} className="user" onClick={() => onSelectConversation(conversation.id)}>
-                    <CircleUserRound />
+                    {renderUserLogo(conversation.userLogo)}
                     <div className="chats">
                         <span>{conversation.otherUser}</span>
                         <p>
@@ -79,4 +91,4 @@ const ListChats = ({ onSelectConversation }) => {
     );
 }
 
-export default ListChats
+export default ListChats;

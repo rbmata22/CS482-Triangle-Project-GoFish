@@ -21,7 +21,14 @@
         
         .back-icon {
         margin-right: 5px;
-        }          
+        }       
+        
+        .user-logo {
+          width: 30px;
+          height: 30px;
+          min-width: 20px;
+          margin: 0 12px;
+        }
     }
 
     .middle {
