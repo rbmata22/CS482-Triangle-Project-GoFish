@@ -98,7 +98,7 @@ const Home = () => {
           </p>
         </div>
         <div className="sidebar-options">
-          <button className="sidebar-button" onClick={() => handleNavigate('/friends')}>Friends</button>
+          <button className="sidebar-button" onClick={() => handleNavigate('/Friends')}>Friends</button>
           <button className="sidebar-button" onClick={() => handleNavigate('/Messages')}>Messages</button>
           <button className="sidebar-button" onClick={() => handleNavigate('/shop')}>Shop</button>
           {/* Add Logout Button */}

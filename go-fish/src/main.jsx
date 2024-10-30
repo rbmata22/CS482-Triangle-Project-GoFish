@@ -7,6 +7,7 @@ import SignUp from './components/SignUp/SignUp'
 import Guest from './components/Guest/Guest'
 import Home from './components/Home/Home'
 import Messages from './components/Messages/Messages';
+import Friends from './components/Friends/Friends'
 import './index.css'
 
 
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/guest" element={<Guest />} />
         <Route path="/home" element={<Home />} />
         <Route path="/Messages" element={<Messages />} />
+        <Route path="/Friends" element={<Friends />} />
       </Routes>
     </Router>
   </StrictMode>

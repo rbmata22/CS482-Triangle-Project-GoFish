@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Send, Cat, Ghost, Dog, Bot, Bird, CircleUserRound } from "lucide-react";
+import { House, Send, Cat, Ghost, Dog, Bot, Bird, CircleUserRound } from "lucide-react";
 import { doc as firestoreDoc, getDoc, updateDoc, arrayUnion, onSnapshot } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../../config/firebase";
@@ -125,7 +125,7 @@ const ChatScreen = ({ selectedConversation }) => {
         <div className="chatscreen">
             <div className="top">
                 <button className="back-button" onClick={() => handleNavigate("/home")}>
-                    <ArrowLeft className="back-icon" /> Home
+                    <House className="back-icon" /> Home
                 </button>
                 {otherUser ? renderUserLogo(otherUser.logo) : <CircleUserRound className="user-logo" />}
                 <div className="other-username">
