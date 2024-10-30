@@ -1,0 +1,29 @@
+ /* Friends.css */
+
+.friends-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+
+.friends-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.friend-item {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.friend-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.friend-username {
+    font-size: 16px;
+}
