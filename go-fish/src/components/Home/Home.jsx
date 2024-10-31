@@ -11,6 +11,7 @@ const Home = () => {
   const [showSupport, setShowSupport] = useState(false);
   const [userData, setUserData] = useState({});
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showJoinDropdown, setShowJoinDropdown] = useState(false);
   const navigate = useNavigate();
   const authType = localStorage.getItem('authType');
 
@@ -42,7 +43,8 @@ const Home = () => {
 
   const handleNavigate = (path) => {
     navigate(path);
-    setShowDropdown(false); // Close dropdown after navigation
+    setShowDropdown(false);
+    setShowJoinDropdown(false); // Close dropdowns after navigation
   };
 
   const handleLogout = async () => {
@@ -82,11 +84,11 @@ const Home = () => {
     }
   };
 
-  // Click handler for clicking outside dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (!event.target.closest('.dropdown')) {
+      if (!event.target.closest('.dropdown') && !event.target.closest('.join-dropdown')) {
         setShowDropdown(false);
+        setShowJoinDropdown(false);
       }
     };
 
@@ -141,7 +143,20 @@ const Home = () => {
               </div>
             )}
           </div>
-          <button className="main-button" onClick={() => handleNavigate('/join-lobby')}>Join Lobby</button>
+          <div className="join-dropdown">
+            <button 
+              className="main-button join-lobby-button" 
+              onClick={() => setShowJoinDropdown(!showJoinDropdown)}
+            >
+              Join Lobby <ChevronDown className="dropdown-icon" size={150} />
+            </button>
+            {showJoinDropdown && (
+              <div className="dropdown-content show">
+                <button onClick={() => handleNavigate('/join-public')}>Join Public</button>
+                <button onClick={() => handleNavigate('/join-private')}>Join Private</button>
+              </div>
+            )}
+          </div>
           <button className="main-button" onClick={() => handleNavigate('/tutorial')}>Tutorial</button>
         </div>
       </div>

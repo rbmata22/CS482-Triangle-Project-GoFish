@@ -16,8 +16,8 @@ const CreatePublic = () => {
       const docRef = await addDoc(collection(db, 'Lobbies'), {
         playerLimit,
         useAI,
-        players: [], // Initially empty; players will join later
-        status: 'open',
+        players: [],
+        status: 'setting up', // Initial status
         createdAt: new Date(),
       });
 

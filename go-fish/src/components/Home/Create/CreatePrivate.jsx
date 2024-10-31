@@ -9,7 +9,7 @@ import './CreatePrivate.css';
 const CreatePrivate = () => {
   const [playerLimit, setPlayerLimit] = useState(4);
   const [useAI, setUseAI] = useState(true);
-  const [loginCode, setLoginCode] = useState(uuidv4().slice(0, 6).toUpperCase()); // Generate a 6-character login code
+  const [loginCode] = useState(uuidv4().slice(0, 6).toUpperCase()); // Generate a 6-character login code
   const navigate = useNavigate();
 
   const handleCreateLobby = async () => {
@@ -19,7 +19,7 @@ const CreatePrivate = () => {
         playerLimit,
         useAI,
         players: [], // Initially empty; players will join later
-        status: 'open',
+        status: 'setting up', // Set the initial status as "setting up"
         createdAt: new Date(),
         lobbyType: 'private', // Mark as a private lobby
         lobbyCode: loginCode, // Save the login code for private access

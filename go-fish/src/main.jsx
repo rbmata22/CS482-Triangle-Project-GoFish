@@ -10,6 +10,8 @@ import Messages from './components/Messages/Messages';
 import Friends from './components/Friends/Friends'
 import CreatePublic from './components/Home/Create/CreatePublic'
 import CreatePrivate from './components/Home/Create/CreatePrivate'
+import JoinPublic from './components/Home/Join/JoinPublic';
+import JoinPrivate from './components/Home/Join/JoinPrivate';
 import Lobby from './components/Home/Lobby/Lobby'
 import './index.css'
 
@@ -27,6 +29,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/Friends" element={<Friends />} />
         <Route path="/create-public" element={<CreatePublic />} />
         <Route path="/create-private" element={<CreatePrivate />} />
+        <Route path="/join-public" element={<JoinPublic />} />
+        <Route path="/join-private" element={<JoinPrivate />} />
         <Route path="/lobby/:lobbyId" element={<Lobby />} />
       </Routes>
     </Router>

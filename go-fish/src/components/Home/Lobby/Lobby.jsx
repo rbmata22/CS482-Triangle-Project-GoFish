@@ -20,6 +20,7 @@ const Lobby = () => {
     const fetchLobbyData = async () => {
       const lobbyRef = doc(db, 'Lobbies', lobbyId);
 
+      // Real-time listener for lobby data
       const unsubscribe = onSnapshot(lobbyRef, (doc) => {
         if (doc.exists()) {
           setLobbyData(doc.data());
@@ -41,7 +42,7 @@ const Lobby = () => {
         logo: guestLogo,
         guestId: guestId,
         virtualCurrency: 500,
-        isReady: false, // Default to not ready
+        isReady: false,
       });
     };
 
@@ -60,7 +61,7 @@ const Lobby = () => {
     const bots = Array.from({ length: emptySlots }, (_, i) => ({
       username: botNames[i % botNames.length],
       logo: "Bot",
-      isReady: true, // Bots are always ready
+      isReady: true,
     }));
 
     try {
@@ -93,7 +94,7 @@ const Lobby = () => {
     await updateDoc(lobbyRef, { players: updatedPlayers });
     setIsReady(!isReady);
 
-    // After toggling ready, check if all real players are ready
+    // Check if all real players are ready before adding AI
     if (lobbyData.useAI && allRealUsersReady(updatedPlayers)) {
       addAIPlayers();
     }
@@ -101,8 +102,10 @@ const Lobby = () => {
 
   // Ensure user is added to a slot
   useEffect(() => {
-    if (lobbyData && !lobbyData.players.some(player => player.username === userData.username)) {
+    if (lobbyData && userData.username && !lobbyData.players.some(player => player.username === userData.username)) {
       const lobbyRef = doc(db, 'Lobbies', lobbyId);
+
+      // Add user to the lobby if not already present
       updateDoc(lobbyRef, {
         players: arrayUnion({
           username: userData.username,
@@ -129,9 +132,8 @@ const Lobby = () => {
           </div>
 
           <div className="lobby-card">
-            <h2 className="lobby-header">{`${userData.username}'s Lobby`}</h2>
+            <h2 className="lobby-header">{`${lobbyData.players[0]?.username || 'Lobby'}'s Lobby`}</h2>
 
-            {/* Display login code if it's a private lobby */}
             {lobbyData.lobbyType === 'private' && (
               <div className="login-code-container">
                 <p className="login-code-label">Login Code:</p>
@@ -165,7 +167,7 @@ const Lobby = () => {
           <div className="lobby-footer">
             <button className="footer-button" onClick={() => navigate('/home')}>Back</button>
             <button className="footer-button" onClick={handleReadyToggle}>
-              {isReady ? 'Unready' : 'Ready'}
+              {lobbyData.players.some(p => p.username === userData.username && p.isReady) ? 'Unready' : 'Ready'}
             </button>
             <button className="go-fish-button" disabled={!allPlayersReady} style={{ backgroundColor: allPlayersReady ? 'green' : '#555' }}>
               GO FISH!
