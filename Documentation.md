@@ -16,5 +16,6 @@
 1. cd go-fish
 2. npm install --legacy-peer-deps
 3. npm install firebase --legacy-peer-deps
-4. npm run dev
-
+4. npm install lucide --legacy-peer-deps
+5. npm install react-router-dom --legacy-peer-deps
+6. npm run dev
