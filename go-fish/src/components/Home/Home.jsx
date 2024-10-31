@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getDoc, doc, deleteDoc } from 'firebase/firestore'; // Import deleteDoc from Firebase
+import { getDoc, doc, deleteDoc } from 'firebase/firestore';
 import { db, auth } from '../config/firebase';
-import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign } from 'lucide-react';
+import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign, ChevronDown } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import Support from './Support/Support';
 import './Home.css';
@@ -10,24 +10,23 @@ import './Home.css';
 const Home = () => {
   const [showSupport, setShowSupport] = useState(false);
   const [userData, setUserData] = useState({});
+  const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
-  const authType = localStorage.getItem('authType'); // Check if user is Guest or regular user
+  const authType = localStorage.getItem('authType');
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (authType === 'Guest') {
-        // Fetch guest data from local storage
         const guestUsername = localStorage.getItem('username');
         const guestLogo = localStorage.getItem('logo');
-        const guestId = localStorage.getItem('guestId'); // Fetch guest ID from local storage
+        const guestId = localStorage.getItem('guestId');
         setUserData({
           username: guestUsername,
           logo: guestLogo,
-          guestId: guestId, // Store guest ID for later deletion
-          virtualCurrency: 500, // Default currency for guests
+          guestId: guestId,
+          virtualCurrency: 500,
         });
       } else {
-        // Fetch signed-in user data from Firestore
         const userId = auth?.currentUser?.uid;
         if (userId) {
           const userDoc = await getDoc(doc(db, 'Users', userId));
@@ -43,22 +42,20 @@ const Home = () => {
 
   const handleNavigate = (path) => {
     navigate(path);
+    setShowDropdown(false); // Close dropdown after navigation
   };
 
   const handleLogout = async () => {
     try {
       if (authType === 'Guest') {
-        // Delete guest document from Firestore
-        const guestId = localStorage.getItem('guestId'); // Fetch guest ID from local storage
+        const guestId = localStorage.getItem('guestId');
         if (guestId) {
-          await deleteDoc(doc(db, 'Guests', guestId)); // Delete guest document
+          await deleteDoc(doc(db, 'Guests', guestId));
         }
-        localStorage.clear(); // Clear local storage for guest users
+        localStorage.clear();
       }
-
-      // Log the user out and navigate to the main page
       await signOut(auth);
-      navigate('/'); // Redirect to the main page (App.jsx)
+      navigate('/');
     } catch (error) {
       console.error('Logout failed: ', error);
     }
@@ -68,7 +65,6 @@ const Home = () => {
     setShowSupport(!showSupport);
   };
 
-  // Render user logo based on the stored value
   const renderUserLogo = () => {
     switch (userData.logo) {
       case 'Cat':
@@ -82,9 +78,23 @@ const Home = () => {
       case 'Bird':
         return <Bird className="user-logo" />;
       default:
-        return <Dices className="user-logo" />; // Default icon if no logo is selected
+        return <Dices className="user-logo" />;
     }
   };
+
+  // Click handler for clicking outside dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.dropdown')) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="home-container">
@@ -101,16 +111,13 @@ const Home = () => {
           <button className="sidebar-button" onClick={() => handleNavigate('/Friends')}>Friends</button>
           <button className="sidebar-button" onClick={() => handleNavigate('/Messages')}>Messages</button>
           <button className="sidebar-button" onClick={() => handleNavigate('/shop')}>Shop</button>
-          {/* Add Logout Button */}
           <button className="sidebar-button" onClick={handleLogout}>Logout</button>
-
           <button 
             className="support-button" 
             onClick={toggleSupport}
           >
             Admin Support
           </button>
-        
           {showSupport && <Support onClose={() => setShowSupport(false)} />}
         </div>
       </div>
@@ -120,7 +127,20 @@ const Home = () => {
           <Dices className="central-dice" />
         </div>
         <div className="main-options">
-          <button className="main-button" onClick={() => handleNavigate('/create-lobby')}>Create Lobby</button>
+          <div className="dropdown">
+            <button 
+              className="main-button create-lobby-button" 
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              Create Lobby <ChevronDown className="dropdown-icon" size={150} />
+            </button>
+            {showDropdown && (
+              <div className="dropdown-content show">
+                <button onClick={() => handleNavigate('/create-public')}>Public Lobby</button>
+                <button onClick={() => handleNavigate('/create-private')}>Private Lobby</button>
+              </div>
+            )}
+          </div>
           <button className="main-button" onClick={() => handleNavigate('/join-lobby')}>Join Lobby</button>
           <button className="main-button" onClick={() => handleNavigate('/tutorial')}>Tutorial</button>
         </div>
