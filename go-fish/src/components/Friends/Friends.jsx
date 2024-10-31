@@ -79,8 +79,8 @@ const Friends = () => {
 
     return (
         <div className="friends-container">
-            <button className="back-button" onClick={() => handleNavigate("/home")}>
-                    <House className="back-icon" /> Home
+            <button className="home-button" onClick={() => handleNavigate("/home")}>
+                <House className="back-icon" /> Home
             </button>
             <div className="search-section">
                 <form onSubmit={handleSearch} className="search-form">

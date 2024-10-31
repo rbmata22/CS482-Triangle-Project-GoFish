@@ -5,6 +5,7 @@
 
 .requests-list {
     margin-top: 15px;
+    overflow-y: auto;
 }
 
 .request-item {

@@ -35,9 +35,10 @@
     cursor: pointer;
 }
 
-.back-button {
+.home-button {
     display: flex;
     justify-content: center;
+    margin: auto;
     align-items: center;
     background-color: #8e8e8e;
     align-self: center;
