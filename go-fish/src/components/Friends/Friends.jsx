@@ -1,46 +1,126 @@
-// Friends.js
-import React, { useEffect, useState } from 'react';
-import { db, auth } from '../config/firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import './Friends.css';
+import { useState } from "react";
+import { Search, House } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import FriendRequests from "./FriendRequests/FriendRequests";
+import UserFriends from "./UserFriends/UserFriends";
+import { db, auth } from "../config/firebase";
+import { collection, query, where, getDocs, addDoc, getDoc, doc, updateDoc, arrayUnion  } from "firebase/firestore";
+import "./Friends.css";
 
 const Friends = () => {
-  const [friends, setFriends] = useState([]);
-  const userId = auth.currentUser?.uid;
+    const [searchUsername, setSearchUsername] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+    const [searchError, setSearchError] = useState("");
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchFriends = async () => {
-      if (userId) {
-        const friendsCollection = collection(db, 'Friends');
-        const friendsSnapshot = await getDocs(friendsCollection);
-        const friendsList = friendsSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setFriends(friendsList);
-      }
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        if (!searchUsername.trim()) return;
+
+        try {
+            const usersRef = collection(db, "Users");
+            const q = query(usersRef, where("username", "==", searchUsername));
+            const querySnapshot = await getDocs(q);
+
+            const results = [];
+            querySnapshot.forEach((doc) => {
+                // Don't include the current user in search results
+                if (doc.id !== auth.currentUser.uid) {
+                    results.push({ id: doc.id, ...doc.data() });
+                }
+            });
+
+            setSearchResults(results);
+            if (results.length === 0) {
+                setSearchError("No user found with that username");
+            } else {
+                setSearchError("");
+            }
+        } catch (error) {
+            console.error("Error searching for user:", error);
+            setSearchError("Error searching for user");
+        }
     };
 
-    fetchFriends();
-  }, [userId]);
+    const sendFriendRequest = async (recipientId, recipientUsername) => {
+        try {
+            // Get sender's data
+            const senderDoc = await getDoc(doc(db, "Users", auth.currentUser.uid));
+            const senderData = senderDoc.data();
 
-  return (
-    <div className="friends-container">
-      <h2>Your Friends</h2>
-      <ul className="friends-list">
-        {friends.length > 0 ? (
-          friends.map(friend => (
-            <li key={friend.id} className="friend-item">
-              <img src={friend.logo} alt={`${friend.username}'s logo`} className="friend-logo" />
-              <span className="friend-username">{friend.username}</span>
-            </li>
-          ))
-        ) : (
-          <p>No friends found.</p>
-        )}
-      </ul>
-    </div>
-  );
+            // Create friend request
+            const friendRequestsRef = collection(db, "FriendRequests");
+            await addDoc(friendRequestsRef, {
+                senderId: auth.currentUser.uid,
+                senderUsername: senderData.username,
+                recipientId: recipientId,
+                recipientUsername: recipientUsername,
+                status: "pending",
+                timestamp: new Date().toISOString()
+            });
+
+            // Update recipient's pending requests array
+            const recipientRef = doc(db, "Users", recipientId);
+            await updateDoc(recipientRef, {
+                pendingFriendRequests: arrayUnion(auth.currentUser.uid)
+            });
+
+            setSearchResults([]);
+            setSearchUsername("");
+        } catch (error) {
+            console.error("Error sending friend request:", error);
+        }
+    };
+
+    // Handling path changes if user wants to go to another page
+    const handleNavigate = (path) => {
+        navigate(path);
+    };
+
+    return (
+        <div className="friends-container">
+            <button className="home-button" onClick={() => handleNavigate("/home")}>
+                <House className="back-icon" /> Home
+            </button>
+            <div className="search-section">
+                <form onSubmit={handleSearch} className="search-form">
+                    <input
+                        type="text"
+                        value={searchUsername}
+                        onChange={(e) => setSearchUsername(e.target.value)}
+                        placeholder="Search for users..."
+                        className="search-input"
+                    />
+                    <button type="submit" className="search-button">
+                        <Search size={20} />
+                    </button>
+                </form>
+                
+                {searchError && <p className="search-error">{searchError}</p>}
+                
+                {searchResults.length > 0 && (
+                    <div className="search-results">
+                        {searchResults.map((user) => (
+                            <div key={user.id} className="search-result-item">
+                                <span>{user.username}</span>
+                                <button 
+                                    onClick={() => sendFriendRequest(user.id, user.username)}
+                                    className="send-request-button"
+                                >
+                                    Send Friend Request
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            <div className="friends-content">
+                <UserFriends />
+                <FriendRequests />
+            </div>
+        </div>
+    );
 };
 
 export default Friends;
