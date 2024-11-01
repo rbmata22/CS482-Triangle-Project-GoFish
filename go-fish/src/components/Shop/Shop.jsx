@@ -53,7 +53,14 @@ const shopItems = [
     image: "https://cdn.shopify.com/s/files/1/0013/7332/files/resized-005_cba8f816-6559-4b89-88bf-85cf31a8b5bb.jpg?v=1650568718",
     price: 300,
     featured: true
-  }
+  },
+  {
+    id: 7,
+    name: "Marvel Trophy",
+    image: "https://store.theory11.com/cdn/shop/files/product.avengers.court-cards_97d23a31-e43f-473d-8cb7-1eabeff01acf.png?v=1650372539&width=4000",
+    price: 300,
+    featured: true
+  },
 ];
 // Define the Shop component function
 const Shop = () => {
