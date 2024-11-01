@@ -1,6 +1,6 @@
 .shop-container {
     padding: 2rem;
-    padding-bottom: 4rem;
+    padding-bottom: 5rem;
     max-width: 1200px;
     margin: 0 auto;
     background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
@@ -45,6 +45,7 @@
     overflow: hidden;
     background-color: #000000;
     animation: float 6s ease-in-out infinite;
+    padding-bottom: 1.5rem;
 }
 
 .shop-item:hover {
@@ -69,7 +70,6 @@
 
 .purchase-button {
     width: 100%;
-    margin-top: auto;
     padding: 0.75rem;
     border-radius: 4px;
     background-color: #7f00ff;
