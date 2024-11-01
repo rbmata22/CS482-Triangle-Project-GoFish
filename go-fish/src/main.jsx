@@ -13,6 +13,7 @@ import CreatePrivate from './components/Home/Create/CreatePrivate'
 import JoinPublic from './components/Home/Join/JoinPublic';
 import JoinPrivate from './components/Home/Join/JoinPrivate';
 import Lobby from './components/Home/Lobby/Lobby'
+import Shop from './components/Home/Shop/Shop'
 import './index.css'
 
 
