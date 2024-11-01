@@ -61,6 +61,13 @@ const shopItems = [
     price: 300,
     featured: true
   },
+  {
+    id: 8,
+    name: "Dragon Ball Z Trophy",
+    image: "https://tccplayingcard.com/cdn/shop/files/Dragon_Ball_Z_3.jpg?v=1723003025&width=1780",
+    price: 400,
+    featured: true
+  },
 ];
 // Define the Shop component function
 const Shop = () => {
