@@ -2,6 +2,10 @@
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
+    background: linear-gradient(to right, #0f0c29, #302b63, #24243e); 
+    color: #ffffff; 
+    position: relative;
+    overflow: hidden; 
 }
 
 .shop-header {
@@ -14,6 +18,8 @@
 .shop-title {
     font-size: 2.5rem;
     font-weight: bold;
+    color: #8a2be2; 
+    text-shadow: 0 0 10px #7f00ff; 
 }
 
 .currency-display {
@@ -22,6 +28,7 @@
     padding: 0.5rem 1rem;
     background-color: #f0f0f0;
     border-radius: 8px;
+    color: #000000; 
 }
 
 .items-grid {
@@ -32,14 +39,16 @@
 }
 
 .shop-item {
-    border: 1px solid #e0e0e0;
+    border: 1px solid #00ff00; 
     border-radius: 8px;
     transition: transform 0.2s;
-    overflow: hidden; /* Ensure images do not exceed the card boundary */
+    overflow: hidden;
+    background-color: #000000; 
 }
 
 .shop-item:hover {
     transform: translateY(-5px);
+    box-shadow: 0 4px 20px #00ff00; 
 }
 
 .item-image {
@@ -54,6 +63,7 @@
     font-size: 1.2rem;
     font-weight: bold;
     margin-top: 1rem;
+    color: #8a2be2; 
 }
 
 .purchase-button {
@@ -61,7 +71,7 @@
     padding: 0.75rem;
     border: none;
     border-radius: 4px;
-    background-color: #4CAF50;
+    background-color: #7f00ff; 
     color: white;
     font-weight: bold;
     cursor: pointer;
@@ -69,19 +79,12 @@
 }
 
 .purchase-button:hover:not(:disabled) {
-    background-color: #45a049;
+    background-color: #9a00ff; 
 }
 
 .purchase-button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
-}
-
-.featured-badge {
-    background-color: #FFD700;
-    color: black;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
 }
 
 .error-message, .success-message {
@@ -115,4 +118,21 @@
     .items-grid {
         grid-template-columns: 1fr;
     }
+}
+
+@keyframes snow {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(500px); }
+}
+
+.shop-container::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://png.pngtree.com/png-clipart/20211202/ourmid/pngtree-christmas-snow-png-image_4048341.png') repeat top center; 
+    animation: snow 10s linear infinite;
+    pointer-events: none;
 }
