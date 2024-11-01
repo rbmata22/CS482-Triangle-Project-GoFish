@@ -33,6 +33,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/join-public" element={<JoinPublic />} />
         <Route path="/join-private" element={<JoinPrivate />} />
         <Route path="/lobby/:lobbyId" element={<Lobby />} />
+        <Route path="/shop" element={<Shop />} />
       </Routes>
     </Router>
   </StrictMode>
