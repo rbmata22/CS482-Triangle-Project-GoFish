@@ -14,56 +14,56 @@ import './shop.css';
 const shopItems = [
   {
     id: 1,
-    name: "NBA Card Trophy",
+    name: "NBA Card Collection",
     image: "https://external-preview.redd.it/4XfJcJFWh7usKB-htKE7QdoiW2GupdFiIhqNU0X7dns.jpg?width=640&crop=smart&auto=webp&s=42be24e79f0e031252dc83454987f7f78ed2a44e",
     price: 200,
     featured: false
   },
   {
     id: 2,
-    name: "Women's Rights Trophy",
+    name: "Famous Women Card Collection",
     image: "https://www.the-outrage.com/cdn/shop/products/wc25_preview.jpeg?v=1511887627",
     price: 200,
     featured: true
   },
   {
     id: 3,
-    name: "Christmas Trophy",
+    name: "Christmas Card Collection",
     image: "https://cdn.shopify.com/s/files/1/0041/7579/0209/files/Christmas_Playing_Cards_-_A_-_3d.webp?v=1699989088",
     price: 250,
     featured: true
   },
   {
     id: 4,
-    name: "Star Wars Trophy",
+    name: "Star Wars Card Collection",
     image: "https://cdn.shopify.com/s/files/1/0013/7332/files/resized-005_cba8f816-6559-4b89-88bf-85cf31a8b5bb.jpg?v=1650568718",
     price: 300,
     featured: true
   },
   {
     id: 5,
-    name: "Marvel Trophy",
+    name: "Marvel Card Collection",
     image: "https://store.theory11.com/cdn/shop/files/product.avengers.court-cards_97d23a31-e43f-473d-8cb7-1eabeff01acf.png?v=1650372539&width=4000",
     price: 300,
     featured: true
   },
   {
     id: 6,
-    name: "Dragon Ball Z Trophy",
+    name: "Dragon Ball Z Card Collection",
     image: "https://tccplayingcard.com/cdn/shop/files/Dragon_Ball_Z_3.jpg?v=1723003025&width=1780",
     price: 400,
     featured: true
   },
   {
     id: 7,
-    name: "Vietnamese Trophy",
+    name: "Vietnamese Card Collection",
     image: "https://cdn.myportfolio.com/e6cfaaf0-38d5-4c18-9230-8a03d0f616cb/9ce60e68-a75a-4619-8867-547dfd97d7d3_rw_1920.jpg?h=bc323e23758059e0ee248037a72c80aa",
     price: 500,
     featured: true
   },
   {
     id: 8,
-    name: "SpongeBob Trophy",
+    name: "SpongeBob Card Collection",
     image: "https://ae01.alicdn.com/kf/S92677255435745c0bc3fe8fba1a127e5Z.jpg_960x960.jpg",
     price: 1000,
     featured: true
@@ -95,7 +95,7 @@ const Shop = () => {
             setUserCurrency(userDoc.data().virtualCurrency || 0);
           }
         } catch (error) {
-          // Set error state and log the error if fetching user data fails
+          // Set error state and log the error if fetching user data doesn't work 
           setError('Error fetching user data');
           console.error('Error:', error);
         }
@@ -148,10 +148,10 @@ const Shop = () => {
   return (
     <div className="shop-container">
       <div className="shop-header">
-      <button className="home-button">Home</button>
+      <button className="home-button" onClick={goHome}>Home</button>
         <h1 className="shop-title">Shop</h1>
         <div className="currency-display">
-          Your Balance: {userCurrency} coins
+          Your Balance: {userCurrency} dollars
         </div>
       </div>
       {error && <div className="error-message">{error}</div>}
@@ -161,7 +161,7 @@ const Shop = () => {
           <div key={item.id} className="shop-item">
             <h2>{item.name}</h2>
             <img src={item.image} alt={item.name} className="item-image"/>
-            <p className="item-price">{item.price} Coins</p>
+            <p className="item-price">{item.price} Dollars</p>
             <button
               onClick={() => handlePurchase(item)}
               className="purchase-button"
