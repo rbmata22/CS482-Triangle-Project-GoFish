@@ -19,16 +19,17 @@
 }
 
 .home-button {
-    position: absolute;
-    left: 0;
     background-color: #7f00ff;
     color: white;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 8px 16px;
     font-size: 1rem;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
+    position: absolute;
+    left: 16px;
+    top: 16px;
 }
 
 .home-button:hover {
@@ -43,14 +44,14 @@
 }
 
 .currency-display {
-    position: absolute;
-    right: 0;
     font-size: 1.2rem;
     font-weight: bold;
     padding: 0.5rem 1rem;
     background-color: #f0f0f0;
     border-radius: 8px;
     color: #000000;
+    position: absolute;
+    right: 0;
 }
 
 .items-grid {
@@ -139,6 +140,13 @@
 
     .items-grid {
         grid-template-columns: 1fr;
+    }
+
+    .home-button {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+        top: 10px;
+        left: 10px;
     }
 }
 

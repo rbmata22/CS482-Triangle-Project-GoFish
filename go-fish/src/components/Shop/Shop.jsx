@@ -79,6 +79,10 @@ const Shop = () => {
   const auth = getAuth();
   // Hook to navigate
   const navigate = useNavigate();
+  // Navigate to the home route
+  const goHome = () => {
+    navigate('/home'); 
+  };
   // Effect hook fetches user data from Firebase 
   useEffect(() => {
     const fetchUserData = async () => {
