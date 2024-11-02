@@ -8,7 +8,7 @@ import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 // Import the useNavigate hook from react-router-dom for navigation
 import { useNavigate } from 'react-router-dom';
-// Import CSS styles for the Shop component
+// Import CSS styles for Shop component
 import './shop.css';
 // An array of shop items with details
 const shopItems = [

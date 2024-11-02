@@ -1,8 +1,8 @@
 .shop-container {
-    padding: 2rem 2rem 4rem;
+    padding: 2rem 1.5rem 3.5rem;
     max-width: 1200px;
     margin: 0 auto;
-    background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+    background: linear-gradient(to right, #1a1a2e, #16213e, #0f3460);
     color: #ffffff;
     position: relative;
     overflow: visible;
@@ -22,25 +22,31 @@
     background-color: #7f00ff;
     color: white;
     border: none;
-    padding: 8px 16px;
-    font-size: 1rem;
-    border-radius: 8px;
+    padding: 4px 8px; /* Reduced padding to minimize extra space */
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     position: absolute;
     left: 16px;
-    top: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: auto;
+    white-space: nowrap;
 }
 
 .home-button:hover {
-    background-color: #9a00ff;
+    background-color: #b400ff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .shop-title {
     font-size: 2.5rem;
     font-weight: bold;
-    color: #8a2be2;
-    text-shadow: 0 0 10px #7f00ff;
+    color: #e0b3ff;
+    text-shadow: 0 2px 8px rgba(127, 0, 255, 0.5);
 }
 
 .currency-display {
@@ -63,9 +69,10 @@
 
 .shop-item {
     border: 1px solid #8a2be2;
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
-    background-color: #000000;
+    background-color: #111;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     animation: float 6s ease-in-out infinite;
 }
 
@@ -94,15 +101,16 @@
     margin-top: auto;
     padding: 0.75rem;
     border-radius: 4px;
-    background-color: #7f00ff;
+    background: linear-gradient(to right, #7f00ff, #e100ff);
     color: white;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .purchase-button:hover:not(:disabled) {
-    background-color: #9a00ff;
+    background-color: #b400ff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .purchase-button:disabled {
@@ -115,6 +123,8 @@
     border-radius: 4px;
     margin-bottom: 1rem;
     text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .error-message {
@@ -138,15 +148,15 @@
         text-align: center;
     }
 
-    .items-grid {
-        grid-template-columns: 1fr;
-    }
-
     .home-button {
-        font-size: 0.8rem;
-        padding: 6px 12px;
+        font-size: 0.7rem;
+        padding: 3px 7px;
         top: 10px;
         left: 10px;
+    }
+
+    .items-grid {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -155,6 +165,6 @@
         transform: translateY(0);
     }
     50% {
-        transform: translateY(-10px);
+        transform: translateY(-5px);
     }
 }
