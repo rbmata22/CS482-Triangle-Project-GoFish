@@ -116,7 +116,7 @@ const Shop = () => {
       const userRef = doc(db, 'Users', auth.currentUser.uid);
       // Get user document
       const userDoc = await getDoc(userRef);
-      // Check if user document exists
+      // Check if user document is there
       if (!userDoc.exists()) {
         setError("Account not found");
         return;
@@ -144,6 +144,7 @@ const Shop = () => {
   return (
     <div className="shop-container">
       <div className="shop-header">
+      <button className="home-button">Home</button>
         <h1 className="shop-title">Shop</h1>
         <div className="currency-display">
           Your Balance: {userCurrency} coins
