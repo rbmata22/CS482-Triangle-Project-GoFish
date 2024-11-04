@@ -32,7 +32,7 @@ const getCardImage = (value, suit) => {
     'Hearts': 'hearts', 'Diamonds': 'diamonds',
     'Clubs': 'clubs', 'Spades': 'spades'
   };
-  return `./assets/cards/${valueMap[value]}_of_${suitMap[suit]}.png`;
+  return require(`../assets/cards/${valueMap[value]}_of_${suitMap[suit]}.png`);
 };
 const Game = () => {
   const { state } = useLocation();
