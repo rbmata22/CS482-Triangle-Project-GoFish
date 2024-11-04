@@ -21,16 +21,19 @@ const shuffleDeck = (deck) => {
   }
   return deck;
 };
-const Game = () => {
+const Game = ({ numberOfPlayers }) => {
   const [deck, setDeck] = useState(shuffleDeck(createDeck()));
-  const [players, setPlayers] = useState(Array(6).fill([]));
+  const [players, setPlayers] = useState(Array(numberOfPlayers).fill([]));
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [message, setMessage] = useState('');
+
   const dealCards = () => {
     let newDeck = [...deck];
-    let newPlayers = Array(6).fill([]).map(() => []);
+    let newPlayers = Array(numberOfPlayers).fill([]).map(() => []);
+
+    // Deal 5 cards to each player
     for (let i = 0; i < 5; i++) {
-      for (let j = 0; j < 6; j++) {
+      for (let j = 0; j < numberOfPlayers; j++) {
         if (newDeck.length > 0) {
           newPlayers[j].push(newDeck.pop());
         }
@@ -64,7 +67,7 @@ const Game = () => {
         setMessage("No more cards left to draw!");
       }
       setDeck(newDeck);
-      setCurrentPlayer((currentPlayer + 1) % 6); 
+      setCurrentPlayer((currentPlayer + 1) % numberOfPlayers); // Move to the next player
     }
   };
   return (
