@@ -118,6 +118,12 @@ const Lobby = () => {
 
   const allPlayersReady = lobbyData?.players.every(player => player.isReady);
 
+  const handleGoFish = () => {
+    if (allPlayersReady) {
+      navigate(`/lobby/${lobbyId}/bet`);
+    }
+  };
+
   return (
     <div className="lobby-container">
       {lobbyData ? (
@@ -169,7 +175,12 @@ const Lobby = () => {
             <button className="footer-button" onClick={handleReadyToggle}>
               {lobbyData.players.some(p => p.username === userData.username && p.isReady) ? 'Unready' : 'Ready'}
             </button>
-            <button className="go-fish-button" disabled={!allPlayersReady} style={{ backgroundColor: allPlayersReady ? 'green' : '#555' }}>
+            <button
+              className="go-fish-button"
+              onClick={handleGoFish}
+              disabled={!allPlayersReady}
+              style={{ backgroundColor: allPlayersReady ? 'green' : '#555' }}
+            >
               GO FISH!
             </button>
           </div>
