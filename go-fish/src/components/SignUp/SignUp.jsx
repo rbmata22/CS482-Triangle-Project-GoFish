@@ -4,9 +4,9 @@ import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthPro
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird } from 'lucide-react'; // Using Bot instead of Dollar Sign
-import './Signup.css';
+import './SignUp.css';
 
-const Signup = () => {
+const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -21,7 +21,7 @@ const Signup = () => {
   const googleProvider = new GoogleAuthProvider();
 
   // Handle email and password signup
-  const handleSignup = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
 
     // Prompts user to input their info for a logo and username
@@ -50,8 +50,8 @@ const Signup = () => {
         messages: [],
       });
       
-      // Store session type as 'Signup' in local storage
-      localStorage.setItem('authType', 'Signup');
+      // Store session type as 'SignUp' in local storage
+      localStorage.setItem('authType', 'SignUp');
 
       // Navigates to the Home/HUB after successful signup
       navigate('/home');
@@ -61,7 +61,7 @@ const Signup = () => {
   };
 
   // Handles Google signup for users that want to sign up that way
-  const handleGoogleSignup = async () => {
+  const handleGoogleSignUp = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
@@ -123,8 +123,8 @@ const Signup = () => {
         gamesWon: 0,
       });
 
-      // Store session type as 'Signup' in local storage
-      localStorage.setItem('authType', 'Signup');
+      // Store session type as 'SignUp' in local storage
+      localStorage.setItem('authType', 'SignUp');
 
       // Navigate to the Home page
       navigate('/home');
@@ -137,7 +137,7 @@ const Signup = () => {
     <div className="signup-container">
       {step === 1 ? (
         <>
-          <h1 className="signup-title">Signup</h1>
+          <h1 className="signup-title">SignUp</h1>
           {error && <p className="error-message">{error}</p>}
           <div className="signup-form">
             <input 
@@ -160,7 +160,7 @@ const Signup = () => {
           <button className="signup-button" onClick={handleNextStep}>Submit</button>
 
           {/* Handles our Google Sign in Logic */}
-          <button className="google-signup-button" onClick={handleGoogleSignup}>Sign Up with Google</button>
+          <button className="google-signup-button" onClick={handleGoogleSignUp}>Sign Up with Google</button>
           
           {/* Handles our redirection back to App.jsx */}
           <button className="back-button" onClick={() => navigate(-1)}>Back</button>
@@ -179,23 +179,47 @@ const Signup = () => {
             className="signup-input"
           />
           <div className="icon-container">
-            <div className={`team-logo ${selectedLogo === 'Cat' ? 'selected' : ''}`} onClick={() => handleLogoClick('Cat')}>
-              <Cat className="glowing-icon" />
-            </div>
-            <div className={`team-logo ${selectedLogo === 'Ghost' ? 'selected' : ''}`} onClick={() => handleLogoClick('Ghost')}>
-              <Ghost className="glowing-icon" />
-            </div>
-            <div className={`team-logo ${selectedLogo === 'Dog' ? 'selected' : ''}`} onClick={() => handleLogoClick('Dog')}>
-              <Dog className="glowing-icon" />
-            </div>
-            <div className={`team-logo ${selectedLogo === 'Bot' ? 'selected' : ''}`} onClick={() => handleLogoClick('Bot')}>
-              <Bot className="glowing-icon" />
-            </div>
-            <div className={`team-logo ${selectedLogo === 'Bird' ? 'selected' : ''}`} onClick={() => handleLogoClick('Bird')}>
-              <Bird className="glowing-icon" />
-            </div>
+          <div 
+            className={`team-logo ${selectedLogo === 'Cat' ? 'selected' : ''}`} 
+            onClick={() => handleLogoClick('Cat')}
+            data-testid="cat-icon"
+          >
+            <Cat className="glowing-icon" />
           </div>
-          <button className="signup-button" onClick={isGoogleUser ? handleGoogleUsernameLogoSubmit : handleSignup}>Create Account</button>
+
+          <div 
+            className={`team-logo ${selectedLogo === 'Ghost' ? 'selected' : ''}`} 
+            onClick={() => handleLogoClick('Ghost')}
+            data-testid="ghost-icon"
+          >
+            <Ghost className="glowing-icon" />
+          </div>
+
+          <div 
+            className={`team-logo ${selectedLogo === 'Dog' ? 'selected' : ''}`} 
+            onClick={() => handleLogoClick('Dog')}
+            data-testid="dog-icon"
+          >
+            <Dog className="glowing-icon" />
+          </div>
+
+          <div 
+            className={`team-logo ${selectedLogo === 'Bot' ? 'selected' : ''}`} 
+            onClick={() => handleLogoClick('Bot')}
+            data-testid="bot-icon"
+          >
+            <Bot className="glowing-icon" />
+          </div>
+
+          <div 
+            className={`team-logo ${selectedLogo === 'Bird' ? 'selected' : ''}`} 
+            onClick={() => handleLogoClick('Bird')}
+            data-testid="bird-icon"
+          >
+            <Bird className="glowing-icon" />
+          </div>
+          </div>
+          <button className="signup-button" onClick={isGoogleUser ? handleGoogleUsernameLogoSubmit : handleSignUp}>Create Account</button>
           <button className="back-button" onClick={() => setStep(1)}>Back</button>
         </>
       )}
@@ -203,4 +227,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignUp;
