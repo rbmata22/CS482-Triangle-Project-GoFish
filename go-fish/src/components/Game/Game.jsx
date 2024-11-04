@@ -22,7 +22,19 @@ const shuffleDeck = (deck) => {
   }
   return deck;
 };
-const Game = () => {
+const getCardImage = (value, suit) => {
+  const valueMap = {
+    '2': '2', '3': '3', '4': '4', '5': '5', '6': '6',
+    '7': '7', '8': '8', '9': '9', '10': '10',
+    'Jack': 'jack', 'Queen': 'queen', 'King': 'king', 'Ace': 'ace'
+  };
+  const suitMap = {
+    'Hearts': 'hearts', 'Diamonds': 'diamonds',
+    'Clubs': 'clubs', 'Spades': 'spades'
+  };
+  return `/assets/cards/${valueMap[value]}_of_${suitMap[suit]}.png`;
+};
+st Game = () => {
   const { state } = useLocation();
   const numberOfPlayers = state?.numberOfPlayers || 2;
   const userPlayerIndex = 0;
@@ -32,7 +44,7 @@ const Game = () => {
   const [message, setMessage] = useState('');
   useEffect(() => {
     if (currentPlayer !== userPlayerIndex) {
-      const timer = setTimeout(() => botTurn(), 5000);
+      const timer = setTimeout(() => botTurn(), 1000);
       return () => clearTimeout(timer);
     }
   }, [currentPlayer]);
@@ -78,7 +90,7 @@ const Game = () => {
         setMessage("No more cards left to draw!");
       }
       setDeck(newDeck);
-      setCurrentPlayer((currentPlayer + 1) % numberOfPlayers); 
+      setCurrentPlayer((currentPlayer + 1) % numberOfPlayers);
     }
   };
   const botTurn = () => {
@@ -102,9 +114,12 @@ const Game = () => {
             <div className="cards">
               {index === userPlayerIndex ? (
                 hand.map((card, i) => (
-                  <div key={i} className="card neon-text">
-                    {card.value} of {card.suit}
-                  </div>
+                  <img
+                    key={i}
+                    src={getCardImage(card.value, card.suit)}
+                    alt={`${card.value} of ${card.suit}`}
+                    className="card-image"
+                  />
                 ))
               ) : (
                 <p className="neon-text">Cards are hidden</p>
