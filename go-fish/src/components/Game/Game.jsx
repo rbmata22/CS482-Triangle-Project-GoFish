@@ -24,14 +24,14 @@ const shuffleDeck = (deck) => {
 };
 const Game = () => {
   const { state } = useLocation();
-  const numberOfPlayers = state?.numberOfPlayers || 2; 
+  const numberOfPlayers = state?.numberOfPlayers || 2;
   const [deck, setDeck] = useState(shuffleDeck(createDeck()));
-  const [players, setPlayers] = useState(Array(numberOfPlayers).fill([]));
+  const [players, setPlayers] = useState(Array.from({ length: numberOfPlayers }, () => []));
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [message, setMessage] = useState('');
   const dealCards = () => {
     let newDeck = [...deck];
-    let newPlayers = Array(numberOfPlayers).fill([]).map(() => []);
+    let newPlayers = Array.from({ length: numberOfPlayers }, () => []);
     for (let i = 0; i < 5; i++) {
       for (let j = 0; j < numberOfPlayers; j++) {
         if (newDeck.length > 0) {
@@ -41,24 +41,28 @@ const Game = () => {
     }
     setPlayers(newPlayers);
     setDeck(newDeck);
+    setMessage("Cards have been dealt. Let's play!");
   };
   const askForCard = (rank) => {
-    const otherPlayers = players.filter((_, index) => index !== currentPlayer);
-    let matchingCards = [];
-    let newPlayers = [...players];
-    otherPlayers.forEach((hand, index) => {
-      const matches = hand.filter(card => card.value === rank);
-      if (matches.length > 0) {
-        matchingCards = matchingCards.concat(matches);
-        newPlayers[index] = newPlayers[index].filter(card => card.value !== rank);
+    let newPlayers = players.map(hand => [...hand]); 
+    let foundCards = [];
+    let newDeck = [...deck];
+    let successfulRequest = false;
+    for (let i = 0; i < numberOfPlayers; i++) {
+      if (i !== currentPlayer) {
+        const matches = newPlayers[i].filter(card => card.value === rank);
+        if (matches.length > 0) {
+          foundCards = foundCards.concat(matches);
+          newPlayers[i] = newPlayers[i].filter(card => card.value !== rank);
+          successfulRequest = true;
+        }
       }
-    });
-    if (matchingCards.length > 0) {
-      newPlayers[currentPlayer] = [...newPlayers[currentPlayer], ...matchingCards];
+    }
+    if (successfulRequest) {
+      newPlayers[currentPlayer] = newPlayers[currentPlayer].concat(foundCards);
       setPlayers(newPlayers);
-      setMessage(`Player ${currentPlayer + 1} got ${matchingCards.length} card(s)! Go again.`);
+      setMessage(`Player ${currentPlayer + 1} got ${foundCards.length} card(s)! Go again.`);
     } else {
-      let newDeck = [...deck];
       if (newDeck.length > 0) {
         const drawnCard = newDeck.pop();
         newPlayers[currentPlayer].push(drawnCard);
@@ -67,7 +71,7 @@ const Game = () => {
         setMessage("No more cards left to draw!");
       }
       setDeck(newDeck);
-      setCurrentPlayer((currentPlayer + 1) % numberOfPlayers); // Move to the next player
+      setCurrentPlayer((currentPlayer + 1) % numberOfPlayers); 
     }
   };
   return (
