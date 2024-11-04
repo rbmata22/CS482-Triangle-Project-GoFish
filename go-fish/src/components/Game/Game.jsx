@@ -3,10 +3,7 @@ import { useLocation } from 'react-router-dom';
 import './Game.css';
 const createDeck = () => {
   const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
-  const values = [
-    '2', '3', '4', '5', '6', '7', '8', '9', '10',
-    'Jack', 'Queen', 'King', 'Ace'
-  ];
+  const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
   let deck = [];
   for (let suit of suits) {
     for (let value of values) {
@@ -42,12 +39,14 @@ const Game = () => {
   const [players, setPlayers] = useState(Array.from({ length: numberOfPlayers }, () => []));
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [message, setMessage] = useState('');
+  const [gameOver, setGameOver] = useState(false);
+  const [winner, setWinner] = useState(null);
   useEffect(() => {
-    if (currentPlayer !== userPlayerIndex) {
+    if (!gameOver && currentPlayer !== userPlayerIndex) {
       const timer = setTimeout(() => botTurn(), 1000);
       return () => clearTimeout(timer);
     }
-  }, [currentPlayer]);
+  }, [currentPlayer, gameOver]);
   const dealCards = () => {
     let newDeck = [...deck];
     let newPlayers = Array.from({ length: numberOfPlayers }, () => []);
@@ -62,7 +61,23 @@ const Game = () => {
     setDeck(newDeck);
     setMessage("Cards have been dealt. Let's play!");
   };
+  const checkGameOver = () => {
+    const allHandsEmpty = players.every(hand => hand.length === 0);
+    if (deck.length === 0 && allHandsEmpty) {
+      determineWinner();
+      setGameOver(true);
+    }
+  };
+  const determineWinner = () => {
+    const scores = players.map(hand => hand.length);
+    const maxScore = Math.max(...scores);
+    const winners = scores
+      .map((score, index) => (score === maxScore ? index + 1 : null))
+      .filter(index => index !== null);
+    setWinner(winners.length > 1 ? `Players ${winners.join(', ')}` : `Player ${winners[0]}`);
+  };
   const askForCard = (rank) => {
+    if (gameOver) return;
     let newPlayers = players.map(hand => [...hand]);
     let foundCards = [];
     let newDeck = [...deck];
@@ -92,8 +107,10 @@ const Game = () => {
       setDeck(newDeck);
       setCurrentPlayer((currentPlayer + 1) % numberOfPlayers);
     }
+    checkGameOver();
   };
   const botTurn = () => {
+    if (gameOver) return;
     const botHand = players[currentPlayer];
     if (botHand.length === 0) {
       setCurrentPlayer((currentPlayer + 1) % numberOfPlayers);
@@ -106,47 +123,53 @@ const Game = () => {
   return (
     <div className="game-container">
       <h1 className="neon-text">Go Fish</h1>
-      <button onClick={dealCards} className="neon-button">Deal Cards</button>
-      <div className="players">
-        {players.map((hand, index) => (
-          <div key={index} className="player-hand">
-            <h2 className="neon-text">Player {index + 1}'s Hand</h2>
-            <div className="cards">
-              {index === userPlayerIndex ? (
-                hand.map((card, i) => (
-                  <img
-                    key={i}
-                    src={getCardImage(card.value, card.suit)}
-                    alt={`${card.value} of ${card.suit}`}
-                    className="card-image"
-                  />
-                ))
-              ) : (
-                <p className="neon-text">Cards are hidden</p>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="actions">
-        {currentPlayer === userPlayerIndex ? (
-          <>
-            <h2 className="neon-text">Player {currentPlayer + 1}'s Turn</h2>
-            <p className="neon-text">Ask for a rank:</p>
-            {['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'].map(rank => (
-              <button
-                key={rank}
-                onClick={() => askForCard(rank)}
-                className="neon-button"
-              >
-                {rank}
-              </button>
+      {!gameOver ? (
+        <>
+          <button onClick={dealCards} className="neon-button">Deal Cards</button>
+          <div className="players">
+            {players.map((hand, index) => (
+              <div key={index} className="player-hand">
+                <h2 className="neon-text">Player {index + 1}'s Hand</h2>
+                <div className="cards">
+                  {index === userPlayerIndex ? (
+                    hand.map((card, i) => (
+                      <img
+                        key={i}
+                        src={getCardImage(card.value, card.suit)}
+                        alt={`${card.value} of ${card.suit}`}
+                        className="card-image"
+                      />
+                    ))
+                  ) : (
+                    <p className="neon-text">Cards are hidden</p>
+                  )}
+                </div>
+              </div>
             ))}
-          </>
-        ) : (
-          <h2 className="neon-text">Player {currentPlayer + 1} (Bot) is thinking...</h2>
-        )}
-      </div>
+          </div>
+          <div className="actions">
+            {currentPlayer === userPlayerIndex ? (
+              <>
+                <h2 className="neon-text">Player {currentPlayer + 1}'s Turn</h2>
+                <p className="neon-text">Ask for a rank:</p>
+                {['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'].map(rank => (
+                  <button
+                    key={rank}
+                    onClick={() => askForCard(rank)}
+                    className="neon-button"
+                  >
+                    {rank}
+                  </button>
+                ))}
+              </>
+            ) : (
+              <h2 className="neon-text">Player {currentPlayer + 1} (Bot) is thinking...</h2>
+            )}
+          </div>
+        </>
+      ) : (
+        <h2 className="neon-text">Game Over! {winner} wins!</h2>
+      )}
       <p className="message neon-text">{message}</p>
     </div>
   );
