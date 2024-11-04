@@ -14,6 +14,7 @@ import JoinPublic from './components/Home/Join/JoinPublic';
 import JoinPrivate from './components/Home/Join/JoinPrivate';
 import Lobby from './components/Home/Lobby/Lobby'
 import Bet from './components/Home/Lobby/Bet/Bet';
+import Tutorial from './components/Home/Tutorial/Tutorial';
 import './index.css'
 
 
@@ -31,6 +32,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/create-public" element={<CreatePublic />} />
         <Route path="/create-private" element={<CreatePrivate />} />
         <Route path="/join-public" element={<JoinPublic />} />
+        <Route path="/tutorial" element={<Tutorial />} />
         <Route path="/join-private" element={<JoinPrivate />} />
         <Route path="/lobby/:lobbyId" element={<Lobby />} />
         <Route path="/lobby/:lobbyId/bet" element={<Bet />} />
