@@ -116,12 +116,11 @@ const Lobby = () => {
 
   const handleGoFish = () => {
     if (allPlayersReady) {
-      navigate('/game', { state: { numberOfPlayers: lobbyData.playerLimit } });
+      navigate('/game', { state: { numberOfPlayers: lobbyData.players.length } });
     } else {
       alert('Not all players are ready!');
     }
   };
-  
 
   return (
     <div className="lobby-container">
@@ -149,7 +148,7 @@ const Lobby = () => {
             <div className="player-list">
               {[...Array(lobbyData.playerLimit)].map((_, index) => {
                 const player = lobbyData.players[index];
-                
+
                 return (
                   <div key={index} className="player-item">
                     {player ? (

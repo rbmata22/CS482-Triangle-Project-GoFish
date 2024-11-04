@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './Game.css';
 const createDeck = () => {
@@ -29,6 +29,12 @@ const Game = () => {
   const [players, setPlayers] = useState(Array.from({ length: numberOfPlayers }, () => []));
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [message, setMessage] = useState('');
+  useEffect(() => {
+    if (currentPlayer !== 0) {
+      const timer = setTimeout(() => botTurn(), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [currentPlayer]);
   const dealCards = () => {
     let newDeck = [...deck];
     let newPlayers = Array.from({ length: numberOfPlayers }, () => []);
@@ -44,7 +50,7 @@ const Game = () => {
     setMessage("Cards have been dealt. Let's play!");
   };
   const askForCard = (rank) => {
-    let newPlayers = players.map(hand => [...hand]); 
+    let newPlayers = players.map(hand => [...hand]);
     let foundCards = [];
     let newDeck = [...deck];
     let successfulRequest = false;
@@ -71,8 +77,18 @@ const Game = () => {
         setMessage("No more cards left to draw!");
       }
       setDeck(newDeck);
-      setCurrentPlayer((currentPlayer + 1) % numberOfPlayers); 
+      setCurrentPlayer((currentPlayer + 1) % numberOfPlayers); // Move to the next player
     }
+  };
+  const botTurn = () => {
+    const botHand = players[currentPlayer];
+    if (botHand.length === 0) {
+      setCurrentPlayer((currentPlayer + 1) % numberOfPlayers);
+      return;
+    }
+    const randomIndex = Math.floor(Math.random() * botHand.length);
+    const randomRank = botHand[randomIndex].value;
+    askForCard(randomRank);
   };
   return (
     <div className="game-container">
@@ -93,17 +109,23 @@ const Game = () => {
         ))}
       </div>
       <div className="actions">
-        <h2 className="neon-text">Player {currentPlayer + 1}'s Turn</h2>
-        <p className="neon-text">Ask for a rank:</p>
-        {['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'].map(rank => (
-          <button
-            key={rank}
-            onClick={() => askForCard(rank)}
-            className="neon-button"
-          >
-            {rank}
-          </button>
-        ))}
+        {currentPlayer === 0 ? (
+          <>
+            <h2 className="neon-text">Player {currentPlayer + 1}'s Turn</h2>
+            <p className="neon-text">Ask for a rank:</p>
+            {['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'].map(rank => (
+              <button
+                key={rank}
+                onClick={() => askForCard(rank)}
+                className="neon-button"
+              >
+                {rank}
+              </button>
+            ))}
+          </>
+        ) : (
+          <h2 className="neon-text">Player {currentPlayer + 1} (Bot) is thinking...</h2>
+        )}
       </div>
       <p className="message neon-text">{message}</p>
     </div>
