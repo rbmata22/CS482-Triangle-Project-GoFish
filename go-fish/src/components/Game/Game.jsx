@@ -25,13 +25,14 @@ const shuffleDeck = (deck) => {
 const Game = () => {
   const { state } = useLocation();
   const numberOfPlayers = state?.numberOfPlayers || 2;
+  const userPlayerIndex = 0;
   const [deck, setDeck] = useState(shuffleDeck(createDeck()));
   const [players, setPlayers] = useState(Array.from({ length: numberOfPlayers }, () => []));
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [message, setMessage] = useState('');
   useEffect(() => {
-    if (currentPlayer !== 0) {
-      const timer = setTimeout(() => botTurn(), 1000);
+    if (currentPlayer !== userPlayerIndex) {
+      const timer = setTimeout(() => botTurn(), 5000);
       return () => clearTimeout(timer);
     }
   }, [currentPlayer]);
@@ -77,7 +78,7 @@ const Game = () => {
         setMessage("No more cards left to draw!");
       }
       setDeck(newDeck);
-      setCurrentPlayer((currentPlayer + 1) % numberOfPlayers); // Move to the next player
+      setCurrentPlayer((currentPlayer + 1) % numberOfPlayers); 
     }
   };
   const botTurn = () => {
@@ -99,17 +100,21 @@ const Game = () => {
           <div key={index} className="player-hand">
             <h2 className="neon-text">Player {index + 1}'s Hand</h2>
             <div className="cards">
-              {hand.map((card, i) => (
-                <div key={i} className="card neon-text">
-                  {card.value} of {card.suit}
-                </div>
-              ))}
+              {index === userPlayerIndex ? (
+                hand.map((card, i) => (
+                  <div key={i} className="card neon-text">
+                    {card.value} of {card.suit}
+                  </div>
+                ))
+              ) : (
+                <p className="neon-text">Cards are hidden</p>
+              )}
             </div>
           </div>
         ))}
       </div>
       <div className="actions">
-        {currentPlayer === 0 ? (
+        {currentPlayer === userPlayerIndex ? (
           <>
             <h2 className="neon-text">Player {currentPlayer + 1}'s Turn</h2>
             <p className="neon-text">Ask for a rank:</p>
