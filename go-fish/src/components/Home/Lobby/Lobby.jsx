@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { doc, onSnapshot, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../../config/firebase';
@@ -20,7 +20,6 @@ const Lobby = () => {
     const fetchLobbyData = async () => {
       const lobbyRef = doc(db, 'Lobbies', lobbyId);
 
-      // Real-time listener for lobby data
       const unsubscribe = onSnapshot(lobbyRef, (doc) => {
         if (doc.exists()) {
           setLobbyData(doc.data());
@@ -94,18 +93,15 @@ const Lobby = () => {
     await updateDoc(lobbyRef, { players: updatedPlayers });
     setIsReady(!isReady);
 
-    // Check if all real players are ready before adding AI
     if (lobbyData.useAI && allRealUsersReady(updatedPlayers)) {
       addAIPlayers();
     }
   };
 
-  // Ensure user is added to a slot
   useEffect(() => {
     if (lobbyData && userData.username && !lobbyData.players.some(player => player.username === userData.username)) {
       const lobbyRef = doc(db, 'Lobbies', lobbyId);
 
-      // Add user to the lobby if not already present
       updateDoc(lobbyRef, {
         players: arrayUnion({
           username: userData.username,
@@ -120,9 +116,9 @@ const Lobby = () => {
 
   const handleGoFish = () => {
     if (allPlayersReady) {
-      navigate('/game'); 
+      navigate('/game');
     } else {
-      alert('Not all players are ready!!!');
+      alert('Not all players are ready!');
     }
   };
 

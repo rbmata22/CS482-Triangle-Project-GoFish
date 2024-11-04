@@ -23,7 +23,7 @@ const shuffleDeck = (deck) => {
 };
 const Game = () => {
   const [deck, setDeck] = useState(shuffleDeck(createDeck()));
-  const [players, setPlayers] = useState([[], [], [], []]);
+  const [players, setPlayers] = useState([[], []]);
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [message, setMessage] = useState('');
   const dealCards = () => {
@@ -53,10 +53,11 @@ const Game = () => {
         newPlayers[currentPlayer].push(drawnCard);
         setMessage(`Go Fish! Player ${currentPlayer + 1} drew a card.`);
       } else {
-        setMessage("No more cards left to draw!");
+        setMessage("No more cards left to draw!!!");
       }
       setDeck(newDeck);
-      setCurrentPlayer(otherPlayer); 
+      setCurrentPlayer(otherPlayer);
+    }
   };
   return (
     <div className="game-container">
@@ -92,5 +93,5 @@ const Game = () => {
       <p className="message neon-text">{message}</p>
     </div>
   );
-};}
+};
 export default Game;
