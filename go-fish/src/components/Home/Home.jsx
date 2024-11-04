@@ -113,7 +113,6 @@ const Home = () => {
           <button className="sidebar-button" onClick={() => handleNavigate('/Friends')}>Friends</button>
           <button className="sidebar-button" onClick={() => handleNavigate('/Messages')}>Messages</button>
           <button className="sidebar-button" onClick={() => handleNavigate('/shop')}>Shop</button>
-          <button className="sidebar-button" onClick={() => handleNavigate('/tutorial')}>Tutorial</button>
 
           <button className="sidebar-button" onClick={handleLogout}>Logout</button>
           <button 
