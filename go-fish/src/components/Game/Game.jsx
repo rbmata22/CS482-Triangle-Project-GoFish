@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import './Game.css';
 const createDeck = () => {
   const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
@@ -21,17 +22,16 @@ const shuffleDeck = (deck) => {
   }
   return deck;
 };
-const Game = ({ numberOfPlayers }) => {
+const Game = () => {
+  const { state } = useLocation();
+  const numberOfPlayers = state?.numberOfPlayers || 2; 
   const [deck, setDeck] = useState(shuffleDeck(createDeck()));
   const [players, setPlayers] = useState(Array(numberOfPlayers).fill([]));
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [message, setMessage] = useState('');
-
   const dealCards = () => {
     let newDeck = [...deck];
     let newPlayers = Array(numberOfPlayers).fill([]).map(() => []);
-
-    // Deal 5 cards to each player
     for (let i = 0; i < 5; i++) {
       for (let j = 0; j < numberOfPlayers; j++) {
         if (newDeck.length > 0) {

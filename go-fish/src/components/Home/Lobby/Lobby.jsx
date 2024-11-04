@@ -116,11 +116,12 @@ const Lobby = () => {
 
   const handleGoFish = () => {
     if (allPlayersReady) {
-      navigate('/game');
+      navigate('/game', { state: { numberOfPlayers: lobbyData.playerLimit } });
     } else {
       alert('Not all players are ready!');
     }
   };
+  
 
   return (
     <div className="lobby-container">
