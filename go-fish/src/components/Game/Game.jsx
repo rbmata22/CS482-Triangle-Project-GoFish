@@ -23,40 +23,48 @@ const shuffleDeck = (deck) => {
 };
 const Game = () => {
   const [deck, setDeck] = useState(shuffleDeck(createDeck()));
-  const [players, setPlayers] = useState([[], []]);
+  const [players, setPlayers] = useState(Array(6).fill([]));
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [message, setMessage] = useState('');
   const dealCards = () => {
     let newDeck = [...deck];
-    let newPlayers = [[], []];
+    let newPlayers = Array(6).fill([]).map(() => []);
     for (let i = 0; i < 5; i++) {
-      newPlayers[0].push(newDeck.pop());
-      newPlayers[1].push(newDeck.pop());
+      for (let j = 0; j < 6; j++) {
+        if (newDeck.length > 0) {
+          newPlayers[j].push(newDeck.pop());
+        }
+      }
     }
     setPlayers(newPlayers);
     setDeck(newDeck);
   };
   const askForCard = (rank) => {
-    const otherPlayer = currentPlayer === 0 ? 1 : 0;
-    const matchingCards = players[otherPlayer].filter(card => card.value === rank);
+    const otherPlayers = players.filter((_, index) => index !== currentPlayer);
+    let matchingCards = [];
+    let newPlayers = [...players];
+    otherPlayers.forEach((hand, index) => {
+      const matches = hand.filter(card => card.value === rank);
+      if (matches.length > 0) {
+        matchingCards = matchingCards.concat(matches);
+        newPlayers[index] = newPlayers[index].filter(card => card.value !== rank);
+      }
+    });
     if (matchingCards.length > 0) {
-      let newPlayers = [...players];
       newPlayers[currentPlayer] = [...newPlayers[currentPlayer], ...matchingCards];
-      newPlayers[otherPlayer] = newPlayers[otherPlayer].filter(card => card.value !== rank);
       setPlayers(newPlayers);
       setMessage(`Player ${currentPlayer + 1} got ${matchingCards.length} card(s)! Go again.`);
     } else {
       let newDeck = [...deck];
-      let newPlayers = [...players];
       if (newDeck.length > 0) {
         const drawnCard = newDeck.pop();
         newPlayers[currentPlayer].push(drawnCard);
         setMessage(`Go Fish! Player ${currentPlayer + 1} drew a card.`);
       } else {
-        setMessage("No more cards left to draw!!!");
+        setMessage("No more cards left to draw!");
       }
       setDeck(newDeck);
-      setCurrentPlayer(otherPlayer);
+      setCurrentPlayer((currentPlayer + 1) % 6); 
     }
   };
   return (
