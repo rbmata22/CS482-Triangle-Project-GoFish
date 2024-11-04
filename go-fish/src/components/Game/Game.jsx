@@ -34,7 +34,7 @@ const getCardImage = (value, suit) => {
   };
   return `/assets/cards/${valueMap[value]}_of_${suitMap[suit]}.png`;
 };
-st Game = () => {
+const Game = () => {
   const { state } = useLocation();
   const numberOfPlayers = state?.numberOfPlayers || 2;
   const userPlayerIndex = 0;
