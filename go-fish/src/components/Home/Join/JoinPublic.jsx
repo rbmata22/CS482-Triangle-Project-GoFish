@@ -26,7 +26,9 @@ const JoinPublic = () => {
       const q = query(lobbiesRef, where('status', '==', 'setting up'));
 
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        const lobbies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const lobbies = snapshot.docs
+          .map(doc => ({ id: doc.id, ...doc.data() }))
+          .filter(lobby => lobby.lobbyType !== 'private'); // Filter out private lobbies
         setAvailableLobbies(lobbies);
       });
 
