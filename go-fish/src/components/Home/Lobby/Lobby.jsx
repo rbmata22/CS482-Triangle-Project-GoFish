@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { doc, onSnapshot, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../../config/firebase';
@@ -20,7 +20,6 @@ const Lobby = () => {
     const fetchLobbyData = async () => {
       const lobbyRef = doc(db, 'Lobbies', lobbyId);
 
-      // Real-time listener for lobby data
       const unsubscribe = onSnapshot(lobbyRef, (doc) => {
         if (doc.exists()) {
           setLobbyData(doc.data());
@@ -94,18 +93,15 @@ const Lobby = () => {
     await updateDoc(lobbyRef, { players: updatedPlayers });
     setIsReady(!isReady);
 
-    // Check if all real players are ready before adding AI
     if (lobbyData.useAI && allRealUsersReady(updatedPlayers)) {
       addAIPlayers();
     }
   };
 
-  // Ensure user is added to a slot
   useEffect(() => {
     if (lobbyData && userData.username && !lobbyData.players.some(player => player.username === userData.username)) {
       const lobbyRef = doc(db, 'Lobbies', lobbyId);
 
-      // Add user to the lobby if not already present
       updateDoc(lobbyRef, {
         players: arrayUnion({
           username: userData.username,
@@ -117,6 +113,14 @@ const Lobby = () => {
   }, [lobbyData, userData, lobbyId]);
 
   const allPlayersReady = lobbyData?.players.every(player => player.isReady);
+
+  const handleGoFish = () => {
+    if (allPlayersReady) {
+      navigate('/game', { state: { numberOfPlayers: lobbyData.players.length } });
+    } else {
+      alert('Not all players are ready!');
+    }
+  };
 
   return (
     <div className="lobby-container">
@@ -144,7 +148,7 @@ const Lobby = () => {
             <div className="player-list">
               {[...Array(lobbyData.playerLimit)].map((_, index) => {
                 const player = lobbyData.players[index];
-                
+
                 return (
                   <div key={index} className="player-item">
                     {player ? (
@@ -169,7 +173,7 @@ const Lobby = () => {
             <button className="footer-button" onClick={handleReadyToggle}>
               {lobbyData.players.some(p => p.username === userData.username && p.isReady) ? 'Unready' : 'Ready'}
             </button>
-            <button className="go-fish-button" disabled={!allPlayersReady} style={{ backgroundColor: allPlayersReady ? 'green' : '#555' }}>
+            <button className="go-fish-button" onClick={handleGoFish} disabled={!allPlayersReady} style={{ backgroundColor: allPlayersReady ? 'green' : '#555' }}>
               GO FISH!
             </button>
           </div>
