@@ -1,73 +1,160 @@
 /* Container for the join public screen */
 .join-public-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 2rem;
-    color: #ffffff;
-  }
-  
-  .join-public-container h2 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Styling for each lobby item */
-  .lobby-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #1a1a2e;
-    padding: 1rem 2rem;
-    margin: 0.5rem 0;
-    border-radius: 10px;
-    width: 60%;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .lobby-item:hover {
-    background-color: #282845;
-  }
-  
-  /* Icon and text styling */
-  .lobby-item p {
-    margin: 0;
-    font-size: 1.2rem;
-    color: #ffffff;
-  }
-  
-  /* Styling for the player icon */
-  .lobby-icon {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  /* Username and icon area */
-  .lobby-username {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #00ffff;
-    display: flex;
-    align-items: center;
-  }
-  
-  .lobby-username img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-  
-  /* Player count */
-  .lobby-player-count {
-    font-size: 1rem;
-    color: #a8a8d3;
-  }
-  
-  .lobby-status {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #00ff00; /* Green for active lobby */
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+  color: #ffffff;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Smooth fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Back button styling */
+.back-button {
+  align-self: flex-start;
+  margin-left: 20px;
+  padding: 0.8rem 2rem;
+  background-color: #1E90FF;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.back-button:hover {
+  background-color: #00FFFF;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+  transform: scale(1.05);
+}
+
+/* Header styling */
+.join-public-container h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #00ffff;
+  animation: slideIn 0.6s ease-out;
+}
+
+/* Styling for each lobby item */
+.lobby-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: #1a1a2e;
+  padding: 1rem 2rem;
+  margin: 0.5rem 0;
+  border-radius: 10px;
+  width: 60%;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  animation: slideIn 0.6s ease-out;
+}
+
+.lobby-item.expanded {
+  background-color: #242446; /* Darker background when expanded */
+}
+
+.lobby-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.lobby-item:hover .lobby-summary {
+  background-color: #282845;
+  transform: scale(1.02);
+}
+
+/* Icon and text styling */
+.lobby-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lobby-username {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #00ffff;
+  display: flex;
+  align-items: center;
+}
+
+.lobby-player-count {
+  font-size: 1rem;
+  color: #a8a8d3;
+}
+
+/* Detailed view for lobby */
+.lobby-details {
+  width: 100%;
+  background-color: #212139;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  animation: fadeInDetails 0.3s ease-in-out;
+}
+
+@keyframes fadeInDetails {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Lobby details text */
+.lobby-details p {
+  font-size: 1rem;
+  color: #a8a8d3;
+  margin: 0.5rem 0;
+}
+
+/* List styling for players */
+.lobby-details ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 0.5rem;
+}
+
+.lobby-details li {
+  color: #00ffff;
+  font-size: 1rem;
+  margin: 0.2rem 0;
+}
+
+/* Join and collapse button styling */
+.join-button, .collapse-button {
+  margin-top: 1rem;
+  padding: 0.8rem 2rem;
+  background-color: #1E90FF;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.join-button:hover, .collapse-button:hover {
+  background-color: #00FFFF;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+  transform: scale(1.05);
+}
+
+.no-lobbies-message {
+  font-size: 1.2rem;
+  color: #a8a8d3;
+  margin-top: 1rem;
+}
