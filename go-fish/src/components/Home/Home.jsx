@@ -78,30 +78,17 @@ const Home = () => {
   const renderUserLogo = () => {
     switch (userData.logo) {
       case 'Cat':
-        return <Cat className="user-logo" />;
+        return <Cat className="user-logo" data-testid="user-logo" />;
       case 'Ghost':
-        return <Ghost className="user-logo" />;
+        return <Ghost className="user-logo" data-testid="user-logo" />;
       case 'Dog':
-        return <Dog className="user-logo" />;
+        return <Dog className="user-logo" data-testid="user-logo" />;
       case 'Bot':
-        return <Bot className="user-logo" />;
+        return <Bot className="user-logo" data-testid="user-logo" />;
       case 'Bird':
-        return <Bird className="user-logo" />;
+        return <Bird className="user-logo" data-testid="user-logo" />;
       default:
-        return <Dices className="user-logo" />;
-    }
-  };
-
-  const handlePlayerLeave = async (lobbyId) => {
-    if (userData.username) {
-      const lobbyRef = doc(db, 'Lobbies', lobbyId);
-      await updateDoc(lobbyRef, {
-        players: arrayRemove({
-          username: userData.username,
-          logo: userData.logo,
-          isReady: false,
-        }),
-      });
+        return <Dices className="user-logo" data-testid="user-logo" />;
     }
   };
 

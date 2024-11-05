@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for components/App.jsx</title>
+    <title>Code coverage report for components/Home/Support/Support.jsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../prettify.css" />
-    <link rel="stylesheet" href="../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">components</a> App.jsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">components/Home/Support</a> Support.jsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">28.57% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/5</span>
+                <span class='fraction'>4/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/4</span>
+                <span class='fraction'>1/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">30.76% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/5</span>
+                <span class='fraction'>4/13</span>
             </div>
         
             
@@ -113,28 +113,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -148,54 +151,51 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useNavigate } from 'react-router-dom';
-import './App.css';
-import { Dices, Diamond, Heart, Club, Spade, LogIn, Plus, VenetianMask } from 'lucide-react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from "react";
+import { collection, addDoc } from "firebase/firestore";
+import { db, auth } from "../../config/firebase";
+import "./Support.css";
 &nbsp;
-function App() {
-  const navigate = useNavigate();
+const Support = ({ onClose }) =&gt; {
+    const [message, setMessage] = useState("");
 &nbsp;
-  return (
-    &lt;div className="app-container"&gt;
-      {/* Animated Background Aura */}
-      &lt;div className="aura-background"&gt;&lt;/div&gt;
+    const handleSubmit = <span class="fstat-no" title="function not covered" >as</span>ync (e) =&gt; {
+<span class="cstat-no" title="statement not covered" >        e.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >        if (!message.trim()) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
-      {/* Main Logo Icon on Top */}
-      &lt;div className="icon-on-top"&gt;
-        &lt;Dices className="glowing-dice" size={160} /&gt; {/* Adjusted size directly */}
-      &lt;/div&gt;
+<span class="cstat-no" title="statement not covered" >        try {</span>
+            const userId = <span class="cstat-no" title="statement not covered" >auth.currentUser ? auth.currentUser.uid : "guest";</span>
+<span class="cstat-no" title="statement not covered" >            await addDoc(collection(db, "SupportMessages"), {</span>
+                userId,
+                message,
+                timestamp: new Date()
+            });
+<span class="cstat-no" title="statement not covered" >            setMessage("");</span>
+<span class="cstat-no" title="statement not covered" >            onClose();</span>
+        } catch (error) {
+<span class="cstat-no" title="statement not covered" >            console.error("Error sending message: ", error);</span>
+        }
+    };
 &nbsp;
-      {/* Main Title with Aura Glow */}
-      &lt;h1 className="main-title"&gt;Bui&amp;apos;s Bayside Inn&lt;/h1&gt;
+    return (
+        &lt;div className="support-popup"&gt;
+            &lt;form onSubmit={handleSubmit}&gt;
+                &lt;textarea
+                    value={message}
+                    onChange={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >setMessage(e.target.value)}</span>
+                    placeholder="What do you need help with?"
+                /&gt;
+                &lt;div className="button-group"&gt;
+                    &lt;button type="submit"&gt;Send&lt;/button&gt;
+                    &lt;button type="button" onClick={onClose}&gt;Close&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+    );
+};
 &nbsp;
-      {/* Login Buttons with Icons */}
-      &lt;div className="login-buttons"&gt;
-        &lt;button className="login-btn" onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigate('/login')}</span>&gt;
-          &lt;LogIn size={30} /&gt; Login
-        &lt;/button&gt;
-        &lt;button className="create-btn" onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigate('/signup')}</span>&gt;
-          &lt;Plus size={30} /&gt; Create
-        &lt;/button&gt;
-        &lt;button className="guest-btn" onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigate('/guest')}</span>&gt;
-          &lt;VenetianMask size={30} /&gt; Guest
-        &lt;/button&gt;
-      &lt;/div&gt;
-&nbsp;
-      {/* Glowing and Rotating Card Suit Icons Under Buttons */}
-      &lt;div className="dice-container"&gt;
-        &lt;Diamond className="icon glowing-diamond rotating" size={80} /&gt;
-        &lt;Heart className="icon glowing-heart rotating" size={80} /&gt;
-        &lt;Club className="icon glowing-club rotating" size={80} /&gt;
-        &lt;Spade className="icon glowing-spade rotating" size={80} /&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  );
-}
-&nbsp;
-export default App;</pre></td></tr></table></pre>
+export default Support;
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
@@ -204,14 +204,14 @@ export default App;</pre></td></tr></table></pre>
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
                 at 2024-11-05T19:59:23.004Z
             </div>
-        <script src="../prettify.js"></script>
+        <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../sorter.js"></script>
-        <script src="../block-navigation.js"></script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
     </body>
 </html>
     
