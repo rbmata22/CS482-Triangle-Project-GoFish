@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getDoc, doc, deleteDoc } from 'firebase/firestore';
+import { getDoc, doc, deleteDoc, updateDoc, arrayRemove } from 'firebase/firestore';
 import { db, auth } from '../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign, ChevronDown } from 'lucide-react';
 import { signOut } from 'firebase/auth';
@@ -12,10 +12,18 @@ const Home = () => {
   const [userData, setUserData] = useState({});
   const [showDropdown, setShowDropdown] = useState(false);
   const [showJoinDropdown, setShowJoinDropdown] = useState(false);
+  const [ownerLeftMessage, setOwnerLeftMessage] = useState(null);
   const navigate = useNavigate();
   const authType = localStorage.getItem('authType');
 
   useEffect(() => {
+    // Check for the "owner has left" message in localStorage
+    const message = localStorage.getItem('ownerLeftMessage');
+    if (message) {
+      setOwnerLeftMessage(message);
+      localStorage.removeItem('ownerLeftMessage');
+    }
+
     const fetchUserData = async () => {
       if (authType === 'Guest') {
         const guestUsername = localStorage.getItem('username');
@@ -44,7 +52,7 @@ const Home = () => {
   const handleNavigate = (path) => {
     navigate(path);
     setShowDropdown(false);
-    setShowJoinDropdown(false); // Close dropdowns after navigation
+    setShowJoinDropdown(false);
   };
 
   const handleLogout = async () => {
@@ -84,6 +92,19 @@ const Home = () => {
     }
   };
 
+  const handlePlayerLeave = async (lobbyId) => {
+    if (userData.username) {
+      const lobbyRef = doc(db, 'Lobbies', lobbyId);
+      await updateDoc(lobbyRef, {
+        players: arrayRemove({
+          username: userData.username,
+          logo: userData.logo,
+          isReady: false,
+        }),
+      });
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.dropdown') && !event.target.closest('.join-dropdown')) {
@@ -100,6 +121,12 @@ const Home = () => {
 
   return (
     <div className="home-container">
+      {ownerLeftMessage && (
+        <div className="alert-message">
+          <p>{ownerLeftMessage}</p>
+        </div>
+      )}
+      
       <div className="sidebar">
         <div className="user-info">
           {renderUserLogo()}
@@ -115,12 +142,7 @@ const Home = () => {
           <button className="sidebar-button" onClick={() => handleNavigate('/shop')}>Shop</button>
 
           <button className="sidebar-button" onClick={handleLogout}>Logout</button>
-          <button 
-            className="support-button" 
-            onClick={toggleSupport}
-          >
-            Admin Support
-          </button>
+          <button className="support-button" onClick={toggleSupport}>Admin Support</button>
           {showSupport && <Support onClose={() => setShowSupport(false)} />}
         </div>
       </div>
@@ -131,10 +153,7 @@ const Home = () => {
         </div>
         <div className="main-options">
           <div className="dropdown">
-            <button 
-              className="main-button create-lobby-button" 
-              onClick={() => setShowDropdown(!showDropdown)}
-            >
+            <button className="main-button create-lobby-button" onClick={() => setShowDropdown(!showDropdown)}>
               Create Lobby <ChevronDown className="dropdown-icon" size={150} />
             </button>
             {showDropdown && (
@@ -145,10 +164,7 @@ const Home = () => {
             )}
           </div>
           <div className="join-dropdown">
-            <button 
-              className="main-button join-lobby-button" 
-              onClick={() => setShowJoinDropdown(!showJoinDropdown)}
-            >
+            <button className="main-button join-lobby-button" onClick={() => setShowJoinDropdown(!showJoinDropdown)}>
               Join Lobby <ChevronDown className="dropdown-icon" size={150} />
             </button>
             {showJoinDropdown && (

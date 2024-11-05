@@ -14,6 +14,8 @@ const CreatePrivate = () => {
 
   const handleCreateLobby = async () => {
     try {
+      const ownerUsername = localStorage.getItem('username'); // Retrieve the owner's username
+
       // Add a new document with a generated ID to the Lobbies collection
       const docRef = await addDoc(collection(db, 'Lobbies'), {
         playerLimit,
@@ -23,6 +25,7 @@ const CreatePrivate = () => {
         createdAt: new Date(),
         lobbyType: 'private', // Mark as a private lobby
         lobbyCode: loginCode, // Save the login code for private access
+        owner: ownerUsername, // Set the owner of the lobby
       });
 
       // Redirect to the Lobby page with the created lobby ID

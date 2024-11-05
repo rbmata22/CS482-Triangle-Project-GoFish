@@ -12,6 +12,8 @@ const CreatePublic = () => {
 
   const handleCreateLobby = async () => {
     try {
+      const ownerUsername = localStorage.getItem('username'); // Retrieve the owner's username
+
       // Add a new document with a generated ID to the Lobbies collection
       const docRef = await addDoc(collection(db, 'Lobbies'), {
         playerLimit,
@@ -19,6 +21,7 @@ const CreatePublic = () => {
         players: [],
         status: 'setting up', // Initial status
         createdAt: new Date(),
+        owner: ownerUsername, // Set the owner of the lobby
       });
 
       // Redirect to the Lobby page with the created lobby ID

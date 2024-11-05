@@ -1,4 +1,9 @@
+<<<<<<< HEAD:go-fish/src/components/Home/Tutorial/Tutorial.jsx
+import { useState } from 'react';
+import './Tutorial.css';
+=======
 import React, { useState } from 'react';
+>>>>>>> main:go-fish/src/components/Tutorial/Tutorial.jsx
 
 const App = () => {
     const [currentStep, setCurrentStep] = useState(0);

@@ -13,10 +13,10 @@ import CreatePrivate from './components/Home/Create/CreatePrivate';
 import JoinPublic from './components/Home/Join/JoinPublic';
 import JoinPrivate from './components/Home/Join/JoinPrivate';
 import Lobby from './components/Home/Lobby/Lobby';
+import Bet from './components/Home/Lobby/Bet/Bet';
 import Shop from './components/Shop/Shop';
 import Game from './components/Game/Game';
-import Tutorial from './components/Tutorial/Tutorial'
-
+import Tutorial from './components/Tutorial/Tutorial';
 import './index.css';
 
 createRoot(document.getElementById('root')).render(
@@ -35,10 +35,10 @@ createRoot(document.getElementById('root')).render(
         <Route path="/join-public" element={<JoinPublic />} />
         <Route path="/join-private" element={<JoinPrivate />} />
         <Route path="/lobby/:lobbyId" element={<Lobby />} />
+        <Route path="/lobby/:lobbyId/bet" element={<Bet />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/game" element={<Game />} />
-        <Route path = "/tutorial" element={<Tutorial />}/>
-
+        <Route path="/tutorial" element={<Tutorial />} />
       </Routes>
     </Router>
   </StrictMode>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
-import { Cat, Ghost, Dog, Bot, Bird } from 'lucide-react';
+import { Cat, Ghost, Dog, Bot, Bird, Check, X } from 'lucide-react';
 import './JoinPublic.css';
 
 const renderUserLogo = (logo) => {
@@ -18,6 +18,7 @@ const renderUserLogo = (logo) => {
 
 const JoinPublic = () => {
   const [availableLobbies, setAvailableLobbies] = useState([]);
+  const [expandedLobby, setExpandedLobby] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +27,9 @@ const JoinPublic = () => {
       const q = query(lobbiesRef, where('status', '==', 'setting up'));
 
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        const lobbies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const lobbies = snapshot.docs
+          .map(doc => ({ id: doc.id, ...doc.data() }))
+          .filter(lobby => lobby.lobbyType !== 'private'); // Filter out private lobbies
         setAvailableLobbies(lobbies);
       });
 
@@ -40,23 +43,49 @@ const JoinPublic = () => {
     navigate(`/lobby/${lobbyId}`);
   };
 
+  const handleBack = () => {
+    navigate(-1); // Go back to the previous page
+  };
+
+  const toggleLobbyDetails = (lobbyId) => {
+    setExpandedLobby(expandedLobby === lobbyId ? null : lobbyId);
+  };
+
   return (
     <div className="join-public-container">
+      <button className="back-button" onClick={handleBack}><X /> Back</button>
       <h2>Open Lobbies</h2>
       {availableLobbies.length > 0 ? (
         availableLobbies.map((lobby) => (
-          <div key={lobby.id} className="lobby-item" onClick={() => handleJoinLobby(lobby.id)}>
-            <div className="lobby-icon">
-              {renderUserLogo(lobby.players[0]?.logo || 'Bird')}
+          <div key={lobby.id} className={`lobby-item ${expandedLobby === lobby.id ? 'expanded' : ''}`}>
+            <div className="lobby-summary" onClick={() => toggleLobbyDetails(lobby.id)}>
+              <div className="lobby-icon">
+                {renderUserLogo(lobby.players[0]?.logo || 'Bird')}
+              </div>
+              <div className="lobby-username">{lobby.players[0]?.username || 'Unknown'}</div>
+              <div className="lobby-player-count">
+                {`${lobby.players.length} / ${lobby.playerLimit} Players`}
+              </div>
             </div>
-            <div className="lobby-username">{lobby.players[0]?.username || 'Unknown'}</div>
-            <div className="lobby-player-count">
-              {`${lobby.players.length} / ${lobby.playerLimit} Players`}
-            </div>
+
+            {expandedLobby === lobby.id && (
+              <div className="lobby-details">
+                <p><strong>Lobby Type:</strong> {lobby.lobbyType}</p>
+                <p><strong>AI Fill:</strong> {lobby.useAI ? 'Enabled' : 'Disabled'}</p>
+                <p><strong>Players:</strong></p>
+                <ul>
+                  {lobby.players.map((player, index) => (
+                    <li key={index}>{player.username} ({player.logo})</li>
+                  ))}
+                </ul>
+                <button className="join-button" onClick={() => handleJoinLobby(lobby.id)}><Check /> Join Lobby</button>
+                <button className="collapse-button" onClick={() => toggleLobbyDetails(null)}><X /> Back</button>
+              </div>
+            )}
           </div>
         ))
       ) : (
-        <p>No lobbies available at the moment.</p>
+        <p className="no-lobbies-message">No lobbies available at the moment.</p>
       )}
     </div>
   );
