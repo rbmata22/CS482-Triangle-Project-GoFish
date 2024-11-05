@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { doc, onSnapshot, updateDoc, deleteDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../../config/firebase';
@@ -99,9 +99,6 @@ const Lobby = () => {
     }
   };
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
   const handleLeaveLobby = async () => {
     if (lobbyData.owner === userData.username) {
       // Owner is leaving, delete the lobby
@@ -112,10 +109,6 @@ const Lobby = () => {
     }
   };
 
-  // Ensure user is added to a slot
-=======
->>>>>>> main
->>>>>>> create-join
   useEffect(() => {
     if (lobbyData && userData.username && !lobbyData.players.some(player => player.username === userData.username)) {
       const lobbyRef = doc(db, 'Lobbies', lobbyId);
@@ -134,19 +127,9 @@ const Lobby = () => {
 
   const handleGoFish = () => {
     if (allPlayersReady) {
-<<<<<<< HEAD
       navigate('/game', { state: { numberOfPlayers: lobbyData.players.length } });
     } else {
       alert('Not all players are ready!');
-=======
-<<<<<<< HEAD
-      navigate(`/lobby/${lobbyId}/bet`);
-=======
-      navigate('/game', { state: { numberOfPlayers: lobbyData.players.length } });
-    } else {
-      alert('Not all players are ready!');
->>>>>>> main
->>>>>>> create-join
     }
   };
 
@@ -201,20 +184,7 @@ const Lobby = () => {
             <button className="footer-button" onClick={handleReadyToggle}>
               {lobbyData.players.some(p => p.username === userData.username && p.isReady) ? 'Unready' : 'Ready'}
             </button>
-<<<<<<< HEAD
             <button className="go-fish-button" onClick={handleGoFish} disabled={!allPlayersReady} style={{ backgroundColor: allPlayersReady ? 'green' : '#555' }}>
-=======
-<<<<<<< HEAD
-            <button
-              className="go-fish-button"
-              onClick={handleGoFish}
-              disabled={!allPlayersReady}
-              style={{ backgroundColor: allPlayersReady ? 'green' : '#555' }}
-            >
-=======
-            <button className="go-fish-button" onClick={handleGoFish} disabled={!allPlayersReady} style={{ backgroundColor: allPlayersReady ? 'green' : '#555' }}>
->>>>>>> main
->>>>>>> create-join
               GO FISH!
             </button>
           </div>

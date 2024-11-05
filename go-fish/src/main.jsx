@@ -16,7 +16,7 @@ import Lobby from './components/Home/Lobby/Lobby';
 import Bet from './components/Home/Lobby/Bet/Bet';
 import Shop from './components/Shop/Shop';
 import Game from './components/Game/Game';
-import Tutorial from './components/Tutorial/Tutorial';
+import Tutorial from './components/Home/Tutorial/Tutorial';
 import './index.css';
 
 createRoot(document.getElementById('root')).render(
