@@ -27,4 +27,4 @@
 4.  npm install --save-dev identity-obj-proxy
 5.  npm install --save-dev vitest
 6.  RUNNING TESTS: npm test
-7.  RUNNING TEST COVERAGES: npm test:coverage
+7.  RUNNING TEST COVERAGES: npm run test:coverage
