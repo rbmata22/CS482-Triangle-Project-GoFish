@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './App.css'; // Ensure you have this CSS file for styling
 
 const App = () => {
     const [currentStep, setCurrentStep] = useState(0);
