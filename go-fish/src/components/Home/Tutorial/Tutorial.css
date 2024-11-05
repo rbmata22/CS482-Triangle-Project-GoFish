@@ -1,42 +1,112 @@
-/* App.css */
+ /* Container styling */
 .tutorial-container {
-  background-color: #f9f9f9; /* Light background */
-  border: 1px solid #ddd; /* Light border */
-  border-radius: 8px; /* Rounded corners */
-  padding: 20px; /* Padding around the content */
-  width: 400px; /* Fixed width */
-  margin: 50px auto; /* Centered in the page */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  font-family: 'Arial', sans-serif; /* Font styling */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #333;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  margin: auto;
+  color: #fff;
+  font-family: Arial, sans-serif;
 }
 
-.tutorial-container h2 {
-  color: #333; /* Darker color for the title */
-  margin-bottom: 15px; /* Space below the title */
+/* Title styling */
+.tutorial-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  text-shadow: 1px 1px 8px rgba(255, 255, 255, 0.2);
 }
 
+/* Step content styling */
+.tutorial-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.step-icon {
+  font-size: 4rem;
+  color: #0095ff;
+  margin-bottom: 1rem;
+  animation: glow 1.5s infinite alternate;
+}
+
+/* Tutorial step text styling */
 .tutorial-step {
-  font-size: 1rem; /* Font size for step description */
-  color: #555; /* Dark gray text color */
-  margin-bottom: 20px; /* Space below the paragraph */
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 0 1rem;
+  max-width: 500px;
 }
 
+/* Control button styling */
 .tutorial-controls {
-  display: flex; /* Flexbox for layout */
-  justify-content: space-between; /* Space buttons evenly */
+  display: flex;
+  gap: 1rem;
 }
 
 .control-button {
-  background-color: #007acc; /* Button background color */
-  border: none; /* No border */
-  color: white; /* White text color */
-  padding: 10px 15px; /* Padding for buttons */
-  border-radius: 5px; /* Rounded corners for buttons */
-  cursor: pointer; /* Pointer on hover */
-  font-size: 1rem; /* Font size */
+  background-color: #007bff;
+  color: #fff;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.3s ease;
 }
 
 .control-button:disabled {
-  background-color: #ccc; /* Gray background for disabled buttons */
-  cursor: not-allowed; /* Not allowed cursor */
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+.control-button:hover:not(:disabled) {
+  background-color: #0056b3;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Icon styling for control buttons */
+.control-icon {
+  font-size: 1.5rem;
+}
+
+/* Keyframe animation for glowing effect */
+@keyframes glow {
+  from {
+      color: #0095ff;
+      text-shadow: 0 0 10px #0095ff, 0 0 20px #0095ff, 0 0 30px #0095ff, 0 0 40px #0095ff, 0 0 50px #0095ff;
+  }
+  to {
+      color: #fff8dc;
+      text-shadow: 0 0 20px #fff8dc, 0 0 30px #ffffff, 0 0 40px #ffffff, 0 0 50px #ffffff, 0 0 60px #ffffff;
+  }
+}
+
+/* Mobile responsive styling */
+@media (max-width: 768px) {
+  .tutorial-container {
+      padding: 1rem;
+  }
+
+  .tutorial-title {
+      font-size: 1.5rem;
+  }
+
+  .tutorial-step {
+      font-size: 1.2rem;
+  }
+
+  .control-button {
+      font-size: 0.9rem;
+      padding: 0.3rem 0.8rem;
+  }
 }
