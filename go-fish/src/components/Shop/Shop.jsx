@@ -10,6 +10,8 @@ import { db } from '../config/firebase';
 import { useNavigate } from 'react-router-dom';
 // Import CSS styles for Shop component
 import './shop.css';
+// Import music for the shop
+import backgroundMusic from '../assets/background-music.mp3';
 // An array of shop items with details
 const shopItems = [
   {
@@ -75,15 +77,18 @@ const Shop = () => {
   const [userCurrency, setUserCurrency] = useState(0);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  // Hook for controlling background music
+  const [audio] = useState(new Audio(backgroundMusic));
+  const [isPlaying, setIsPlaying] = useState(false);
   // Initialize Firebase Authentication
   const auth = getAuth();
   // Hook to navigate
   const navigate = useNavigate();
   // Navigate to the home route
   const goHome = () => {
-    navigate('/home'); 
+    navigate('/home');
   };
-  // Effect hook fetches user data from Firebase 
+  // Effect hook fetches user data from Firebase
   useEffect(() => {
     const fetchUserData = async () => {
       if (auth.currentUser) {
@@ -103,6 +108,15 @@ const Shop = () => {
     };
     fetchUserData();
   }, [auth.currentUser]);
+  // Function to toggle music play/pause
+  const toggleMusic = () => {
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
   // Function to handle item purchase
   const handlePurchase = async (item) => {
     // Check if user is logged in
@@ -148,8 +162,12 @@ const Shop = () => {
   return (
     <div className="shop-container">
       <div className="shop-header">
-      <button className="home-button" onClick={goHome}>Home</button>
+        <button className="home-button" onClick={goHome}>Home</button>
         <h1 className="shop-title">Shop</h1>
+        {/* Add the music button right below the Shop title */}
+        <button className="music-button" onClick={toggleMusic}>
+          {isPlaying ? 'Pause Music' : 'Play Music'}
+        </button>
         <div className="currency-display">
           Your Balance: {userCurrency} coins
         </div>
@@ -160,7 +178,7 @@ const Shop = () => {
         {shopItems.map(item => (
           <div key={item.id} className="shop-item">
             <h2>{item.name}</h2>
-            <img src={item.image} alt={item.name} className="item-image"/>
+            <img src={item.image} alt={item.name} className="item-image" />
             <p className="item-price">{item.price} Coins</p>
             <button
               onClick={() => handlePurchase(item)}
@@ -174,6 +192,4 @@ const Shop = () => {
       </div>
     </div>
   );
-};
-// Export Shop default export
-export default Shop;
+}  

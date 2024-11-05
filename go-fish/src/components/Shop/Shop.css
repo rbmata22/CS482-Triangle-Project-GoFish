@@ -42,6 +42,28 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+.music-button {
+    background-color: #7f00ff;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    margin-top: 10px; 
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.music-button:hover {
+    background-color: #b400ff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+
 .shop-title {
     font-size: 2.5rem;
     font-weight: bold;
