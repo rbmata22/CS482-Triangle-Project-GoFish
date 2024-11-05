@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 // Import CSS styles for Shop component
 import './shop.css';
 // Import music for the shop
-import backgroundMusic from '../assets/background-music.mp3';
+import backgroundMusic from '../../assets/background-music.mp3';
 // An array of shop items with details
 const shopItems = [
   {
@@ -162,12 +162,13 @@ const Shop = () => {
   return (
     <div className="shop-container">
       <div className="shop-header">
-        <button className="home-button" onClick={goHome}>Home</button>
+        <div className="button-container">
+          <button className="home-button" onClick={goHome}>Home</button>
+          <button className="music-button" onClick={toggleMusic}>
+            {isPlaying ? 'Pause Music' : 'Play Music'}
+          </button>
+        </div>
         <h1 className="shop-title">Shop</h1>
-        {/* Add the music button right below the Shop title */}
-        <button className="music-button" onClick={toggleMusic}>
-          {isPlaying ? 'Pause Music' : 'Play Music'}
-        </button>
         <div className="currency-display">
           Your Balance: {userCurrency} coins
         </div>
@@ -192,4 +193,6 @@ const Shop = () => {
       </div>
     </div>
   );
-}  
+};
+// Export Shop default export
+export default Shop;
