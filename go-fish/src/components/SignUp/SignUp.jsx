@@ -60,6 +60,10 @@ const SignUp = () => {
     }
   };
 
+  const isValidEmail = (email) => {
+    return email.includes('@');
+  };
+
   // Handles Google signup for users that want to sign up that way
   const handleGoogleSignUp = async () => {
     try {
@@ -89,11 +93,17 @@ const SignUp = () => {
 
   // Continue to the next step (username and logo selection) for normal email users
   const handleNextStep = () => {
-    if (email && password) {
-      setStep(2);
-    } else {
+    if (!email || !password) {
       setError('Please enter your email and password');
+      return;
     }
+  
+    if (!isValidEmail(email)) {
+      setError('Invalid email');
+      return;
+    }
+  
+    setStep(2);
   };
 
   // Handle logo selection
