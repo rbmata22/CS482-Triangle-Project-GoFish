@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { doc, onSnapshot, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, deleteDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign, SquareCheck } from 'lucide-react';
 import './Lobby.css';
@@ -25,7 +25,8 @@ const Lobby = () => {
         if (doc.exists()) {
           setLobbyData(doc.data());
         } else {
-          console.log("Lobby not found");
+          // Lobby document was deleted (e.g., owner left)
+          localStorage.setItem('ownerLeftMessage', 'Owner of session has left');
           navigate('/home');
         }
       });
@@ -100,6 +101,16 @@ const Lobby = () => {
     }
   };
 
+  const handleLeaveLobby = async () => {
+    if (lobbyData.owner === userData.username) {
+      // Owner is leaving, delete the lobby
+      await deleteDoc(doc(db, 'Lobbies', lobbyId));
+    } else {
+      // If not the owner, just navigate to home
+      navigate('/home');
+    }
+  };
+
   // Ensure user is added to a slot
   useEffect(() => {
     if (lobbyData && userData.username && !lobbyData.players.some(player => player.username === userData.username)) {
@@ -171,7 +182,7 @@ const Lobby = () => {
           </div>
 
           <div className="lobby-footer">
-            <button className="footer-button" onClick={() => navigate('/home')}>Back</button>
+            <button className="footer-button" onClick={handleLeaveLobby}>Leave Lobby</button>
             <button className="footer-button" onClick={handleReadyToggle}>
               {lobbyData.players.some(p => p.username === userData.username && p.isReady) ? 'Unready' : 'Ready'}
             </button>

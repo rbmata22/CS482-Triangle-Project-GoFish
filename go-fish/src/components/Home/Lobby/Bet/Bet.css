@@ -1,66 +1,59 @@
-/* Container for the betting screen */
 .bet-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #0e0b16;
-    color: white;
-    font-family: 'Roboto', sans-serif;
-  }
-  
-  /* Title styling */
-  .bet-title {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    color: #ffffff;
-  }
-  
-  /* Currency information */
-  .currency-info {
-    font-size: 1.2rem;
-    color: #a8a8d3;
-    margin-bottom: 1rem;
-  }
-  
-  /* Bet input styling */
-  .bet-input {
-    width: 80%;
-    max-width: 300px;
-    padding: 0.8rem;
-    font-size: 1.1rem;
-    border-radius: 5px;
-    border: none;
-    outline: none;
-    background-color: #222;
-    color: white;
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Bet button styling */
-  .bet-button {
-    background-color: #1E90FF;
-    color: white;
-    padding: 0.8rem 2rem;
-    border: none;
-    border-radius: 25px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .bet-button:hover {
-    background-color: #00FFFF;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
-    transform: scale(1.05);
-  }
-  
-  /* Error message styling */
-  .error-message {
-    color: #ff4d4d;
-    font-size: 1rem;
-    margin-top: 1rem;
-    text-align: center;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #0e0b16;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+}
+
+.bet-header {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.user-currency {
+  font-size: 1.2rem;
+  color: #1E90FF;
+  margin-bottom: 15px;
+}
+
+.bet-slider {
+  width: 80%;
+  max-width: 400px;
+  margin: 20px 0;
+}
+
+.bet-amount {
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin-top: 10px;
+}
+
+.place-bet-button {
+  background-color: #1E90FF;
+  color: white;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.place-bet-button:hover {
+  background-color: #004cff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+.total-bet-pool {
+  font-size: 1.3rem;
+  color: #FF4C4C;
+  margin-top: 25px;
+}
