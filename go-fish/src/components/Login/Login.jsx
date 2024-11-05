@@ -26,10 +26,29 @@ const Login = () => {
     }
   }, []);
 
+  const validateEmail = (email) => {
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password) => {
+    // Password should be at least 6 characters
+    return password.length >= 6;
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!email || !password) {
       setError('Please enter email and password');
+      return;
+    }
+    if (!validateEmail(email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+    if (!validatePassword(password)) {
+      setError('Password must be at least 6 characters');
       return;
     }
 
@@ -76,7 +95,8 @@ const Login = () => {
         setStep(2); // Move to username/logo selection step
       }
     } catch (error) {
-      setError('Failed to log in with Google: ' + error.message);
+      setError('Failed to log in with Google...');
+      throw error
     }
   };
 
