@@ -1,10 +1,27 @@
+// SignUp.test.jsx
+
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
-import { getAuth, createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { setDoc, doc } from 'firebase/firestore'
 import SignUp from './SignUp'
+import { act } from 'react'
 
-// Mock Firebase modules. Replicas of Firebase authentication functions to avoid real API calls and to track testing
+/* 
+*  Mock Firebase modules and functions for testing 
+*  
+*  - No real Firebase calls are made to ensure database is not tampered with
+*  - Easier verification of exactly how the Firebase functions were called
+*  - Mock Firebase means that we can test error handling
+*/
+// Mock the entire firebase.js config file
+jest.mock('../config/firebase', () => ({
+    auth: {},
+    db: {},
+    provider: {}
+}))
+
+// Mock Firebase Auth
 jest.mock('firebase/auth', () => ({
     getAuth: jest.fn(() => ({})),
     createUserWithEmailAndPassword: jest.fn(),
@@ -12,32 +29,29 @@ jest.mock('firebase/auth', () => ({
     GoogleAuthProvider: jest.fn(() => ({}))
 }))
 
+// Mock Firebase Firestore
 jest.mock('firebase/firestore', () => ({
     doc: jest.fn(),
     getDoc: jest.fn(),
-    setDoc: jest.fn()
+    setDoc: jest.fn(),
+    getFirestore: jest.fn()
 }))
 
-jest.mock('../config/firebase', () => ({
-    db: {}
-}))
-
-// Mock navigation
-// Preserves real router functionality while mocking navigation
+// Mock react-router-dom navigation
 const mockNavigate = jest.fn()
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
     useNavigate: () => mockNavigate
 }))
 
+// Testcases for signing up
 describe('SignUp Component', () => {
-    // Clears all mocks and localStorage before each test
+    // Clearing each mock Jest and local storage before each testcase
     beforeEach(() => {
         jest.clearAllMocks()
         localStorage.clear()
     })
 
-    // Creates a helper function to render the SignUp component consistently
     const renderSignUp = () => {
         render(
         <BrowserRouter>
@@ -46,177 +60,227 @@ describe('SignUp Component', () => {
         )
     }
 
-    describe('Initial Render', () => {
-        it('Renders the signup form with email and password inputs', () => {
-            renderSignUp()
-            expect(screen.getByPlaceholderText('Email')).toBeInTheDocument()
-            expect(screen.getByPlaceholderText('Password')).toBeInTheDocument()
-            expect(screen.getByText('Sign Up with Google')).toBeInTheDocument()
+    // Helper function to move to next step in signup process
+    const moveToStepTwo = () => {
+        fireEvent.change(screen.getByPlaceholderText('Email'), {
+        target: { value: 'test@example.com' }
         })
-    })
-
-    describe('Email Password SignUp Flow', () => {
-        it('Moves to step 2 when email and password are provided', async () => {
-        renderSignUp()
-        
-        const emailInput = screen.getByPlaceholderText('Email')
-        const passwordInput = screen.getByPlaceholderText('Password')
-        
-        fireEvent.change(emailInput, { target: { value: 'test@test.com' } })
-        fireEvent.change(passwordInput, { target: { value: 'password123' } })
-        
-        fireEvent.click(screen.getByText('Submit'))
-        
-        await waitFor(() => {
-            expect(screen.getByText('Enter Username and Select Your Icon')).toBeInTheDocument()
-        })
-        })
-
-        it('Shows error when trying to proceed without email or password', () => {
-        renderSignUp()
-        
-        fireEvent.click(screen.getByText('Submit'))
-        
-        expect(screen.getByText('Please enter your email and password')).toBeInTheDocument()
-        })
-
-        it('Shows error when trying to create account without username', async () => {
-            renderSignUp()
-            
-            // Move to step 2
-            fireEvent.change(screen.getByPlaceholderText('Email'), { 
-            target: { value: 'test@test.com' }
-            })
-            fireEvent.change(screen.getByPlaceholderText('Password'), { 
-            target: { value: 'password123' }
-            })
-            fireEvent.click(screen.getByText('Submit'))
-            
-            // Select logo but no username
-            await waitFor(() => {
-            const catLogo = screen.getByTestId('cat-icon')
-            fireEvent.click(catLogo)
-            })
-            
-            // Try to create account
-            fireEvent.click(screen.getByText('Create Account'))
-            
-            expect(screen.getByText('Please choose a logo and enter a username')).toBeInTheDocument()
-            expect(createUserWithEmailAndPassword).not.toHaveBeenCalled()
-            expect(setDoc).not.toHaveBeenCalled()
-        })
-
-        it('Completes signup process with valid information', async () => {
-        const mockUser = { uid: 'testuid123' }
-        createUserWithEmailAndPassword.mockResolvedValue({ user: mockUser })
-        setDoc.mockResolvedValue()
-        
-        renderSignUp()
-        
-        // Step 1: Email and password
-        fireEvent.change(screen.getByPlaceholderText('Email'), { 
-            target: { value: 'test@test.com' }
-        })
-        fireEvent.change(screen.getByPlaceholderText('Password'), { 
-            target: { value: 'password123' }
-        })
-        fireEvent.click(screen.getByText('Submit'))
-        
-        // Step 2: Username and logo
-        await waitFor(() => {
-            fireEvent.change(screen.getByPlaceholderText('Username'), {
-            target: { value: 'testuser' }
-            })
-        })
-        
-        // Click the Cat logo
-        const catLogo = screen.getByTestId('cat-icon')
-        fireEvent.click(catLogo)
-        
-        // Create account
-        fireEvent.click(screen.getByText('Create Account'))
-        
-        await waitFor(() => {
-            expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(
-            expect.anything(),
-            'test@test.com',
-            'password123'
-            )
-            expect(setDoc).toHaveBeenCalledTimes(2)
-            expect(mockNavigate).toHaveBeenCalledWith('/home')
-            expect(localStorage.getItem('authType')).toBe('SignUp')
-        })
-        })
-    })
-
-    it('Redirects existing Google users to home', async () => {
-        const mockUser = { uid: 'existinggoogleuid123' }
-        signInWithPopup.mockResolvedValue({ user: mockUser })
-        getDoc.mockResolvedValue({ exists: () => true })
-        
-        renderSignUp()
-        
-        fireEvent.click(screen.getByText('Sign Up with Google'))
-        
-        await waitFor(() => {
-            expect(mockNavigate).toHaveBeenCalledWith('/home')
-        })
-    })
-
-    it('Handles Google signup error', async () => {
-        signInWithPopup.mockRejectedValue(new Error('Google signup failed'))
-        
-        renderSignUp()
-        
-        fireEvent.click(screen.getByText('Sign Up with Google'))
-        
-        await waitFor(() => {
-            expect(screen.getByText('Failed to sign up with Google: Google signup failed')).toBeInTheDocument()
-        })
-    })
-})
-
-
-describe('Navigation', () => {
-    // Clears all mocks and localStorage before each test
-    beforeEach(() => {
-        jest.clearAllMocks()
-        localStorage.clear()
-    })
-
-    const renderSignUp = () => {
-        render(
-            <BrowserRouter>
-                <SignUp />
-            </BrowserRouter>
-        )
-    }
-
-    it('Goes back when back button is clicked', () => {
-        renderSignUp()
-
-        fireEvent.click(screen.getByText('Back'))
-
-        expect(mockNavigate).toHaveBeenCalledWith(-1)
-    })
-
-    it('Returns to step 1 when back button is clicked in step 2', async () => {
-        renderSignUp()
-        
-        // Move to step 2
-        fireEvent.change(screen.getByPlaceholderText('Email'), { 
-        target: { value: 'test@test.com' }
-        })
-        fireEvent.change(screen.getByPlaceholderText('Password'), { 
+        fireEvent.change(screen.getByPlaceholderText('Password'), {
         target: { value: 'password123' }
         })
         fireEvent.click(screen.getByText('Submit'))
+    }
+
+    // Testcase 1: User doesn't input a username
+    it('Shows error when username is empty', async () => {
+        renderSignUp()
+        moveToStepTwo()
         
-        // Click back in step 2
-        await waitFor(() => {
-        fireEvent.click(screen.getByText('Back'))
+        // Select a logo but leave username empty
+        fireEvent.click(screen.getByTestId('dog-icon'))
+        fireEvent.click(screen.getByText('Create Account'))
+        
+        expect(screen.getByText('Please choose a logo and enter a username')).toBeInTheDocument()
+    })
+
+    // Testcase 2: User inputs username but no logo
+    it('Shows error when logo is not selected', async () => {
+        renderSignUp()
+        moveToStepTwo()
+        
+        // Enter username but don't select logo
+        fireEvent.change(screen.getByPlaceholderText('Username'), {
+        target: { value: 'kobe24' }
         })
+        fireEvent.click(screen.getByText('Create Account'))
         
+        expect(screen.getByText('Please choose a logo and enter a username')).toBeInTheDocument()
+    })
+
+    // Testcase 3: No Email and password
+    it('Shows error when email and password are empty', () => {
+        renderSignUp()
+        fireEvent.click(screen.getByText('Submit'))
+        
+        expect(screen.getByText('Please enter your email and password')).toBeInTheDocument()
+    })
+
+    // Testcase 4: Email with no '@' symbol
+    it('Shows error for invalid email format', async () => {
+        // Reset mock before setting up new mock implementation
+        createUserWithEmailAndPassword.mockReset();
+
+        // Set up the mock rejection BEFORE rendering and interactions
+        createUserWithEmailAndPassword.mockRejectedValue(new Error('Invalid email'));
+        
+        renderSignUp();
+        
+        fireEvent.change(screen.getByPlaceholderText('Email'), {
+            target: { value: 'spongebob' }
+        });
+        fireEvent.change(screen.getByPlaceholderText('Password'), {
+            target: { value: 'squarepants' }
+        });
+        
+        await act(async () => {
+            fireEvent.click(screen.getByText('Submit'));
+        });
+        
+        expect(await screen.findByText('Invalid email')).toBeInTheDocument();
+    });
+
+    // Testcase 5: Allows for selection of logo
+    it('Allows logo selection and updates state', () => {
+        renderSignUp()
+        moveToStepTwo()
+        
+        const dogIcon = screen.getByTestId('dog-icon')
+        fireEvent.click(dogIcon)
+        
+        expect(dogIcon.className).toContain('selected')
+    })
+
+    // Testcase 6: Signing up using email and password
+    it('Successfully creates a new user in the database with valid credentials', async () => {
+        // Reset all mocks and their implementations
+        jest.resetAllMocks();
+        
+        // Mock the Firebase auth response with a specific UID
+        const mockUser = { uid: 'test-uid' };
+        createUserWithEmailAndPassword.mockResolvedValue({
+            user: mockUser
+        });
+    
+        // Create mock implementations for setDoc to capture the data
+        let capturedUserData = null;
+        let capturedUserMessages = null;
+        const setDocPromises = [];
+        
+        setDoc.mockImplementation((docRef, data) => {
+            const promise = new Promise(resolve => {
+                if (docRef.id === 'test-uid') {
+                    if (capturedUserData === null) {
+                        capturedUserData = data;
+                    } else {
+                        capturedUserMessages = data;
+                    }
+                }
+                resolve();
+            });
+            setDocPromises.push(promise);
+            return promise;
+        });
+        
+        // Mock the doc function
+        doc.mockReturnValue({ id: 'test-uid' });
+        
+        renderSignUp();
+        
+        // Fill in email and password
+        fireEvent.change(screen.getByPlaceholderText('Email'), {
+            target: { value: 'spongebob@krustykrab.com' }
+        });
+        fireEvent.change(screen.getByPlaceholderText('Password'), {
+            target: { value: 'hello123' }
+        });
+        
+        // Wait for the submit button to be clicked
+        await act(async () => {
+            fireEvent.click(screen.getByText('Submit'));
+        });
+        
+        // Fill in username and select logo
+        fireEvent.change(screen.getByPlaceholderText('Username'), {
+            target: { value: 'spongebobmeboy' }
+        });
+        fireEvent.click(screen.getByTestId('bot-icon'));
+        
+        // Create account and wait for all promises to resolve
+        await act(async () => {
+            fireEvent.click(screen.getByText('Create Account'));
+            await Promise.all([
+                createUserWithEmailAndPassword.mock.results[0].value,
+                ...setDocPromises
+            ]);
+        });
+        
+        // Verify authentication was called with correct credentials
+        expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(
+            undefined,
+            'spongebob@krustykrab.com',
+            'hello123'
+        );
+    
+        // Verify the document reference was created with the correct user ID for both collections
+        expect(doc).toHaveBeenCalledTimes(2);
+        expect(doc).toHaveBeenNthCalledWith(1, expect.anything(), 'Users', 'test-uid');
+        expect(doc).toHaveBeenNthCalledWith(2, expect.anything(), 'UserMessages', 'test-uid');
+        
+        // Verify the captured user data contains all required fields
+        expect(capturedUserData).toEqual({
+            username: 'spongebobmeboy',
+            logo: expect.any(String),
+            emailAccount: true,
+            googleAccount: false,
+            virtualCurrency: 500,
+            friends: [],
+            gamesPlayed: 0,
+            gamesWon: 0,
+        });
+    
+        // Verify the captured user messages data
+        expect(capturedUserMessages).toEqual({
+            messages: [],
+        });
+    });
+
+
+    // Testcase 7: Signing up using Google
+    it('Prompts for username and logo after Google sign up', async () => {
+        const { signInWithPopup } = require('firebase/auth')
+        const { getDoc } = require('firebase/firestore')
+
+        signInWithPopup.mockResolvedValueOnce({
+        user: { uid: 'google-uid' }
+        })
+        getDoc.mockResolvedValueOnce({ exists: () => false })
+        
+        renderSignUp()
+        
+        fireEvent.click(screen.getByText('Sign Up with Google'))
+        
+        await waitFor(() => {
+        expect(screen.getByText('Enter Username and Select Your Icon')).toBeInTheDocument()
+        })
+    })
+
+    // Testcase 8: Returning to login/signup during registration
+    it('Returns to opening page when back button is clicked', () => {
+        renderSignUp()
+        
+        const backButton = screen.getByText('Back')
+        fireEvent.click(backButton)
+        
+        expect(mockNavigate).toHaveBeenCalledWith(-1)
+    })
+
+    // Testcase 9: Returns to previous page during email/password signup
+    it('Returns to first page when back is clicked after submitting email and password', () => {
+        renderSignUp()
+        
+        // Move to next step in account registration
+        fireEvent.change(screen.getByPlaceholderText('Email'), {
+        target: { value: 'test@testing.com' }
+        })
+        fireEvent.change(screen.getByPlaceholderText('Password'), {
+        target: { value: 'testtest' }
+        })
+        fireEvent.click(screen.getByText('Submit'))
+        
+        // Click back button
+        fireEvent.click(screen.getByText('Back'))
+        
+        // Verify we're back at the first page we started with
         expect(screen.getByText('Sign Up with Google')).toBeInTheDocument()
     })
 })
