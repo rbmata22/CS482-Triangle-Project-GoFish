@@ -10,65 +10,49 @@
 
 .shop-header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     padding: 0 1rem;
     margin-top: 20px;
     margin-bottom: 20px;
-    position: relative;
 }
 
-.home-button {
-    background-color: #7f00ff;
-    color: white;
-    border: none;
-    padding: 4px 8px; /* Reduced padding to minimize extra space */
-    font-size: 0.9rem;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    width: auto;
-    white-space: nowrap;
+.button-container {
+    display: flex;
+    gap: 10px;
 }
 
-.home-button:hover {
-    background-color: #b400ff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
+.home-button,
 .music-button {
     background-color: #7f00ff;
     color: white;
     border: none;
     padding: 4px 8px;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: bold;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    margin-top: 10px; 
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.home-button:hover,
 .music-button:hover {
     background-color: #b400ff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+.shop-title-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
 .shop-title {
     font-size: 2.5rem;
     font-weight: bold;
     color: #e0b3ff;
     text-shadow: 0 2px 8px rgba(127, 0, 255, 0.5);
+    margin: 0;
 }
 
 .currency-display {
@@ -78,8 +62,6 @@
     background-color: #f0f0f0;
     border-radius: 8px;
     color: #000000;
-    position: absolute;
-    right: 0;
 }
 
 .items-grid {
@@ -140,7 +122,8 @@
     cursor: not-allowed;
 }
 
-.error-message, .success-message {
+.error-message,
+.success-message {
     padding: 1rem;
     border-radius: 4px;
     margin-bottom: 1rem;
@@ -170,11 +153,14 @@
         text-align: center;
     }
 
-    .home-button {
+    .button-container {
+        justify-content: center;
+    }
+
+    .home-button,
+    .music-button {
         font-size: 0.7rem;
         padding: 3px 7px;
-        top: 10px;
-        left: 10px;
     }
 
     .items-grid {

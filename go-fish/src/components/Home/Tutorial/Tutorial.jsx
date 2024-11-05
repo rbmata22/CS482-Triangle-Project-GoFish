@@ -30,7 +30,7 @@ const App = () => {
             text: "If the player being asked has the cards, they must hand them to the person asking.",
             icons: [
                 <IoPersonOutline key="person" className="icon" />,
-                <GiCardJoker key="joker" className="icon" />,
+                <GiCardAceHearts key="ace" className="icon" />,
             ],
         },
         {
