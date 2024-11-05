@@ -71,7 +71,6 @@ const shopItems = [
     featured: true
   }
 ];
-// Define the Shop component function
 const Shop = () => {
   // Hooks for currency, error messages, and success messages
   const [userCurrency, setUserCurrency] = useState(0);
@@ -79,14 +78,38 @@ const Shop = () => {
   const [successMessage, setSuccessMessage] = useState('');
   // Hook for controlling background music
   const [audio] = useState(new Audio(backgroundMusic));
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true); 
   // Initialize Firebase Authentication
   const auth = getAuth();
   // Hook to navigate
   const navigate = useNavigate();
-  // Navigate to the home route
+  // Function to navigate home and stop the music
   const goHome = () => {
+    audio.pause(); 
+    audio.currentTime = 0; 
     navigate('/home');
+  };
+
+  // Effect to handle music play and loop on component mount
+  useEffect(() => {
+    audio.loop = true; 
+    audio.play(); 
+    setIsPlaying(true);
+
+    // Cleanup function to stop music when the component unmounts
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [audio]);
+  // Function to toggle music play/pause
+  const toggleMusic = () => {
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
+    setIsPlaying(!isPlaying);
   };
   // Effect hook fetches user data from Firebase
   useEffect(() => {
@@ -95,7 +118,7 @@ const Shop = () => {
         try {
           // Get user document from Firestore
           const userDoc = await getDoc(doc(db, 'Users', auth.currentUser.uid));
-          // If user document exists update state with user's virtual currency
+          // If user document exists, update state with user's virtual currency
           if (userDoc.exists()) {
             setUserCurrency(userDoc.data().virtualCurrency || 0);
           }
@@ -108,53 +131,34 @@ const Shop = () => {
     };
     fetchUserData();
   }, [auth.currentUser]);
-  // Function to toggle music play/pause
-  const toggleMusic = () => {
-    if (isPlaying) {
-      audio.pause();
-    } else {
-      audio.play();
-    }
-    setIsPlaying(!isPlaying);
-  };
   // Function to handle item purchase
   const handlePurchase = async (item) => {
-    // Check if user is logged in
     if (!auth.currentUser) {
       setError("To buy something you have to be logged in");
       return;
     }
-    // Check if user has enough currency to buy the item
     if (userCurrency < item.price) {
       setError("You need more money");
       return;
     }
     try {
-      // Reference to user's Firestore document
       const userRef = doc(db, 'Users', auth.currentUser.uid);
-      // Get user document
       const userDoc = await getDoc(userRef);
-      // Check if user document is there
       if (!userDoc.exists()) {
         setError("Account not found");
         return;
       }
-      // Get new balance after purchase
       const userData = userDoc.data();
       const newBalance = userData.virtualCurrency - item.price;
-      // Update user's virtual currency in Firestore
       await updateDoc(userRef, {
         virtualCurrency: newBalance,
         [`inventory.${item.id}`]: true
       });
-      // Update user currency state and set success message
       setUserCurrency(newBalance);
       setSuccessMessage(`You bought it! ${item.name}!`);
       setTimeout(() => setSuccessMessage(''), 3000);
-      // Navigate to a different route
       navigate('/shape', { state: { selectedItem: item } });
     } catch (error) {
-      // Set error state and log the error if purchase fails
       setError("Something went wrong");
       console.error("Here's what went wrong", error);
     }
@@ -165,13 +169,15 @@ const Shop = () => {
         <div className="button-container">
           <button className="home-button" onClick={goHome}>Home</button>
           <button className="music-button" onClick={toggleMusic}>
-            {isPlaying ? 'Pause Music' : 'Play Music'}
+            {isPlaying ? 'Pause Music' : 'Music'}
           </button>
         </div>
-        <h1 className="shop-title">Shop</h1>
         <div className="currency-display">
           Your Balance: {userCurrency} coins
         </div>
+      </div>
+      <div className="shop-title-container">
+        <h1 className="shop-title">Shop</h1>
       </div>
       {error && <div className="error-message">{error}</div>}
       {successMessage && <div className="success-message">{successMessage}</div>}
@@ -194,5 +200,4 @@ const Shop = () => {
     </div>
   );
 };
-// Export Shop default export
 export default Shop;
