@@ -1,7 +1,7 @@
 // Import useState and useEffect hooks from React
 import { useState, useEffect } from 'react';
 // Import authentication function from Firebase authentication module
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 // Import functions to interact with Firestore database
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
 // Import the database configuration from the local config file
@@ -12,33 +12,19 @@ import { useNavigate } from 'react-router-dom';
 import './shop.css';
 // Import music for the shop
 import backgroundMusic from '../../assets/background-music.mp3';
-// Import shop icons
+// Import shop icons from Lucide
 import { Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem } from 'lucide-react';
 // An array of shop items with details
 const shopItems = [
-  { id: 1, name: "Apple Icon", price: 200, featured: false },
-  { id: 2, name: "Banana Icon", price: 200, featured: true },
-  { id: 3, name: "Cherry Icon", price: 250, featured: true },
-  { id: 4, name: "Grape Icon", price: 300, featured: true },
-  { id: 5, name: "Candy Icon", price: 300, featured: true },
-  { id: 6, name: "Pizza Icon", price: 400, featured: true },
-  { id: 7, name: "Croissant Icon", price: 500, featured: true },
-  { id: 8, name: "Gem Icon", price: 1000, featured: true }
+  { id: 1, name: "Apple Icon", price: 200, icon: Apple },
+  { id: 2, name: "Banana Icon", price: 200, icon: Banana },
+  { id: 3, name: "Cherry Icon", price: 250, icon: Cherry },
+  { id: 4, name: "Grape Icon", price: 300, icon: Grape },
+  { id: 5, name: "Candy Icon", price: 300, icon: Candy },
+  { id: 6, name: "Pizza Icon", price: 400, icon: Pizza },
+  { id: 7, name: "Croissant Icon", price: 500, icon: Croissant },
+  { id: 8, name: "Gem Icon", price: 1000, icon: Gem }
 ];
-// Function to render the correct icon based on item id
-const renderItemIcon = (id) => {
-  switch (id) {
-    case 1: return <Apple className="item-icon" />;
-    case 2: return <Banana className="item-icon" />;
-    case 3: return <Cherry className="item-icon" />;
-    case 4: return <Grape className="item-icon" />;
-    case 5: return <Candy className="item-icon" />;
-    case 6: return <Pizza className="item-icon" />;
-    case 7: return <Croissant className="item-icon" />;
-    case 8: return <Gem className="item-icon" />;
-    default: return <Apple className="item-icon" />; 
-  }
-};
 // Shop component
 const Shop = () => {
   // Define state for user currency
@@ -99,14 +85,13 @@ const Shop = () => {
   };
   // useEffect to fetch user currency and inventory data based on authentication type
   useEffect(() => {
-    // Define an asynchronous function to fetch user data
+    // Define a function to fetch user data
     const fetchUserData = async () => {
       // Check if the user is a guest
       if (authType === 'Guest') {
         // Load the guest currency from localStorage, defaulting to 500 if not found
         const guestCurrency = parseInt(localStorage.getItem('guestCurrency')) || 500;
         setUserCurrency(guestCurrency);
-        
         // Load the guest inventory from localStorage
         const guestInventory = JSON.parse(localStorage.getItem('guestInventory')) || {};
         setInventory(guestInventory);
@@ -144,61 +129,46 @@ const Shop = () => {
   const handlePurchase = async (item) => {
     // Check if the user has enough currency to purchase the item
     if (userCurrency < item.price) {
+      // Set an error message if the user has insufficient currency
       setError("You need more money");
       return;
     }
     // Check if the item has already been purchased
     if (inventory[item.id]) {
+      // Set an error message if the item is already owned
       setError("You already own this item");
       return;
     }
+    // Calculate the new balance after the purchase
+    const newBalance = userCurrency - item.price;
+    // Update user currency in state
+    setUserCurrency(newBalance);
+    // Update inventory in state
+    const updatedInventory = { ...inventory, [item.id]: true };
+    setInventory(updatedInventory);
+    // If user is a guest, update localStorage
     if (authType === 'Guest') {
-      // For guests, update the balance and inventory in localStorage
-      const newBalance = userCurrency - item.price;
-      localStorage.setItem('guestCurrency', newBalance); // Update currency in localStorage
-      setUserCurrency(newBalance);
-      // Update the inventory in localStorage
-      const guestInventory = { ...inventory, [item.id]: true };
-      localStorage.setItem('guestInventory', JSON.stringify(guestInventory));
-      setInventory(guestInventory);
-      // Show success message for the purchase
-      setSuccessMessage(`You bought it! ${item.name}!`);
-      setTimeout(() => setSuccessMessage(''), 3000);
+      localStorage.setItem('guestCurrency', newBalance);
+      localStorage.setItem('guestInventory', JSON.stringify(updatedInventory));
+      setSuccessMessage(`You bought ${item.name}!`);
     } else {
       // For signed-in users, update Firestore
       try {
-        // Reference the user's document in Firestore
         const userRef = doc(db, 'Users', auth.currentUser.uid);
-        // Calculate the new balance after the purchase
-        const newBalance = userCurrency - item.price;
-        // Update the user's currency and inventory in Firestore
-        await updateDoc(userRef, {
-          virtualCurrency: newBalance,
-          [`inventory.${item.id}`]: true
-        });
-        // Update the user currency in the component state
-        setUserCurrency(newBalance);
-        // Update the inventory state to reflect the purchase
-        setInventory(prevInventory => ({ ...prevInventory, [item.id]: true }));
-        // Set a success message to notify the user of the successful purchase
-        setSuccessMessage(`You bought it! ${item.name}!`);
-        setTimeout(() => setSuccessMessage(''), 3000);
-        // Navigate to the shape page, passing the selected item as state
-        navigate('/shape', { state: { selectedItem: item } });
+        await updateDoc(userRef, { virtualCurrency: newBalance, inventory: updatedInventory });
+        setSuccessMessage(`You bought ${item.name}!`);
       } catch (error) {
-        // Set an error message if the purchase process fails
         setError("Something went wrong");
-        // Log the error for debugging
         console.error("Error during purchase:", error);
       }
     }
+    // Clear success message after 3 seconds
+    setTimeout(() => setSuccessMessage(''), 3000);
   };
-  // Function to spin or not if item has been purchased
+  // Render each item’s icon, conditionally applying spin if not purchased
   const renderItemIcon = (itemId, IconComponent) => {
     const isPurchased = inventory[itemId];
-    return (
-      <IconComponent className={`item-icon ${!isPurchased ? "spin" : ""}`} />
-    );
+    return <IconComponent className={`item-icon ${!isPurchased ? "spin" : ""}`} />;
   };
   // Render the Shop component UI
   return (
@@ -252,6 +222,6 @@ const Shop = () => {
       </div>
     </div>
   );
-}
+};
 // Export the Shop component as default
 export default Shop;
