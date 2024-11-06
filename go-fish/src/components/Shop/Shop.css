@@ -137,7 +137,7 @@
     /* Brightened shadow on hover */
     box-shadow: 0 4px 20px #7f00ff;
 }
-/* Style for shop item icons with spinning animation */
+/* Style for shop item icons */
 .item-icon {
     /* Width of the icon */
     width: 60px;
@@ -147,6 +147,9 @@
     margin: 10px auto;
     /* Set icon color to white */
     color: white;
+}
+/* Spinning animation applied to unpurchased icons */
+.spin {
     /* Apply spin animation */
     animation: spin 6s linear infinite;
 }
