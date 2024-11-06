@@ -137,18 +137,16 @@
     /* Brightened shadow on hover */
     box-shadow: 0 4px 20px #7f00ff;
 }
-/* Style for shop item images */
-.item-image {
-    /* Full width of item container */
-    width: 100%;
-    /* Maintain image aspect ratio */
-    height: auto;
-    /* Max height for item image */
-    max-height: 160px;
-    /* Crop image if necessary */
-    object-fit: cover;
-    /* Rounded corners */
-    border-radius: 4px;
+/* Style for shop item icons */
+.item-icon {
+    /* Width of the icon */
+    width: 60px;
+    /* Height of the icon */
+    height: 60px;
+    /* Center icon horizontally */
+    margin: 10px auto;
+    /* Set icon color */
+    color: #8a2be2;
 }
 /* Style for item price text */
 .item-price {

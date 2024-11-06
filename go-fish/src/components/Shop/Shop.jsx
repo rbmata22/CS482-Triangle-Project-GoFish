@@ -12,65 +12,33 @@ import { useNavigate } from 'react-router-dom';
 import './shop.css';
 // Import music for the shop
 import backgroundMusic from '../../assets/background-music.mp3';
+// Import shop icons
+import { Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem } from 'lucide-react';
 // An array of shop items with details
 const shopItems = [
-  {
-    id: 1,
-    name: "NBA Icon",
-    image: "https://external-preview.redd.it/4XfJcJFWh7usKB-htKE7QdoiW2GupdFiIhqNU0X7dns.jpg?width=640&crop=smart&auto=webp&s=42be24e79f0e031252dc83454987f7f78ed2a44e",
-    price: 200,
-    featured: false
-  },
-  {
-    id: 2,
-    name: "Women Icon",
-    image: "https://www.the-outrage.com/cdn/shop/products/wc25_preview.jpeg?v=1511887627",
-    price: 200,
-    featured: true
-  },
-  {
-    id: 3,
-    name: "Christmas Icon",
-    image: "https://cdn.shopify.com/s/files/1/0041/7579/0209/files/Christmas_Playing_Cards_-_A_-_3d.webp?v=1699989088",
-    price: 250,
-    featured: true
-  },
-  {
-    id: 4,
-    name: "Star Wars Icon",
-    image: "https://cdn.shopify.com/s/files/1/0013/7332/files/resized-005_cba8f816-6559-4b89-88bf-85cf31a8b5bb.jpg?v=1650568718",
-    price: 300,
-    featured: true
-  },
-  {
-    id: 5,
-    name: "Marvel Icon",
-    image: "https://store.theory11.com/cdn/shop/files/product.avengers.court-cards_97d23a31-e43f-473d-8cb7-1eabeff01acf.png?v=1650372539&width=4000",
-    price: 300,
-    featured: true
-  },
-  {
-    id: 6,
-    name: "Dragon Ball Z Icon",
-    image: "https://tccplayingcard.com/cdn/shop/files/Dragon_Ball_Z_3.jpg?v=1723003025&width=1780",
-    price: 400,
-    featured: true
-  },
-  {
-    id: 7,
-    name: "Vietnamese Icon",
-    image: "https://cdn.myportfolio.com/e6cfaaf0-38d5-4c18-9230-8a03d0f616cb/9ce60e68-a75a-4619-8867-547dfd97d7d3_rw_1920.jpg?h=bc323e23758059e0ee248037a72c80aa",
-    price: 500,
-    featured: true
-  },
-  {
-    id: 8,
-    name: "SpongeBob Icon",
-    image: "https://ae01.alicdn.com/kf/S92677255435745c0bc3fe8fba1a127e5Z.jpg_960x960.jpg",
-    price: 1000,
-    featured: true
-  }
+  { id: 1, name: "Apple Icon", price: 200, featured: false },
+  { id: 2, name: "Banana Icon", price: 200, featured: true },
+  { id: 3, name: "Cherry Icon", price: 250, featured: true },
+  { id: 4, name: "Grape Icon", price: 300, featured: true },
+  { id: 5, name: "Candy Icon", price: 300, featured: true },
+  { id: 6, name: "Pizza Icon", price: 400, featured: true },
+  { id: 7, name: "Croissant Icon", price: 500, featured: true },
+  { id: 8, name: "Gem Icon", price: 1000, featured: true }
 ];
+// Function to render the correct icon based on item id
+const renderItemIcon = (id) => {
+  switch (id) {
+    case 1: return <Apple className="item-icon" />;
+    case 2: return <Banana className="item-icon" />;
+    case 3: return <Cherry className="item-icon" />;
+    case 4: return <Grape className="item-icon" />;
+    case 5: return <Candy className="item-icon" />;
+    case 6: return <Pizza className="item-icon" />;
+    case 7: return <Croissant className="item-icon" />;
+    case 8: return <Gem className="item-icon" />;
+    default: return <Apple className="item-icon" />; 
+  }
+};
 // Shop component
 const Shop = () => {
   // Define state for user currency
@@ -226,57 +194,57 @@ const Shop = () => {
     }
   };
   // Render the Shop component UI
-  return (
-    <div className="shop-container">
-      {/* Header section of the shop */}
-      <div className="shop-header">
-        {/* Container for navigation buttons */}
-        <div className="button-container">
-          {/* Home button to navigate back to home */}
-          <button className="home-button" onClick={goHome}>Home</button>
-          {/* Button to toggle background music */}
-          <button className="music-button" onClick={toggleMusic}>
-            {isPlaying ? 'Pause Music' : 'Music'}
-          </button>
-        </div>
-        {/* Display for user currency balance */}
-        <div className="currency-display">
-          Your Balance: {userCurrency} coins
-        </div>
+return (
+  <div className="shop-container">
+    {/* Header section of the shop */}
+    <div className="shop-header">
+      {/* Container for navigation buttons */}
+      <div className="button-container">
+        {/* Home button to navigate back to home */}
+        <button className="home-button" onClick={goHome}>Home</button>
+        {/* Button to toggle background music */}
+        <button className="music-button" onClick={toggleMusic}>
+          {isPlaying ? 'Pause Music' : 'Music'}
+        </button>
       </div>
-      {/* Title section of the shop */}
-      <div className="shop-title-container">
-        <h1 className="shop-title">Shop</h1>
-      </div>
-      {/* Display error messages if any */}
-      {error && <div className="error-message">{error}</div>}
-      {/* Display success messages if any */}
-      {successMessage && <div className="success-message">{successMessage}</div>}
-            {/* Grid layout for displaying shop items */}
-            <div className="items-grid">
-        {/* Map over each item in shopItems array */}
-        {shopItems.map(item => (
-          // Container for individual shop item
-          <div key={item.id} className="shop-item">
-            {/* Display item name */}
-            <h2>{item.name}</h2>
-            {/* Display item image */}
-            <img src={item.image} alt={item.name} className="item-image" />
-            {/* Display item price */}
-            <p className="item-price">{item.price} Coins</p>
-            {/* Purchase button, disabled if the item is already owned */}
-            <button
-              onClick={() => handlePurchase(item)}
-              className="purchase-button"
-              disabled={inventory[item.id]}
-            >
-              {inventory[item.id] ? 'Purchased' : 'Purchase'}
-            </button>
-          </div>
-        ))}
+      {/* Display for user currency balance */}
+      <div className="currency-display">
+        Your Balance: {userCurrency} coins
       </div>
     </div>
-  );
+    {/* Title section of the shop */}
+    <div className="shop-title-container">
+      <h1 className="shop-title">Shop</h1>
+    </div>
+    {/* Display error messages if any */}
+    {error && <div className="error-message">{error}</div>}
+    {/* Display success messages if any */}
+    {successMessage && <div className="success-message">{successMessage}</div>}
+    {/* Grid layout for displaying shop items */}
+    <div className="items-grid">
+      {/* Map over each item in shopItems array */}
+      {shopItems.map(item => (
+        // Container for individual shop item
+        <div key={item.id} className="shop-item">
+          {/* Display item name */}
+          <h2>{item.name}</h2>
+          {/* Display item icon based on item id */}
+          {renderItemIcon(item.id)}
+          {/* Display item price */}
+          <p className="item-price">{item.price} Coins</p>
+          {/* Purchase button, disabled if the item is already owned */}
+          <button
+            onClick={() => handlePurchase(item)}
+            className="purchase-button"
+            disabled={inventory[item.id]}
+          >
+            {inventory[item.id] ? 'Purchased' : 'Purchase'}
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 }
 // Export the Shop component as default
 export default Shop;
