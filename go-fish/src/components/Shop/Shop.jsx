@@ -52,6 +52,7 @@ const Shop = () => {
   // Define audio instances for success and error sounds
   const successAudio = new Audio(purchaseSuccessSound);
   const errorAudio = new Audio(purchaseErrorSound);
+  //CHECK THIS OUT <Marley>, here's why I am pleased with this addition of code. It was something that really brought the whole shop component together for me. Once I got the functionality working, it was soothing, innovative, and creative. Something that would set our project apart from others.
   // Function to navigate back to the home page and stop the music
   const goHome = () => {
     // Pause the background music
