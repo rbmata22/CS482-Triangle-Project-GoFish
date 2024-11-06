@@ -1,7 +1,7 @@
 // Import useState and useEffect hooks from React
 import { useState, useEffect } from 'react';
 // Import authentication function from Firebase authentication module
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 // Import functions to interact with Firestore database
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
 // Import the database configuration from the local config file
@@ -71,6 +71,7 @@ const shopItems = [
     featured: true
   }
 ];
+// Shop component
 const Shop = () => {
   // Hooks for currency, error messages, and success messages
   const [userCurrency, setUserCurrency] = useState(0);
@@ -78,24 +79,22 @@ const Shop = () => {
   const [successMessage, setSuccessMessage] = useState('');
   // Hook for controlling background music
   const [audio] = useState(new Audio(backgroundMusic));
-  const [isPlaying, setIsPlaying] = useState(true); 
+  const [isPlaying, setIsPlaying] = useState(true);
   // Initialize Firebase Authentication
   const auth = getAuth();
   // Hook to navigate
   const navigate = useNavigate();
   // Function to navigate home and stop the music
   const goHome = () => {
-    audio.pause(); 
-    audio.currentTime = 0; 
+    audio.pause();
+    audio.currentTime = 0;
     navigate('/home');
   };
-
   // Effect to handle music play and loop on component mount
   useEffect(() => {
-    audio.loop = true; 
-    audio.play(); 
+    audio.loop = true;
+    audio.play();
     setIsPlaying(true);
-
     // Cleanup function to stop music when the component unmounts
     return () => {
       audio.pause();
@@ -111,58 +110,91 @@ const Shop = () => {
     }
     setIsPlaying(!isPlaying);
   };
-  // Effect hook fetches user data from Firebase
+  // Effect hook to fetch user data from Firebase when authentication state changes
   useEffect(() => {
-    const fetchUserData = async () => {
-      if (auth.currentUser) {
-        try {
-          // Get user document from Firestore
-          const userDoc = await getDoc(doc(db, 'Users', auth.currentUser.uid));
-          // If user document exists, update state with user's virtual currency
-          if (userDoc.exists()) {
-            setUserCurrency(userDoc.data().virtualCurrency || 0);
+    console.log("Setting up onAuthStateChanged listener");
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User signed in:", user.uid);
+        // User is signed in, fetch user data
+        const fetchUserData = async () => {
+          try {
+            // Get user document from Firestore
+            const userRef = doc(db, 'Users', user.uid);
+            const userDoc = await getDoc(userRef);
+            if (userDoc.exists()) {
+              // Get user's virtual currency, default to 500 if not set
+              const currency = userDoc.data().virtualCurrency ?? 500;
+              console.log("Fetched user currency:", currency);
+              // If currency is not present, initialize it to 500
+              if (!userDoc.data().virtualCurrency) {
+                console.log("Initializing currency to 500 for user:", user.uid);
+                await updateDoc(userRef, { virtualCurrency: 500 });
+              }
+              setUserCurrency(currency);
+            } else {
+              console.log("User document does not exist, initializing currency to 500");
+              await updateDoc(userRef, { virtualCurrency: 500 });
+              setUserCurrency(500);
+            }
+          } catch (error) {
+            // Set error state and log the error if fetching user data fails
+            setError('Error fetching user data');
+            console.error('Error fetching user data:', error);
           }
-        } catch (error) {
-          // Set error state and log the error if fetching user data fails
-          setError('Error fetching user data');
-          console.error('Error:', error);
-        }
+        };
+        fetchUserData();
+      } else {
+        console.log("No user is signed in. Setting currency to 0.");
+        // User is signed out, reset currency and other user-specific state
+        setUserCurrency(0);
       }
-    };
-    fetchUserData();
-  }, [auth.currentUser]);
+    });
+    // Cleanup the listener on component unmount
+    return () => unsubscribe();
+  }, [auth]);
   // Function to handle item purchase
   const handlePurchase = async (item) => {
     if (!auth.currentUser) {
+      // Set error if user is not logged in
       setError("To buy something you have to be logged in");
       return;
     }
     if (userCurrency < item.price) {
+      // Set error if user does not have enough currency
       setError("You need more money");
       return;
     }
     try {
+      // Reference to the user's document in Firestore
       const userRef = doc(db, 'Users', auth.currentUser.uid);
       const userDoc = await getDoc(userRef);
       if (!userDoc.exists()) {
+        // Set error if user account is not found
         setError("Account not found");
         return;
       }
+      // Update user's virtual currency and add the item to their inventory
       const userData = userDoc.data();
       const newBalance = userData.virtualCurrency - item.price;
+      console.log("New balance after purchase:", newBalance);
       await updateDoc(userRef, {
         virtualCurrency: newBalance,
         [`inventory.${item.id}`]: true
       });
+      // Update the state and set success message
       setUserCurrency(newBalance);
       setSuccessMessage(`You bought it! ${item.name}!`);
       setTimeout(() => setSuccessMessage(''), 3000);
+      // Navigate to the 'shape' page with the selected item
       navigate('/shape', { state: { selectedItem: item } });
     } catch (error) {
+      // Set error if something goes wrong during the purchase
       setError("Something went wrong");
-      console.error("Here's what went wrong", error);
+      console.error("Error during purchase:", error);
     }
   };
+  // Render the Shop component
   return (
     <div className="shop-container">
       <div className="shop-header">
