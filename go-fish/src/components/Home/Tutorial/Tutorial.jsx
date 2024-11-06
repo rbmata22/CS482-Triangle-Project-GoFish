@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GiCardPickup, GiCardJoker, GiCardAceHearts, GiCard2Clubs, GiCard3Spades, GiAnglerFish } from 'react-icons/gi';
+import { GiCardPickup, GiCardAceHearts, GiCard2Clubs, GiCard3Spades, GiAnglerFish } from 'react-icons/gi';
 import { IoTabletLandscape, IoPersonOutline } from 'react-icons/io5';
 import { FaArrowRotateLeft } from 'react-icons/fa6';
 import './Tutorial.css';
