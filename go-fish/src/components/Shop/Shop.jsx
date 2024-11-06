@@ -203,29 +203,43 @@ const Shop = () => {
   // Render the Shop component UI
   return (
     <div className="shop-container">
+      {/* Header section of the shop */}
       <div className="shop-header">
+        {/* Container for navigation buttons */}
         <div className="button-container">
-          <button className="home-button" onClick={() => navigate('/home')}>Home</button>
-          <button className="music-button" onClick={() => /* your music toggle code here */}>Music</button>
+          {/* Home button to navigate back to home */}
+          <button className="home-button" onClick={goHome}>Home</button>
+          {/* Button to toggle background music */}
+          <button className="music-button" onClick={toggleMusic}>
+            {isPlaying ? 'Pause Music' : 'Music'}
+          </button>
         </div>
+        {/* Display for user currency balance */}
         <div className="currency-display">
           Your Balance: {userCurrency} coins
         </div>
       </div>
-
+      {/* Title section of the shop */}
       <div className="shop-title-container">
         <h1 className="shop-title">Shop</h1>
       </div>
-
+      {/* Display error messages if any */}
       {error && <div className="error-message">{error}</div>}
+      {/* Display success messages if any */}
       {successMessage && <div className="success-message">{successMessage}</div>}
-
+      {/* Grid layout for displaying shop items */}
       <div className="items-grid">
+        {/* Map over each item in shopItems array */}
         {shopItems.map(item => (
+          // Container for individual shop item
           <div key={item.id} className="shop-item">
+            {/* Display item name */}
             <h2>{item.name}</h2>
+            {/* Display item icon based on item id */}
             {renderItemIcon(item.id, item.icon)}
+            {/* Display item price */}
             <p className="item-price">{item.price} Coins</p>
+            {/* Purchase button, disabled if the item is already owned */}
             <button
               onClick={() => handlePurchase(item)}
               className="purchase-button"
