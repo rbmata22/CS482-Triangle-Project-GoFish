@@ -16,56 +16,56 @@ import backgroundMusic from '../../assets/background-music.mp3';
 const shopItems = [
   {
     id: 1,
-    name: "NBA Cards",
+    name: "NBA Icon",
     image: "https://external-preview.redd.it/4XfJcJFWh7usKB-htKE7QdoiW2GupdFiIhqNU0X7dns.jpg?width=640&crop=smart&auto=webp&s=42be24e79f0e031252dc83454987f7f78ed2a44e",
     price: 200,
     featured: false
   },
   {
     id: 2,
-    name: "Women cards",
+    name: "Women Icon",
     image: "https://www.the-outrage.com/cdn/shop/products/wc25_preview.jpeg?v=1511887627",
     price: 200,
     featured: true
   },
   {
     id: 3,
-    name: "Christmas cards",
+    name: "Christmas Icon",
     image: "https://cdn.shopify.com/s/files/1/0041/7579/0209/files/Christmas_Playing_Cards_-_A_-_3d.webp?v=1699989088",
     price: 250,
     featured: true
   },
   {
     id: 4,
-    name: "Star Wars cards",
+    name: "Star Wars Icon",
     image: "https://cdn.shopify.com/s/files/1/0013/7332/files/resized-005_cba8f816-6559-4b89-88bf-85cf31a8b5bb.jpg?v=1650568718",
     price: 300,
     featured: true
   },
   {
     id: 5,
-    name: "Marvel cards",
+    name: "Marvel Icon",
     image: "https://store.theory11.com/cdn/shop/files/product.avengers.court-cards_97d23a31-e43f-473d-8cb7-1eabeff01acf.png?v=1650372539&width=4000",
     price: 300,
     featured: true
   },
   {
     id: 6,
-    name: "Dragon Ball Z cards",
+    name: "Dragon Ball Z Icon",
     image: "https://tccplayingcard.com/cdn/shop/files/Dragon_Ball_Z_3.jpg?v=1723003025&width=1780",
     price: 400,
     featured: true
   },
   {
     id: 7,
-    name: "Vietnamese cards",
+    name: "Vietnamese Icon",
     image: "https://cdn.myportfolio.com/e6cfaaf0-38d5-4c18-9230-8a03d0f616cb/9ce60e68-a75a-4619-8867-547dfd97d7d3_rw_1920.jpg?h=bc323e23758059e0ee248037a72c80aa",
     price: 500,
     featured: true
   },
   {
     id: 8,
-    name: "SpongeBob cards",
+    name: "SpongeBob Icon",
     image: "https://ae01.alicdn.com/kf/S92677255435745c0bc3fe8fba1a127e5Z.jpg_960x960.jpg",
     price: 1000,
     featured: true
