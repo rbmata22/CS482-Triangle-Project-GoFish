@@ -108,8 +108,8 @@
 .items-grid {
     /* Display items in a grid layout */
     display: grid;
-    /* Define responsive grid columns */
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* Set grid columns to 4 items per row */
+    grid-template-columns: repeat(4, 1fr);
     /* Spacing between grid items */
     gap: 1.5rem;
     /* Space below the grid */
@@ -145,8 +145,8 @@
     height: 60px;
     /* Center icon horizontally */
     margin: 10px auto;
-    /* Set icon color */
-    color: #8a2be2;
+    /* Set icon color to white */
+    color: white;
 }
 /* Style for item price text */
 .item-price {
