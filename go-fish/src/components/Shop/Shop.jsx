@@ -85,45 +85,33 @@ const Shop = () => {
   };
   // useEffect to fetch user currency and inventory data based on authentication type
   useEffect(() => {
-    // Define a function to fetch user data
     const fetchUserData = async () => {
-      // Check if the user is a guest
       if (authType === 'Guest') {
-        // Load the guest currency from localStorage, defaulting to 500 if not found
-        const guestCurrency = parseInt(localStorage.getItem('guestCurrency')) || 500;
-        // Load the guest inventory from localStorage
-        const guestInventory = JSON.parse(localStorage.getItem('guestInventory')) || {};
-        setUserData({
-          username: localStorage.getItem('username'),
-          virtualCurrency: guestCurrency,
-          inventory: guestInventory,
-          logo: localStorage.getItem('logo'),
-        });
+        // Fetch guest data from localStorage
+        let guestCurrency = parseInt(localStorage.getItem('guestCurrency'));
+        if (isNaN(guestCurrency)) {
+          guestCurrency = 500;  // Default balance for a new guest
+          localStorage.setItem('guestCurrency', guestCurrency);
+        }
+        setUserCurrency(guestCurrency);
+        setInventory(JSON.parse(localStorage.getItem('guestInventory')) || {});
       } else {
-        // For signed-in users, fetch data from Firestore
         const userId = auth.currentUser?.uid;
-        // Check if the user is authenticated
         if (userId) {
-          // Get the user document from Firestore
           const userDoc = await getDoc(doc(db, 'Users', userId));
-           // Check if the user document exists
           if (userDoc.exists()) {
-            setUserData(userDoc.data());
-          } else {
-            // Set an error message if the user document is not found
-            setError("User document not found");
+            setUserCurrency(userDoc.data().virtualCurrency || 0);
+            setInventory(userDoc.data().inventory || {});
           }
         }
       }
     };
-    // Call the fetchUserData function
     fetchUserData();
   }, [authType, auth]);
   // Function to handle purchasing items
 const handlePurchase = async (item) => {
   // Check if the user has enough currency to purchase the item
   if (userCurrency < item.price) {
-    // Set an error message if the user has insufficient currency
     setError("You need more money");
     return;
   }
@@ -152,9 +140,7 @@ const handlePurchase = async (item) => {
         inventory: updatedInventory
       });
     } catch (error) {
-      // Set an error message if there is an issue fetching user data
       setError("Something went wrong while updating your balance");
-      // Log the error for debugging
       console.error("Error during purchase:", error);
       return;
     }
