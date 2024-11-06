@@ -135,9 +135,10 @@ const Shop = () => {
     const fetchUserData = async () => {
       // Check if the user is a guest
       if (authType === 'Guest') {
-        // Set the user currency to 500 for guests
+        // Load the guest currency from localStorage, defaulting to 500 if not found
         const guestCurrency = parseInt(localStorage.getItem('guestCurrency')) || 500;
         setUserCurrency(guestCurrency);
+        
         // Load the guest inventory from localStorage
         const guestInventory = JSON.parse(localStorage.getItem('guestInventory')) || {};
         setInventory(guestInventory);
@@ -253,8 +254,8 @@ const Shop = () => {
       {error && <div className="error-message">{error}</div>}
       {/* Display success messages if any */}
       {successMessage && <div className="success-message">{successMessage}</div>}
-      {/* Grid layout for displaying shop items */}
-      <div className="items-grid">
+            {/* Grid layout for displaying shop items */}
+            <div className="items-grid">
         {/* Map over each item in shopItems array */}
         {shopItems.map(item => (
           // Container for individual shop item
