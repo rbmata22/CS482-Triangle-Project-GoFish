@@ -176,20 +176,18 @@ const Shop = () => {
   const handlePurchase = async (item) => {
     // Check if the user has enough currency to purchase the item
     if (userCurrency < item.price) {
-      // Set an error message if the user has insufficient currency
       setError("You need more money");
       return;
     }
     // Check if the item has already been purchased
     if (inventory[item.id]) {
-      // Set an error message if the item is already owned
       setError("You already own this item");
       return;
     }
     if (authType === 'Guest') {
       // For guests, update the balance and inventory in localStorage
       const newBalance = userCurrency - item.price;
-      localStorage.setItem('guestCurrency', newBalance);
+      localStorage.setItem('guestCurrency', newBalance); // Update currency in localStorage
       setUserCurrency(newBalance);
       // Update the inventory in localStorage
       const guestInventory = { ...inventory, [item.id]: true };
@@ -279,6 +277,6 @@ const Shop = () => {
       </div>
     </div>
   );
-};
+}
 // Export the Shop component as default
 export default Shop;

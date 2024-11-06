@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getDoc, doc, deleteDoc, updateDoc, arrayRemove } from 'firebase/firestore';
+import { getDoc, doc, deleteDoc } from 'firebase/firestore';
 import { db, auth } from '../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign, ChevronDown } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import Support from './Support/Support';
 import './Home.css';
-
 const Home = () => {
   const [showSupport, setShowSupport] = useState(false);
   const [userData, setUserData] = useState({});
@@ -15,25 +14,24 @@ const Home = () => {
   const [ownerLeftMessage, setOwnerLeftMessage] = useState(null);
   const navigate = useNavigate();
   const authType = localStorage.getItem('authType');
-
   useEffect(() => {
-    // Check for the "owner has left" message in localStorage
     const message = localStorage.getItem('ownerLeftMessage');
     if (message) {
       setOwnerLeftMessage(message);
       localStorage.removeItem('ownerLeftMessage');
     }
-
     const fetchUserData = async () => {
       if (authType === 'Guest') {
         const guestUsername = localStorage.getItem('username');
         const guestLogo = localStorage.getItem('logo');
         const guestId = localStorage.getItem('guestId');
+        const guestCurrency = parseInt(localStorage.getItem('guestCurrency')) || 500; // Load updated balance
+
         setUserData({
           username: guestUsername,
           logo: guestLogo,
           guestId: guestId,
-          virtualCurrency: 500,
+          virtualCurrency: guestCurrency,
         });
       } else {
         const userId = auth?.currentUser?.uid;
@@ -46,15 +44,13 @@ const Home = () => {
       }
     };
 
-    fetchUserData();
+    fetchUserData(); 
   }, [authType]);
-
   const handleNavigate = (path) => {
     navigate(path);
     setShowDropdown(false);
     setShowJoinDropdown(false);
   };
-
   const handleLogout = async () => {
     try {
       if (authType === 'Guest') {
@@ -70,11 +66,9 @@ const Home = () => {
       console.error('Logout failed: ', error);
     }
   };
-
   const toggleSupport = () => {
     setShowSupport(!showSupport);
   };
-
   const renderUserLogo = () => {
     switch (userData.logo) {
       case 'Cat':
@@ -91,7 +85,6 @@ const Home = () => {
         return <Dices className="user-logo" data-testid="user-logo" />;
     }
   };
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.dropdown') && !event.target.closest('.join-dropdown')) {
@@ -99,13 +92,11 @@ const Home = () => {
         setShowJoinDropdown(false);
       }
     };
-
     document.addEventListener('click', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
-
   return (
     <div className="home-container">
       {ownerLeftMessage && (
@@ -113,7 +104,7 @@ const Home = () => {
           <p>{ownerLeftMessage}</p>
         </div>
       )}
-      
+    
       <div className="sidebar">
         <div className="user-info">
           {renderUserLogo()}
@@ -127,13 +118,11 @@ const Home = () => {
           <button className="sidebar-button" onClick={() => handleNavigate('/Friends')}>Friends</button>
           <button className="sidebar-button" onClick={() => handleNavigate('/Messages')}>Messages</button>
           <button className="sidebar-button" onClick={() => handleNavigate('/shop')}>Shop</button>
-
           <button className="sidebar-button" onClick={handleLogout}>Logout</button>
           <button className="support-button" onClick={toggleSupport}>Admin Support</button>
           {showSupport && <Support onClose={() => setShowSupport(false)} />}
         </div>
       </div>
-
       <div className="main-content">
         <div className="central-image">
           <Dices className="central-dice" />
@@ -167,5 +156,4 @@ const Home = () => {
     </div>
   );
 };
-
 export default Home;
