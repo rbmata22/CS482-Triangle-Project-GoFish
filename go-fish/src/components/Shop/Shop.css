@@ -137,7 +137,7 @@
     /* Brightened shadow on hover */
     box-shadow: 0 4px 20px #7f00ff;
 }
-/* Style for shop item icons */
+/* Style for shop item icons with spinning animation */
 .item-icon {
     /* Width of the icon */
     width: 60px;
@@ -147,6 +147,17 @@
     margin: 10px auto;
     /* Set icon color to white */
     color: white;
+    /* Apply spin animation */
+    animation: spin 6s linear infinite;
+}
+/* Keyframes for spinning effect */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 /* Style for item price text */
 .item-price {
