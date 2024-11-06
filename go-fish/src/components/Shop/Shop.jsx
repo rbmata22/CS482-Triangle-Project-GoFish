@@ -14,6 +14,10 @@ import './shop.css';
 import backgroundMusic from '../../assets/background-music.mp3';
 // Import shop icons from Lucide
 import { Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem } from 'lucide-react';
+// Import sound effects for purchase errors
+import purchaseErrorSound from '../../assets/purchase-error.mp3';
+// Import sound effects for purchase success
+import purchaseSuccessSound from '../../assets/purchase-succesful.mp3';
 // An array of shop items with details
 const shopItems = [
   { id: 1, name: "Apple Icon", price: 200, icon: Apple },
@@ -45,6 +49,9 @@ const Shop = () => {
   const navigate = useNavigate();
   // Retrieve the authentication type (e.g., guest or signed-in user) from localStorage
   const authType = localStorage.getItem('authType');
+  // Define audio instances for success and error sounds
+  const successAudio = new Audio(purchaseSuccessSound);
+  const errorAudio = new Audio(purchaseErrorSound);
   // Function to navigate back to the home page and stop the music
   const goHome = () => {
     // Pause the background music
@@ -113,11 +120,13 @@ const handlePurchase = async (item) => {
   // Check if the user has enough currency to purchase the item
   if (userCurrency < item.price) {
     setError("You need more money");
+    errorAudio.play();
     return;
   }
   // Check if the item has already been purchased
   if (inventory[item.id]) {
     setError("You already own this item");
+    errorAudio.play();
     return;
   }
   // Calculate the new balance after the purchase
@@ -142,10 +151,12 @@ const handlePurchase = async (item) => {
     } catch (error) {
       setError("Something went wrong while updating your balance");
       console.error("Error during purchase:", error);
+      errorAudio.play();
       return;
     }
   }
   setSuccessMessage(`You bought ${item.name}!`);
+  successAudio.play(); 
   setTimeout(() => setSuccessMessage(''), 3000);
 };
   // Render each item’s icon, conditionally applying spin if not purchased
