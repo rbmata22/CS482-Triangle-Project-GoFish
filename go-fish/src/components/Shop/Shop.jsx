@@ -85,10 +85,13 @@ const Shop = () => {
   };
   // useEffect to fetch user currency and inventory data based on authentication type
   useEffect(() => {
+    // Define a function to fetch user data
     const fetchUserData = async () => {
+      // Check if the user is a guest
       if (authType === 'Guest') {
-        // Fetch guest data from localStorage
+        // Load the guest currency from localStorage, defaulting to 500 if not found
         const guestCurrency = parseInt(localStorage.getItem('guestCurrency')) || 500;
+        // Load the guest inventory from localStorage
         const guestInventory = JSON.parse(localStorage.getItem('guestInventory')) || {};
         setUserData({
           username: localStorage.getItem('username'),
@@ -97,24 +100,30 @@ const Shop = () => {
           logo: localStorage.getItem('logo'),
         });
       } else {
-        // Fetch data from Firestore for authenticated users
+        // For signed-in users, fetch data from Firestore
         const userId = auth.currentUser?.uid;
+        // Check if the user is authenticated
         if (userId) {
+          // Get the user document from Firestore
           const userDoc = await getDoc(doc(db, 'Users', userId));
+           // Check if the user document exists
           if (userDoc.exists()) {
             setUserData(userDoc.data());
           } else {
+            // Set an error message if the user document is not found
             setError("User document not found");
           }
         }
       }
     };
+    // Call the fetchUserData function
     fetchUserData();
   }, [authType, auth]);
   // Function to handle purchasing items
 const handlePurchase = async (item) => {
   // Check if the user has enough currency to purchase the item
   if (userCurrency < item.price) {
+    // Set an error message if the user has insufficient currency
     setError("You need more money");
     return;
   }
@@ -143,7 +152,9 @@ const handlePurchase = async (item) => {
         inventory: updatedInventory
       });
     } catch (error) {
+      // Set an error message if there is an issue fetching user data
       setError("Something went wrong while updating your balance");
+      // Log the error for debugging
       console.error("Error during purchase:", error);
       return;
     }
