@@ -5,7 +5,7 @@ import { db } from '../../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign, SquareCheck } from 'lucide-react';
 import './Lobby.css';
 
-const botNames = ["Botty", "LeBot James", "Goku", "Optimus", "Cyber", "RoboCop"];
+const botNames = ["SpongeBot Squarepants", "LeBot James", "Botman", "J.A.R.V.I.S", "Ultron", "Cyborg"];
 
 const Lobby = () => {
   const { lobbyId } = useParams();
