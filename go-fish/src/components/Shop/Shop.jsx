@@ -79,6 +79,8 @@ const Shop = () => {
   const [error, setError] = useState('');
   // Define state for displaying success messages
   const [successMessage, setSuccessMessage] = useState('');
+  // Define state to store the inventory (items that have been purchased)
+  const [inventory, setInventory] = useState({});
   // Create an Audio instance for background music and store it in state
   const [audio] = useState(new Audio(backgroundMusic));
   // Define state for tracking if music is playing
@@ -127,7 +129,7 @@ const Shop = () => {
     // Toggle the isPlaying state to reflect the new audio state
     setIsPlaying(!isPlaying);
   };
-  // useEffect to fetch user currency data based on authentication type
+  // useEffect to fetch user currency and inventory data based on authentication type
   useEffect(() => {
     // Define an asynchronous function to fetch user data
     const fetchUserData = async () => {
@@ -136,6 +138,9 @@ const Shop = () => {
         // Set the user currency to 500 for guests
         const guestCurrency = parseInt(localStorage.getItem('guestCurrency')) || 500;
         setUserCurrency(guestCurrency);
+        // Load the guest inventory from localStorage
+        const guestInventory = JSON.parse(localStorage.getItem('guestInventory')) || {};
+        setInventory(guestInventory);
       } else {
         // For signed-in users, fetch data from Firestore
         const userId = auth?.currentUser?.uid;
@@ -148,6 +153,8 @@ const Shop = () => {
             if (userDoc.exists()) {
               // Set user currency from Firestore, defaulting to 0 if not present
               setUserCurrency(userDoc.data().virtualCurrency || 0);
+              // Set user inventory from Firestore
+              setInventory(userDoc.data().inventory || {});
             } else {
               // Set an error message if the user document is not found
               setError("User document not found");
@@ -172,15 +179,21 @@ const Shop = () => {
       setError("You need more money");
       return;
     }
+    // Check if the item has already been purchased
+    if (inventory[item.id]) {
+      // Set an error message if the item is already owned
+      setError("You already own this item");
+      return;
+    }
     if (authType === 'Guest') {
       // For guests, update the balance and inventory in localStorage
       const newBalance = userCurrency - item.price;
       localStorage.setItem('guestCurrency', newBalance);
       setUserCurrency(newBalance);
       // Update the inventory in localStorage
-      const guestInventory = JSON.parse(localStorage.getItem('guestInventory')) || {};
-      guestInventory[item.id] = true;
+      const guestInventory = { ...inventory, [item.id]: true };
       localStorage.setItem('guestInventory', JSON.stringify(guestInventory));
+      setInventory(guestInventory);
       // Show success message for the purchase
       setSuccessMessage(`You bought it! ${item.name}!`);
       setTimeout(() => setSuccessMessage(''), 3000);
@@ -198,6 +211,8 @@ const Shop = () => {
         });
         // Update the user currency in the component state
         setUserCurrency(newBalance);
+        // Update the inventory state to reflect the purchase
+        setInventory(prevInventory => ({ ...prevInventory, [item.id]: true }));
         // Set a success message to notify the user of the successful purchase
         setSuccessMessage(`You bought it! ${item.name}!`);
         setTimeout(() => setSuccessMessage(''), 3000);
@@ -227,7 +242,7 @@ const Shop = () => {
         </div>
         {/* Display for user currency balance */}
         <div className="currency-display">
-          Your Balance: {userCurrency} dollars
+          Your Balance: {userCurrency} coins
         </div>
       </div>
       {/* Title section of the shop */}
@@ -249,14 +264,14 @@ const Shop = () => {
             {/* Display item image */}
             <img src={item.image} alt={item.name} className="item-image" />
             {/* Display item price */}
-            <p className="item-price">{item.price} Dollars</p>
-            {/* Purchase button, disabled if user currency is insufficient */}
+            <p className="item-price">{item.price} Coins</p>
+            {/* Purchase button, disabled if the item is already owned */}
             <button
               onClick={() => handlePurchase(item)}
               className="purchase-button"
-              disabled={userCurrency < item.price}
+              disabled={inventory[item.id]}
             >
-              {userCurrency < item.price ? 'Out of money' : 'Purchase'}
+              {inventory[item.id] ? 'Purchased' : 'Purchase'}
             </button>
           </div>
         ))}
