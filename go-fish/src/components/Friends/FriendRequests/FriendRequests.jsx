@@ -26,6 +26,14 @@ const FriendRequests = () => {
         return () => unsubscribe();
     }, []);
 
+    /* CHECK THIS OUT (Ryland)
+    *  Figuring out how to accept and decline friend requests took a lot of time. I kept having trouble
+    *  trying to figure out how to decline friend requests and delete the requests from the database.
+    *  Not only this, but I was also havign trouble with the styling as too many requests or having too
+    *  many friends would cause it to run over. Thus, I had to play with the overflow and try to get it
+    *  positioned correctly. While it was difficult, I now have a better understanding of both creating 
+    *  and deleting in the database.
+    */
     const handleRequest = async (requestId, senderId, action) => {
         try {
             const requestRef = doc(db, "FriendRequests", requestId);
