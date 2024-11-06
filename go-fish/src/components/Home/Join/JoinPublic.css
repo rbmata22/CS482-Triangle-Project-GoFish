@@ -17,7 +17,6 @@
 /* Back button styling */
 .back-button {
   align-self: flex-start;
-  margin-left: 20px;
   padding: 0.8rem 2rem;
   background-color: #1E90FF;
   color: white;
@@ -41,7 +40,7 @@
 .join-public-container h2 {
   font-size: 2rem;
   margin-bottom: 1.5rem;
-  color: #00ffff;
+  color: #ffffff;
   animation: slideIn 0.6s ease-out;
 }
 
@@ -126,7 +125,7 @@
 }
 
 .lobby-details li {
-  color: #00ffff;
+  color: #ffffff;
   font-size: 1rem;
   margin: 0.2rem 0;
 }

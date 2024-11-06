@@ -13,9 +13,9 @@ import CreatePrivate from './components/Home/Create/CreatePrivate';
 import JoinPublic from './components/Home/Join/JoinPublic';
 import JoinPrivate from './components/Home/Join/JoinPrivate';
 import Lobby from './components/Home/Lobby/Lobby';
-import Bet from './components/Home/Lobby/Bet/Bet';
+import Bet from './components/Home/Lobby/Game/Bet/Bet';
 import Shop from './components/Shop/Shop';
-import Game from './components/Game/Game';
+import Game from './components/Home/Lobby/Game/Game';
 import Tutorial from './components/Home/Tutorial/Tutorial';
 import './index.css';
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { db } from '../../../config/firebase';
+import { db } from '../../../../config/firebase';
 import { doc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
