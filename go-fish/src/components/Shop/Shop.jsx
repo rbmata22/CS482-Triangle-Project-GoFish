@@ -85,86 +85,72 @@ const Shop = () => {
   };
   // useEffect to fetch user currency and inventory data based on authentication type
   useEffect(() => {
-    // Define a function to fetch user data
     const fetchUserData = async () => {
-      // Check if the user is a guest
       if (authType === 'Guest') {
-        // Load the guest currency from localStorage, defaulting to 500 if not found
+        // Fetch guest data from localStorage
         const guestCurrency = parseInt(localStorage.getItem('guestCurrency')) || 500;
-        setUserCurrency(guestCurrency);
-        // Load the guest inventory from localStorage
         const guestInventory = JSON.parse(localStorage.getItem('guestInventory')) || {};
-        setInventory(guestInventory);
+        setUserData({
+          username: localStorage.getItem('username'),
+          virtualCurrency: guestCurrency,
+          inventory: guestInventory,
+          logo: localStorage.getItem('logo'),
+        });
       } else {
-        // For signed-in users, fetch data from Firestore
-        const userId = auth?.currentUser?.uid;
-        // Check if the user is authenticated
+        // Fetch data from Firestore for authenticated users
+        const userId = auth.currentUser?.uid;
         if (userId) {
-          try {
-            // Get the user document from Firestore
-            const userDoc = await getDoc(doc(db, 'Users', userId));
-            // Check if the user document exists
-            if (userDoc.exists()) {
-              // Set user currency from Firestore, defaulting to 0 if not present
-              setUserCurrency(userDoc.data().virtualCurrency || 0);
-              // Set user inventory from Firestore
-              setInventory(userDoc.data().inventory || {});
-            } else {
-              // Set an error message if the user document is not found
-              setError("User document not found");
-            }
-          } catch (error) {
-            // Set an error message if there is an issue fetching user data
-            setError("Error fetching user data");
-            // Log the error for debugging
-            console.error("Error:", error);
+          const userDoc = await getDoc(doc(db, 'Users', userId));
+          if (userDoc.exists()) {
+            setUserData(userDoc.data());
+          } else {
+            setError("User document not found");
           }
         }
       }
     };
-    // Call the fetchUserData function
     fetchUserData();
   }, [authType, auth]);
   // Function to handle purchasing items
-  const handlePurchase = async (item) => {
-    // Check if the user has enough currency to purchase the item
-    if (userCurrency < item.price) {
-      // Set an error message if the user has insufficient currency
-      setError("You need more money");
+const handlePurchase = async (item) => {
+  // Check if the user has enough currency to purchase the item
+  if (userCurrency < item.price) {
+    setError("You need more money");
+    return;
+  }
+  // Check if the item has already been purchased
+  if (inventory[item.id]) {
+    setError("You already own this item");
+    return;
+  }
+  // Calculate the new balance after the purchase
+  const newBalance = userCurrency - item.price;
+  const updatedInventory = { ...inventory, [item.id]: true };
+  // Update user currency in state
+  setUserCurrency(newBalance);
+  // Update inventory in state
+  setInventory(updatedInventory);
+  if (authType === 'Guest') {
+    // Update guest data in localStorage
+    localStorage.setItem('guestCurrency', newBalance);
+    localStorage.setItem('guestInventory', JSON.stringify(updatedInventory));
+  } else {
+    // For signed-in users, update Firestore
+    try {
+      const userRef = doc(db, 'Users', auth.currentUser.uid);
+      await updateDoc(userRef, {
+        virtualCurrency: newBalance,
+        inventory: updatedInventory
+      });
+    } catch (error) {
+      setError("Something went wrong while updating your balance");
+      console.error("Error during purchase:", error);
       return;
     }
-    // Check if the item has already been purchased
-    if (inventory[item.id]) {
-      // Set an error message if the item is already owned
-      setError("You already own this item");
-      return;
-    }
-    // Calculate the new balance after the purchase
-    const newBalance = userCurrency - item.price;
-    // Update user currency in state
-    setUserCurrency(newBalance);
-    // Update inventory in state
-    const updatedInventory = { ...inventory, [item.id]: true };
-    setInventory(updatedInventory);
-    // If user is a guest, update localStorage
-    if (authType === 'Guest') {
-      localStorage.setItem('guestCurrency', newBalance);
-      localStorage.setItem('guestInventory', JSON.stringify(updatedInventory));
-      setSuccessMessage(`You bought ${item.name}!`);
-    } else {
-      // For signed-in users, update Firestore
-      try {
-        const userRef = doc(db, 'Users', auth.currentUser.uid);
-        await updateDoc(userRef, { virtualCurrency: newBalance, inventory: updatedInventory });
-        setSuccessMessage(`You bought ${item.name}!`);
-      } catch (error) {
-        setError("Something went wrong");
-        console.error("Error during purchase:", error);
-      }
-    }
-    // Clear success message after 3 seconds
-    setTimeout(() => setSuccessMessage(''), 3000);
-  };
+  }
+  setSuccessMessage(`You bought ${item.name}!`);
+  setTimeout(() => setSuccessMessage(''), 3000);
+};
   // Render each item’s icon, conditionally applying spin if not purchased
   const renderItemIcon = (itemId, IconComponent) => {
     const isPurchased = inventory[itemId];
