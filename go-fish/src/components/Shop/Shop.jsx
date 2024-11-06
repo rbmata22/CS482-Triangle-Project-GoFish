@@ -84,6 +84,8 @@ const Shop = () => {
   const auth = getAuth();
   // Hook to navigate
   const navigate = useNavigate();
+  // Get authType from localStorage to determine if user is a guest
+  const authType = localStorage.getItem('authType');
   // Function to navigate home and stop the music
   const goHome = () => {
     audio.pause();
@@ -110,91 +112,64 @@ const Shop = () => {
     }
     setIsPlaying(!isPlaying);
   };
-  // Effect hook to fetch user data from Firebase when authentication state changes
+  // Effect to fetch user currency based on authType
   useEffect(() => {
-    console.log("Setting up onAuthStateChanged listener");
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("User signed in:", user.uid);
-        // User is signed in, fetch user data
-        const fetchUserData = async () => {
+    const fetchUserData = async () => {
+      if (authType === 'Guest') {
+        // Set guest user data from localStorage
+        const guestCurrency = 500;
+        setUserCurrency(guestCurrency);
+      } else {
+        // For non-guest users, fetch data from Firestore
+        const userId = auth?.currentUser?.uid;
+        if (userId) {
           try {
             // Get user document from Firestore
-            const userRef = doc(db, 'Users', user.uid);
-            const userDoc = await getDoc(userRef);
+            const userDoc = await getDoc(doc(db, 'Users', userId));
             if (userDoc.exists()) {
-              // Get user's virtual currency, default to 500 if not set
-              const currency = userDoc.data().virtualCurrency ?? 500;
-              console.log("Fetched user currency:", currency);
-              // If currency is not present, initialize it to 500
-              if (!userDoc.data().virtualCurrency) {
-                console.log("Initializing currency to 500 for user:", user.uid);
-                await updateDoc(userRef, { virtualCurrency: 500 });
-              }
-              setUserCurrency(currency);
+              setUserCurrency(userDoc.data().virtualCurrency || 0);
             } else {
-              console.log("User document does not exist, initializing currency to 500");
-              await updateDoc(userRef, { virtualCurrency: 500 });
-              setUserCurrency(500);
+              setError("User document not found");
             }
           } catch (error) {
-            // Set error state and log the error if fetching user data fails
-            setError('Error fetching user data');
-            console.error('Error fetching user data:', error);
+            setError("Error fetching user data");
+            console.error("Error:", error);
           }
-        };
-        fetchUserData();
-      } else {
-        console.log("No user is signed in. Setting currency to 0.");
-        // User is signed out, reset currency and other user-specific state
-        setUserCurrency(0);
+        }
       }
-    });
-    // Cleanup the listener on component unmount
-    return () => unsubscribe();
-  }, [auth]);
+    };
+    fetchUserData();
+  }, [authType, auth]);
   // Function to handle item purchase
   const handlePurchase = async (item) => {
+    if (authType === 'Guest') {
+      setError("Guest accounts cannot make purchases");
+      return;
+    }
     if (!auth.currentUser) {
-      // Set error if user is not logged in
       setError("To buy something you have to be logged in");
       return;
     }
     if (userCurrency < item.price) {
-      // Set error if user does not have enough currency
       setError("You need more money");
       return;
     }
     try {
-      // Reference to the user's document in Firestore
       const userRef = doc(db, 'Users', auth.currentUser.uid);
-      const userDoc = await getDoc(userRef);
-      if (!userDoc.exists()) {
-        // Set error if user account is not found
-        setError("Account not found");
-        return;
-      }
-      // Update user's virtual currency and add the item to their inventory
-      const userData = userDoc.data();
-      const newBalance = userData.virtualCurrency - item.price;
-      console.log("New balance after purchase:", newBalance);
+      const newBalance = userCurrency - item.price;
       await updateDoc(userRef, {
         virtualCurrency: newBalance,
         [`inventory.${item.id}`]: true
       });
-      // Update the state and set success message
       setUserCurrency(newBalance);
       setSuccessMessage(`You bought it! ${item.name}!`);
       setTimeout(() => setSuccessMessage(''), 3000);
-      // Navigate to the 'shape' page with the selected item
       navigate('/shape', { state: { selectedItem: item } });
     } catch (error) {
-      // Set error if something goes wrong during the purchase
       setError("Something went wrong");
       console.error("Error during purchase:", error);
     }
   };
-  // Render the Shop component
   return (
     <div className="shop-container">
       <div className="shop-header">
