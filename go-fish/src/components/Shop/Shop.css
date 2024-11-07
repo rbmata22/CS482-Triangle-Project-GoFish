@@ -1,159 +1,111 @@
-/* Container for the entire shop section */
+/* Main container for the shop section */
 .shop-container {
-    /* Padding for top, horizontal, and bottom */
     padding: 2rem 1.5rem 3.5rem;
-    /* Maximum width of the container */
     max-width: 1200px;
-    /* Center the container horizontally */
     margin: 0 auto;
-    /* Gradient background from dark blue to navy */
     background: linear-gradient(to right, #1a1a2e, #16213e, #0f3460);
-    /* Text color set to white */
     color: #ffffff;
-    /* Position set for potential overlay elements */
     position: relative;
-    /* Allows overflowed content to be visible */
     overflow: visible;
 }
-/* Header section for shop with navigation and balance display */
+
+/* Header section containing navigation and balance */
 .shop-header {
-    /* Flex layout for alignment */
     display: flex;
-    /* Space elements to the ends */
     justify-content: space-between;
-    /* Center align items vertically */
     align-items: center;
-    /* Horizontal padding */
     padding: 0 1rem;
-    /* Space above header */
-    margin-top: 20px;
-    /* Space below header */
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
-/* Container for buttons within the header */
+
 .button-container {
-    /* Flex layout for horizontal alignment */
     display: flex;
-    /* Spacing between buttons */
     gap: 10px;
 }
-/* Styles for Home and Music buttons */
+
+/* Buttons for Home and Music */
 .home-button,
 .music-button {
-    /* Button background color */
     background-color: #7f00ff;
-    /* Button text color */
     color: white;
-    /* No border */
     border: none;
-    /* Padding inside buttons */
     padding: 4px 8px;
-    /* Font size */
     font-size: 0.9rem;
-    /* Bold font weight */
     font-weight: bold;
-    /* Rounded corners */
     border-radius: 6px;
-    /* Cursor changes to pointer on hover */
     cursor: pointer;
-    /* Smooth color and shadow transitions */
-    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    /* Subtle shadow for depth */
+    transition: background-color 0.3s, box-shadow 0.3s;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
-/* Hover effects for Home and Music buttons */
+
 .home-button:hover,
 .music-button:hover {
-    /* Change background on hover */
     background-color: #b400ff;
-    /* Increase shadow on hover */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
-/* Container for the shop title */
+
+/* Shop title styling */
 .shop-title-container {
-    /* Center-align text */
     text-align: center;
-    /* Space below title */
     margin-bottom: 20px;
 }
-/* Style for the shop title text */
+
 .shop-title {
-    /* Large font size */
     font-size: 2.5rem;
-    /* Bold text */
     font-weight: bold;
-    /* Light purple color */
     color: #e0b3ff;
-    /* Glowing shadow effect */
     text-shadow: 0 2px 8px rgba(127, 0, 255, 0.5);
-    /* Remove default margin */
     margin: 0;
 }
-/* Style for displaying user currency balance */
+
+/* Display for user currency balance */
 .currency-display {
-    /* Slightly larger font */
     font-size: 1.2rem;
-    /* Bold text */
     font-weight: bold;
-    /* Padding around balance display */
     padding: 0.5rem 1rem;
-    /* Light background color for currency display */
     background-color: #f0f0f0;
-    /* Rounded corners for balance display */
     border-radius: 8px;
-    /* Set balance text color to black */
     color: #000000;
 }
-/* Grid layout for displaying shop items */
+
+/* Grid layout for shop items */
 .items-grid {
-    /* Display items in a grid layout */
     display: grid;
-    /* Set grid columns to 4 items per row */
     grid-template-columns: repeat(4, 1fr);
-    /* Spacing between grid items */
     gap: 1.5rem;
-    /* Space below the grid */
     margin-bottom: 2rem;
 }
-/* Style for individual shop item containers */
+
+/* Individual shop item container */
 .shop-item {
-    /* Border color around each item */
     border: 1px solid #8a2be2;
-    /* Rounded corners for each item */
     border-radius: 12px;
-    /* Hidden overflow for each item */
     overflow: hidden;
-    /* Dark background color for items */
     background-color: #111;
-    /* Shadow for depth effect */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    /* Animation for floating effect */
     animation: float 6s ease-in-out infinite;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
-/* Hover effect for shop items */
+
 .shop-item:hover {
-    /* Move item up slightly */
     transform: translateY(-5px);
-    /* Brightened shadow on hover */
     box-shadow: 0 4px 20px #7f00ff;
 }
-/* Style for shop item icons */
+
+/* Shop item icon styling */
 .item-icon {
-    /* Width of the icon */
     width: 60px;
-    /* Height of the icon */
     height: 60px;
-    /* Center icon horizontally */
     margin: 10px auto;
-    /* Set icon color to white */
     color: white;
 }
-/* Spinning animation applied to unpurchased icons */
+
+/* Spinning animation for unpurchased icons */
 .spin {
-    /* Apply spin animation */
     animation: spin 6s linear infinite;
 }
-/* Keyframes for spinning effect */
+
+/* Keyframes for spin effect */
 @keyframes spin {
     0% {
         transform: rotate(0deg);
@@ -162,117 +114,91 @@
         transform: rotate(360deg);
     }
 }
-/* Style for item price text */
+
+/* Price text for shop items */
 .item-price {
-    /* Font size for price text */
     font-size: 1.2rem;
-    /* Bold font for emphasis */
     font-weight: bold;
-    /* Space above the price */
     margin-top: 1rem;
-    /* Color for price text */
     color: #8a2be2;
 }
-/* Style for purchase button */
+
+/* Purchase button styling */
 .purchase-button {
-    /* Full width of button */
     width: 100%;
-    /* Space above the button */
     margin-top: auto;
-    /* Padding for button */
     padding: 0.75rem;
-    /* Rounded corners */
     border-radius: 4px;
-    /* Gradient background for button */
     background: linear-gradient(to right, #7f00ff, #e100ff);
-    /* Button text color */
     color: white;
-    /* Bold font for button text */
     font-weight: bold;
-    /* Cursor changes to pointer */
     cursor: pointer;
-    /* Smooth transition effects */
-    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
-/* Hover effect for purchase button */
+
 .purchase-button:hover:not(:disabled) {
-    /* Darker background on hover */
     background-color: #b400ff;
-    /* Increased shadow on hover */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
-/* Disabled state for purchase button */
+
 .purchase-button:disabled {
-    /* Grey background for disabled button */
     background-color: #cccccc;
-    /* No pointer cursor for disabled button */
     cursor: not-allowed;
 }
-/* Style for error and success messages */
+
+/* Styling for error and success messages */
 .error-message,
 .success-message {
-    /* Padding around message */
     padding: 1rem;
-    /* Rounded corners */
     border-radius: 4px;
-    /* Space below message */
     margin-bottom: 1rem;
-    /* Centered text */
     text-align: center;
-    /* Subtle border for emphasis */
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    /* Shadow for message box */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-/* Background and text color for error messages */
+
 .error-message {
-    /* Light red background for error */
     background-color: #ffebee;
-    /* Dark red text for error */
     color: #c62828;
 }
-/* Background and text color for success messages */
+
 .success-message {
-    /* Light green background for success */
     background-color: #e8f5e9;
-    /* Dark green text for success */
     color: #2e7d32;
 }
-/* Media query for smaller screens */
+
+/* Floating animation for shop items */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Responsive design for smaller screens */
 @media (max-width: 768px) {
-    /* Reduced padding on smaller screens */
     .shop-container {
         padding: 1rem;
     }
-    /* Stack header elements vertically on smaller screens */
+
     .shop-header {
         flex-direction: column;
         gap: 1rem;
         text-align: center;
     }
-    /* Center button container on smaller screens */
+
     .button-container {
         justify-content: center;
     }
-    /* Smaller font and padding for buttons on smaller screens */
+
     .home-button,
     .music-button {
         font-size: 0.7rem;
         padding: 3px 7px;
     }
-    /* Single-column grid layout on smaller screens */
+
     .items-grid {
         grid-template-columns: 1fr;
-    }
-}
-/* Animation keyframes for floating effect */
-@keyframes float {
-    /* Start and end position */
-    0%, 100% {
-        transform: translateY(0);
-    }
-    /* Midpoint of animation */
-    50% {
-        transform: translateY(-5px);
     }
 }

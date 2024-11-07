@@ -72,7 +72,6 @@ html, body {
   border-radius: 50%;
   background-color: transparent;
   cursor: pointer;
-  font-size: 4rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -84,7 +83,6 @@ html, body {
 
 .selected {
   box-shadow: 0 0 200px rgba(0, 255, 255, 0.8);
-  font-size: 4rem;
   transform: translateY(15px); /* Slide the selected icon down */
 
 }
