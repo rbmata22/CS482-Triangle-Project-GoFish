@@ -1,7 +1,8 @@
+/* eslint-disable no-undef */
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
-import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
-import { setDoc, doc, getDoc, serverTimestamp } from 'firebase/firestore'
+import {  createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
+import { setDoc,  getDoc,  } from 'firebase/firestore'
 import SignUp from './SignUp'
 
 // Mock Firebase modules and functions for testing

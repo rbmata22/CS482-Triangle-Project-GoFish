@@ -1,7 +1,8 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+/* eslint-disable no-undef */
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { getDoc, setDoc, doc } from 'firebase/firestore';
+import {  signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { getDoc, setDoc } from 'firebase/firestore';
 import Login from './Login';
 import { act } from 'react';
 

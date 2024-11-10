@@ -13,7 +13,7 @@ const Login = () => {
   const [selectedLogo, setSelectedLogo] = useState('');
   const [step, setStep] = useState(1);
   const [error, setError] = useState('');
-  const [isGoogleUser, setIsGoogleUser] = useState(false); // Track if Google login is used
+  const [ setIsGoogleUser] = useState(false); // Track if Google login is used
   const navigate = useNavigate();
 
   const auth = getAuth();
@@ -67,7 +67,7 @@ const Login = () => {
       } else {
         setError('User does not exist');
       }
-    } catch (error) {
+    } catch  {
       setError('Invalid login credentials');
     }
   };
@@ -96,7 +96,7 @@ const Login = () => {
         setIsGoogleUser(true); // New Google user
         setStep(2);
       }
-    } catch (error) {
+    } catch  {
       setError('Failed to log in with Google');
     }
   };

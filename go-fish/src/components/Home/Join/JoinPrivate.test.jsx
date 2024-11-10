@@ -1,9 +1,9 @@
+/* eslint-disable no-undef */
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import JoinPrivate from "./JoinPrivate";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import {  getDocs } from "firebase/firestore";
 import { BrowserRouter } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
 jest.mock("../../config/firebase", () => ({
     db: {}

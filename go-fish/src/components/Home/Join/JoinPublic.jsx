@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
-import { Cat, Ghost, Dog, Bot, Bird, Check, X, Clock } from 'lucide-react';
+import { Cat, Ghost, Dog, Bot, Bird, Check, X } from 'lucide-react';
 import './JoinPublic.css';
 
 const renderUserLogo = (logo) => {

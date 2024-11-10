@@ -1,9 +1,10 @@
+/* eslint-disable no-undef */
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { BrowserRouter } from "react-router-dom";
 import JoinPublic from "./JoinPublic";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { Cat, Ghost, Dog, Bird } from "lucide-react";
+import { onSnapshot } from "firebase/firestore";
+import { Cat,  Dog, Bird } from "lucide-react";
 
 // Mock Firebase Firestore functions
 jest.mock("../../config/firebase", () => ({

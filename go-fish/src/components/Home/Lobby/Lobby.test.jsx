@@ -1,8 +1,9 @@
+/* eslint-disable no-undef */
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Lobby from './Lobby';
-import { doc, onSnapshot, updateDoc, deleteDoc, getDoc, arrayUnion } from 'firebase/firestore';
-import { auth } from '../../config/firebase';
+import {  onSnapshot, updateDoc, deleteDoc,  arrayUnion } from 'firebase/firestore';
+
 
 // Mock Firebase functions and modules for testing
 jest.mock('../../config/firebase', () => ({

@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
+/* eslint-disable no-undef */
+import { render, screen, fireEvent,  act } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { setDoc, doc } from 'firebase/firestore'
 import Guest from './Guest'
