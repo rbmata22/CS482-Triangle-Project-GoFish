@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore'; // Added serverTimestamp
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { Cat, Ghost, Dog, Bot, Bird } from 'lucide-react'; 
+import { Cat, Ghost, Dog, Bot, Bird } from 'lucide-react';
 import './SignUp.css';
 
 const SignUp = () => {
@@ -11,9 +11,9 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [selectedLogo, setSelectedLogo] = useState('');
-  const [step, setStep] = useState(1); 
+  const [step, setStep] = useState(1);
   const [error, setError] = useState('');
-  const [isGoogleUser, setIsGoogleUser] = useState(false); 
+  const [isGoogleUser, setIsGoogleUser] = useState(false);
   const navigate = useNavigate();
 
   const auth = getAuth();
@@ -22,6 +22,11 @@ const SignUp = () => {
   // Initial and unlockable icons for Firestore storage
   const initialIcons = ['Cat', 'Ghost', 'Dog', 'Bot', 'Bird'];
   const unlockableIcons = ['Apple', 'Banana', 'Cherry', 'Grape', 'Candy', 'Pizza', 'Croissant', 'Gem'];
+
+  useEffect(() => {
+    // Clear any leftover user data on mount to prevent conflicts
+    localStorage.clear();
+  }, []);
 
   // Handle email and password signup
   const handleSignUp = async (e) => {
@@ -48,15 +53,13 @@ const SignUp = () => {
         gamesWon: 0,
         initialIcons: initialIcons,
         unlockableIcons: unlockableIcons,
-        unlockedIcons: [selectedLogo],  // Only the selected icon is unlocked by default
-        createdAt: serverTimestamp()
+        unlockedIcons: [selectedLogo],
+        createdAt: serverTimestamp(),
       });
 
-      await setDoc(doc(db, 'UserMessages', user.uid), {
-        messages: [],
-      });
-      
       localStorage.setItem('authType', 'SignUp');
+      localStorage.setItem('username', username);
+      localStorage.setItem('logo', selectedLogo);
       navigate('/home');
     } catch (error) {
       setError(error.message);
@@ -74,7 +77,7 @@ const SignUp = () => {
 
       if (!userDoc.exists()) {
         setIsGoogleUser(true);
-        setStep(2); 
+        setStep(2);
       } else {
         navigate('/home');
       }
@@ -88,12 +91,12 @@ const SignUp = () => {
       setError('Please enter your email and password');
       return;
     }
-  
+
     if (!isValidEmail(email)) {
       setError('Invalid email');
       return;
     }
-  
+
     setStep(2);
   };
 
@@ -122,8 +125,8 @@ const SignUp = () => {
         gamesWon: 0,
         initialIcons: initialIcons,
         unlockableIcons: unlockableIcons,
-        unlockedIcons: [selectedLogo],  // Start with only the selected icon unlocked
-        createdAt: serverTimestamp()
+        unlockedIcons: [selectedLogo],
+        createdAt: serverTimestamp(),
       });
 
       localStorage.setItem('authType', 'SignUp');

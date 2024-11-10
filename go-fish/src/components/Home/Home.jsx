@@ -34,7 +34,6 @@ const Home = () => {
       let userDocData = null;
 
       if (authType === 'Guest') {
-        // Fetch guest data from localStorage or Firestore
         const guestId = localStorage.getItem('guestId');
         try {
           const guestDoc = await getDoc(doc(db, 'Guests', guestId));
@@ -44,7 +43,6 @@ const Home = () => {
         }
 
         if (!userDocData) {
-          // If no data in Firestore, fall back to localStorage data
           userDocData = {
             username: localStorage.getItem('username'),
             logo: localStorage.getItem('logo'),
@@ -55,7 +53,6 @@ const Home = () => {
           };
         }
       } else {
-        // Fetch registered user data from Firestore
         const userId = auth?.currentUser?.uid;
         if (userId) {
           try {
@@ -68,11 +65,15 @@ const Home = () => {
       }
 
       if (userDocData) {
-        // Set user data with default values if missing
+        // Ensure all necessary fields are populated to avoid undefined issues
         setUserData({
-          ...userDocData,
-          createdAt: userDocData.createdAt || new Date().toLocaleDateString(),
+          username: userDocData.username || 'User',
+          logo: userDocData.logo || 'Dices',
+          virtualCurrency: userDocData.virtualCurrency || 500,
+          gamesPlayed: userDocData.gamesPlayed || 0,
+          gamesWon: userDocData.gamesWon || 0,
           unlockedIcons: userDocData.unlockedIcons || ['Cat', 'Ghost', 'Dog', 'Bot', 'Bird'],
+          createdAt: userDocData.createdAt || new Date().toLocaleDateString(),
         });
       }
     };
@@ -122,9 +123,13 @@ const Home = () => {
     } else {
       const userId = auth.currentUser?.uid;
       if (userId) {
-        const userRef = doc(db, 'Users', userId);
-        await updateDoc(userRef, { logo: newIcon });
-        setUserData({ ...userData, logo: newIcon });
+        try {
+          const userRef = doc(db, 'Users', userId);
+          await updateDoc(userRef, { logo: newIcon });
+          setUserData({ ...userData, logo: newIcon });
+        } catch (error) {
+          console.error("Error updating icon for user: ", error);
+        }
       }
     }
     setShowIconChangeMenu(false);
@@ -156,11 +161,11 @@ const Home = () => {
   const renderPlayerMenu = () => (
     <div className="player-menu">
       <h3>Player Stats</h3>
-      <p><strong>Username:</strong> {userData.username}</p>
+      <p><strong>Username:</strong> {userData.username || 'User'}</p>
       <p><strong>Games Played:</strong> {userData.gamesPlayed || 0}</p>
       <p><strong>Games Won:</strong> {userData.gamesWon || 0}</p>
-      <p><strong>Virtual Currency:</strong> {userData.virtualCurrency}</p>
-      <p><strong>Account Created:</strong> {userData.createdAt}</p>
+      <p><strong>Virtual Currency:</strong> {userData.virtualCurrency || 500}</p>
+      <p><strong>Account Created:</strong> {userData.createdAt || new Date().toLocaleDateString()}</p>
       <button onClick={() => setShowIconChangeMenu(true)}>Change Icon</button>
       <button onClick={() => setShowPlayerMenu(false)}>Close</button>
     </div>
@@ -188,10 +193,10 @@ const Home = () => {
       <div className="sidebar">
         <div className="user-info">
           {renderUserLogo()}
-          <p className="username">{userData.username}</p>
+          <p className="username">{userData.username || 'User'}</p>
           <p className="currency">
             <BadgeDollarSign className="currency-icon" style={{ stroke: 'black', fill: 'green' }} />
-            <span className="currency-value">{userData.virtualCurrency}</span>
+            <span className="currency-value">{userData.virtualCurrency || 500}</span>
           </p>
         </div>
         <div className="sidebar-options">

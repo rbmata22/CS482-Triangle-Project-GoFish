@@ -1,54 +1,43 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { getDoc, doc } from 'firebase/firestore';
-import { Cat, Ghost, Dog, Bot, Bird } from 'lucide-react';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import { Cat, Ghost, Dog, Bot, Bird } from 'lucide-react';
 import './Login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [setIsGoogleUser] = useState(false); // Track Google login
-  const [step, setStep] = useState(1); // Control login flow (if username selection is needed)
   const [username, setUsername] = useState('');
   const [selectedLogo, setSelectedLogo] = useState('');
+  const [step, setStep] = useState(1);
+  const [error, setError] = useState('');
+  const [setIsGoogleUser] = useState(false);
   const navigate = useNavigate();
 
   const auth = getAuth();
   const googleProvider = new GoogleAuthProvider();
 
+  const initialIcons = ['Cat', 'Ghost', 'Dog', 'Bot', 'Bird'];
+
   useEffect(() => {
-    const authType = localStorage.getItem('authType');
-    if (authType === 'Login') {
-      setStep(1);
-    }
+    localStorage.clear(); // Clear any leftover user data on mount to prevent conflicts
   }, []);
 
-  const validateEmail = (email) => {
-    // Basic email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  const validateEmail = (email) => email.includes('@');
 
-  const validatePassword = (password) => {
-    // Password should be at least 6 characters
-    return password.length >= 6;
-  };
-
+  // Handle standard email/password login
   const handleLogin = async (e) => {
     e.preventDefault();
+
     if (!email || !password) {
-      setError('Please enter email and password');
+      setError('Please enter your email and password');
       return;
     }
+
     if (!validateEmail(email)) {
-      setError('Please enter a valid email address');
-      return;
-    }
-    if (!validatePassword(password)) {
-      setError('Password must be at least 6 characters');
+      setError('Invalid email address');
       return;
     }
 
@@ -56,21 +45,25 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Check if user already exists in Firestore
       const userDoc = await getDoc(doc(db, 'Users', user.uid));
 
-      if (!userDoc.exists()) {
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+
+        // Store user data in localStorage
+        localStorage.setItem('authType', 'Login');
+        localStorage.setItem('username', userData.username);
+        localStorage.setItem('logo', userData.logo);
+        localStorage.setItem('virtualCurrency', userData.virtualCurrency);
+        localStorage.setItem('gamesPlayed', userData.gamesPlayed);
+        localStorage.setItem('gamesWon', userData.gamesWon);
+        localStorage.setItem('unlockedIcons', JSON.stringify(userData.unlockedIcons || []));
+
+        navigate('/home');
+      } else {
         setError('User does not exist');
-        return;
       }
-
-      localStorage.setItem('authType', 'Login');
-      localStorage.setItem('username', userDoc.data().username);
-      localStorage.setItem('logo', userDoc.data().logo);
-
-      // Redirect to the home page after successful login
-      navigate('/home');
-    } catch {
+    } catch  {
       setError('Invalid login credentials');
     }
   };
@@ -84,23 +77,28 @@ const Login = () => {
       const userDoc = await getDoc(doc(db, 'Users', user.uid));
 
       if (userDoc.exists()) {
-        // If user exists, skip username/logo selection and go to Home
+        const userData = userDoc.data();
+
+        // Store user data in localStorage
         localStorage.setItem('authType', 'Login');
-        localStorage.setItem('username', userDoc.data().username);
-        localStorage.setItem('logo', userDoc.data().logo);
+        localStorage.setItem('username', userData.username);
+        localStorage.setItem('logo', userData.logo);
+        localStorage.setItem('virtualCurrency', userData.virtualCurrency);
+        localStorage.setItem('gamesPlayed', userData.gamesPlayed);
+        localStorage.setItem('gamesWon', userData.gamesWon);
+        localStorage.setItem('unlockedIcons', JSON.stringify(userData.unlockedIcons || []));
+
         navigate('/home');
       } else {
-        // If the user does not exist, show username/logo selection screen
+        // Prompt new Google user to select username and logo
         setIsGoogleUser(true);
-        setStep(2); // Move to username/logo selection step
+        setStep(2);
       }
-    } catch (error) {
-      setError('Failed to log in with Google...');
-      throw error
+    } catch {
+      setError('Failed to log in with Google');
     }
   };
 
-  // Handle username and logo selection for new Google users
   const handleGoogleUsernameLogoSubmit = async () => {
     if (!selectedLogo || !username) {
       setError('Please choose a logo and enter a username');
@@ -110,8 +108,8 @@ const Login = () => {
     try {
       const user = auth.currentUser;
 
-      // Save Google user data in Firestore
-      await getDoc(doc(db, 'Users', user.uid), {
+      // Store new Google user data in Firestore
+      await setDoc(doc(db, 'Users', user.uid), {
         username: username,
         logo: selectedLogo,
         emailAccount: false,
@@ -120,20 +118,25 @@ const Login = () => {
         friends: [],
         gamesPlayed: 0,
         gamesWon: 0,
+        unlockedIcons: [selectedLogo],
       });
 
       localStorage.setItem('authType', 'Login');
       localStorage.setItem('username', username);
       localStorage.setItem('logo', selectedLogo);
+      localStorage.setItem('virtualCurrency', 500);
+      localStorage.setItem('gamesPlayed', 0);
+      localStorage.setItem('gamesWon', 0);
+      localStorage.setItem('unlockedIcons', JSON.stringify([selectedLogo]));
+
       navigate('/home');
     } catch (error) {
       setError('Error saving user data: ' + error.message);
     }
   };
 
-  // Handle logo selection
-  const handleLogoClick = (logoCode) => {
-    setSelectedLogo(logoCode);
+  const handleLogoClick = (logo) => {
+    setSelectedLogo(logo);
   };
 
   return (
@@ -142,7 +145,6 @@ const Login = () => {
         <>
           <h1 className="login-title">Login</h1>
           {error && <p className="error-message">{error}</p>}
-          
           <div className="login-form">
             <input 
               type="email" 
@@ -159,7 +161,6 @@ const Login = () => {
               className="login-input"
             />
           </div>
-          
           <button className="login-button" onClick={handleLogin}>Login</button>
           <button className="google-login-button" onClick={handleGoogleLogin}>Login with Google</button>
           <button className="back-button" onClick={() => navigate(-1)}>Back</button>
@@ -176,21 +177,20 @@ const Login = () => {
             className="login-input"
           />
           <div className="icon-container">
-            <div className={`team-logo ${selectedLogo === 'Cat' ? 'selected' : ''}`} onClick={() => handleLogoClick('Cat')}>
-              <Cat className="glowing-icon" />
-            </div>
-            <div className={`team-logo ${selectedLogo === 'Ghost' ? 'selected' : ''}`} onClick={() => handleLogoClick('Ghost')}>
-              <Ghost className="glowing-icon" />
-            </div>
-            <div className={`team-logo ${selectedLogo === 'Dog' ? 'selected' : ''}`} onClick={() => handleLogoClick('Dog')}>
-              <Dog className="glowing-icon" />
-            </div>
-            <div className={`team-logo ${selectedLogo === 'Bot' ? 'selected' : ''}`} onClick={() => handleLogoClick('Bot')}>
-              <Bot className="glowing-icon" />
-            </div>
-            <div className={`team-logo ${selectedLogo === 'Bird' ? 'selected' : ''}`} onClick={() => handleLogoClick('Bird')}>
-              <Bird className="glowing-icon" />
-            </div>
+            {initialIcons.map((icon) => (
+              <div
+                key={icon}
+                className={`team-logo ${selectedLogo === icon ? 'selected' : ''}`}
+                onClick={() => handleLogoClick(icon)}
+              >
+                {icon === 'Cat' && <Cat className="glowing-icon" />}
+                {icon === 'Ghost' && <Ghost className="glowing-icon" />}
+                {icon === 'Dog' && <Dog className="glowing-icon" />}
+                {icon === 'Bot' && <Bot className="glowing-icon" />}
+                {icon === 'Bird' && <Bird className="glowing-icon" />}
+                <p>{icon}</p>
+              </div>
+            ))}
           </div>
           <button className="login-button" onClick={handleGoogleUsernameLogoSubmit}>Complete Profile</button>
           <button className="back-button" onClick={() => setStep(1)}>Back</button>

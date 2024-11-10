@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
 import { getDoc, doc, runTransaction, arrayUnion, setDoc } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { db } from '../../config/firebase';
 import { useNavigate } from 'react-router-dom';
 import './shop.css';
-import backgroundMusic from '../../assets/background-music.mp3';
+import backgroundMusic from '../../../assets/background-music.mp3';
 import { Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem } from 'lucide-react';
-import purchaseErrorSound from '../../assets/purchase-error.mp3';
-import purchaseSuccessSound from '../../assets/purchase-succesful.mp3';
+import purchaseErrorSound from '../../../assets/purchase-error.mp3';
+import purchaseSuccessSound from '../../../assets/purchase-succesful.mp3';
 
 const shopItems = [
   { id: 1, name: "Apple", price: 200, icon: Apple },

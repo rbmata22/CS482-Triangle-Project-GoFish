@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { doc, onSnapshot, updateDoc, deleteDoc, arrayUnion } from 'firebase/firestore';
-import { db } from '../../config/firebase';
+import { doc, onSnapshot, updateDoc, deleteDoc, arrayUnion, getDoc } from 'firebase/firestore';
+import { db, auth } from '../../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign, SquareCheck } from 'lucide-react';
 import './Lobby.css';
 
@@ -34,16 +34,39 @@ const Lobby = () => {
     };
 
     const fetchUserData = async () => {
-      const guestUsername = localStorage.getItem('username');
-      const guestLogo = localStorage.getItem('logo');
-      const guestId = localStorage.getItem('guestId');
-      setUserData({
-        username: guestUsername,
-        logo: guestLogo,
-        guestId: guestId,
-        virtualCurrency: 500,
-        isReady: false,
-      });
+      const authType = localStorage.getItem('authType');
+
+      if (authType === 'Guest') {
+        const guestUsername = localStorage.getItem('username');
+        const guestLogo = localStorage.getItem('logo');
+        const guestId = localStorage.getItem('guestId');
+        setUserData({
+          username: guestUsername,
+          logo: guestLogo,
+          guestId: guestId,
+          virtualCurrency: 500,
+          isReady: false,
+        });
+      } else {
+        // Fetch user data for newly signed-up users
+        const userId = auth.currentUser?.uid;
+        if (userId) {
+          try {
+            const userDoc = await getDoc(doc(db, 'Users', userId));
+            if (userDoc.exists()) {
+              const data = userDoc.data();
+              setUserData({
+                username: data.username,
+                logo: data.logo,
+                virtualCurrency: data.virtualCurrency || 500,
+                isReady: false,
+              });
+            }
+          } catch (error) {
+            console.error("Error fetching user data: ", error);
+          }
+        }
+      }
     };
 
     fetchLobbyData();
