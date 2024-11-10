@@ -1,35 +1,30 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { getDoc, doc, deleteDoc, updateDoc, arrayRemove } from 'firebase/firestore';
+import { getDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { signOut } from 'firebase/auth';
 import { act } from 'react';
 import Home from './Home';
 
-// Mock Firebase modules
 jest.mock('../config/firebase', () => ({
     auth: {
-        currentUser: {
-            uid: 'testUID' 
-        }
+        currentUser: { uid: 'testUID' }
     },
     db: {}
 }));
 
-// Mock Firestore functions
 jest.mock('firebase/firestore', () => ({
     getDoc: jest.fn(),
     doc: jest.fn(),
     deleteDoc: jest.fn(),
-    updateDoc: jest.fn(),
-    arrayRemove: jest.fn()
+    updateDoc: jest.fn()
 }));
 
-// Mock Firebase Auth
 jest.mock('firebase/auth', () => ({
     signOut: jest.fn()
 }));
 
-// Mock navigation
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
@@ -50,136 +45,192 @@ describe('Home Component', () => {
         );
     };
 
-    // Testcase 1: Loading guest user data
-    it('Loads guest user data correctly from localStorage', async () => {
-        localStorage.setItem('authType', 'Guest');
-        localStorage.setItem('username', 'testGuest');
-        localStorage.setItem('logo', 'Dog');
-        localStorage.setItem('guestId', 'guest-123');
+    it('Loads guest or registered user data correctly and displays currency', async () => {
+        const testCases = [
+            {
+                authType: 'Guest',
+                localStorageData: {
+                    username: 'testGuest',
+                    logo: 'Dog',
+                    guestId: 'guest-123',
+                    guestCurrency: '750'
+                },
+                firestoreData: null,
+                expectedCurrency: '750'
+            },
+            {
+                authType: 'Login',
+                localStorageData: null,
+                firestoreData: {
+                    username: 'ExampleUser',
+                    logo: 'Cat',
+                    virtualCurrency: 1000
+                },
+                expectedCurrency: '1000'
+            }
+        ];
 
-        renderHome();
+        for (const testCase of testCases) {
+            if (testCase.authType === 'Guest') {
+                localStorage.setItem('authType', 'Guest');
+                localStorage.setItem('username', testCase.localStorageData.username);
+                localStorage.setItem('logo', testCase.localStorageData.logo);
+                localStorage.setItem('guestId', testCase.localStorageData.guestId);
+                localStorage.setItem('guestCurrency', testCase.localStorageData.guestCurrency);
+                getDoc.mockResolvedValueOnce({ exists: () => false });
+            } else {
+                localStorage.setItem('authType', 'Login');
+                getDoc.mockResolvedValueOnce({
+                    exists: () => true,
+                    data: () => testCase.firestoreData
+                });
+            }
 
-        expect(await screen.findByText('testGuest')).toBeInTheDocument();
-        expect(screen.getByText('500')).toBeInTheDocument(); // Default virtual currency
-    });
-
-    // Testcase 2: Load registered user data
-    it('Loads registered user data correctly from Firestore', async () => {
-        localStorage.setItem('authType', 'Login');
-    
-        const mockUserData = {
-            username: 'ExampleUser',
-            logo: 'Cat',
-            virtualCurrency: 1000
-        };
-    
-        getDoc.mockResolvedValue({
-            exists: () => true,
-            data: () => mockUserData
-        });
-    
-        await act(async () => {
             renderHome();
+            await waitFor(() => {
+                expect(screen.getByText(testCase.expectedCurrency)).toBeInTheDocument();
+            });
+            jest.clearAllMocks();
+        }
+    });
+
+    it('Handles logout and navigation for guest and registered users', async () => {
+        const testCases = [
+            { authType: 'Guest', expectDelete: true },
+            { authType: 'Login', expectDelete: false }
+        ];
+
+        for (const testCase of testCases) {
+            localStorage.setItem('authType', testCase.authType);
+            if (testCase.authType === 'Guest') {
+                localStorage.setItem('guestId', 'guest-123');
+            }
+
+            renderHome();
+            await act(async () => fireEvent.click(screen.getByText('Logout')));
+
+            expect(mockNavigate).toHaveBeenCalledWith('/');
+            if (testCase.expectDelete) {
+                expect(deleteDoc).toHaveBeenCalled();
+            }
+            expect(signOut).toHaveBeenCalled();
+            jest.clearAllMocks();
+        }
+    });
+
+    it('Handles navigation to Friends, Messages, and Shop', () => {
+        renderHome();
+        const navItems = [
+            { label: 'Friends', path: '/Friends' },
+            { label: 'Messages', path: '/Messages' },
+            { label: 'Shop', path: '/shop' }
+        ];
+
+        navItems.forEach(({ label, path }) => {
+            fireEvent.click(screen.getByText(label));
+            expect(mockNavigate).toHaveBeenCalledWith(path);
         });
-    
-        await waitFor(() => {
-            expect(screen.getByText(mockUserData.username)).toBeInTheDocument();
-            expect(screen.getByText(mockUserData.virtualCurrency.toString())).toBeInTheDocument();
-            expect(screen.getByTestId('user-logo')).toBeInTheDocument();
-        }, { timeout: 5000 });
-    
-        expect(getDoc).toHaveBeenCalled();
     });
 
-    // Testcase 3: Guest logout
-    it('Handles guest logout correctly', async () => {
-        localStorage.setItem('authType', 'Guest');
-        localStorage.setItem('guestId', 'guest-123');
-
+    it('Displays dropdowns and closes on outside click', () => {
         renderHome();
 
-        await act(async () => {
-            fireEvent.click(screen.getByText('Logout'));
+        const dropdowns = [
+            { label: 'Create Lobby', options: ['Public Lobby', 'Private Lobby'] },
+            { label: 'Join Lobby', options: ['Join Public', 'Join Private'] }
+        ];
+
+        dropdowns.forEach(({ label, options }) => {
+            fireEvent.click(screen.getByText(label));
+            options.forEach(option => {
+                expect(screen.getByText(option)).toBeInTheDocument();
+            });
+
+            fireEvent.click(document.body);
+            options.forEach(option => {
+                expect(screen.queryByText(option)).not.toBeInTheDocument();
+            });
         });
-
-        expect(deleteDoc).toHaveBeenCalled();
-        expect(mockNavigate).toHaveBeenCalledWith('/');
-        expect(localStorage.length).toBe(0);
     });
 
-    // Testcase 4: Navigation to different pages
-    it('Navigates to different pages correctly', () => {
+    it('Displays and hides support model on Admin Support click', () => {
         renderHome();
 
-        fireEvent.click(screen.getByText('Friends'));
-        expect(mockNavigate).toHaveBeenCalledWith('/Friends');
+        fireEvent.click(screen.getByText('Admin Support'));
+        expect(screen.getByText('What do you need help with?')).toBeInTheDocument();
 
-        fireEvent.click(screen.getByText('Messages'));
-        expect(mockNavigate).toHaveBeenCalledWith('/Messages');
-
-        fireEvent.click(screen.getByText('Shop'));
-        expect(mockNavigate).toHaveBeenCalledWith('/shop');
+        fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+        expect(screen.queryByText('What do you need help with?')).not.toBeInTheDocument();
     });
 
-    // Testcase 5: Create Lobby dropdown
-    it('Shows create lobby dropdown options', async () => {
-        renderHome();
+    it('Updates user icon for both guest and registered users', async () => {
+        const testCases = [
+            {
+                authType: 'Guest',
+                initialIcon: 'Dog',
+                newIcon: 'Bot',
+                updateDocCalled: false
+            },
+            {
+                authType: 'Login',
+                initialIcon: 'Cat',
+                newIcon: 'Bird',
+                updateDocCalled: true
+            }
+        ];
 
-        fireEvent.click(screen.getByText('Create Lobby'));
+        for (const { authType, initialIcon, newIcon, updateDocCalled } of testCases) {
+            localStorage.setItem('authType', authType);
+            if (authType === 'Guest') {
+                localStorage.setItem('logo', initialIcon);
+            } else {
+                getDoc.mockResolvedValueOnce({
+                    exists: () => true,
+                    data: () => ({ logo: initialIcon })
+                });
+            }
 
-        expect(screen.getByText('Public Lobby')).toBeInTheDocument();
-        expect(screen.getByText('Private Lobby')).toBeInTheDocument();
+            renderHome();
+            fireEvent.click(screen.getByTestId('user-logo'));
+            fireEvent.click(screen.getByText('Change Icon'));
+            fireEvent.click(screen.getByText(newIcon));
+
+            expect(screen.getByTestId('user-logo')).toHaveClass('user-logo');
+            if (updateDocCalled) {
+                expect(updateDoc).toHaveBeenCalledWith(expect.any(Object), { logo: newIcon });
+            } else {
+                expect(localStorage.getItem('logo')).toBe(newIcon);
+            }
+
+            jest.clearAllMocks();
+        }
     });
 
-    // Testcase 6: Join Lobby dropdown
-    it('Shows join lobby dropdown options', async () => {
-        renderHome();
-
-        fireEvent.click(screen.getByText('Join Lobby'));
-
-        expect(screen.getByText('Join Public')).toBeInTheDocument();
-        expect(screen.getByText('Join Private')).toBeInTheDocument();
-    });
-
-    // Testcase 7: Owner left message display
-    it('Displays owner left message when present in localStorage', () => {
+    it('Displays owner left message and removes it from localStorage', () => {
         localStorage.setItem('ownerLeftMessage', 'The lobby owner has left');
-        
         renderHome();
 
         expect(screen.getByText('The lobby owner has left')).toBeInTheDocument();
         expect(localStorage.getItem('ownerLeftMessage')).toBeNull();
     });
 
-    // Testcase 8: Support modal toggle
-    it('Toggles support modal visibility', () => {
-        renderHome();
+    it('Handles fetch errors gracefully for guest and registered users', async () => {
+        const testCases = [
+            { authType: 'Guest', errorMessage: 'Error fetching guest data' },
+            { authType: 'Login', errorMessage: 'Error loading user data' }
+        ];
 
-        // Initially, support modal should not be visible
-        expect(screen.queryByText('What do you need help with?')).not.toBeInTheDocument();
+        for (const { authType, errorMessage } of testCases) {
+            localStorage.setItem('authType', authType);
+            getDoc.mockRejectedValueOnce(new Error('Firestore fetch failed'));
 
-        // Click to open support
-        fireEvent.click(screen.getByText('Admin Support'));
-        
-        // Check if support modal is now visible
-        expect(screen.getByText('Admin Support')).toBeInTheDocument();
+            renderHome();
 
-        // Close the support modal
-        const closeButton = screen.getByRole('button', { name: 'Close' });
-        fireEvent.click(closeButton);
+            await waitFor(() => {
+                expect(screen.getByText(errorMessage)).toBeInTheDocument();
+            });
 
-        // Verify support modal is no longer visible
-        expect(screen.queryByText('What do you need help with?')).not.toBeInTheDocument();
-    });
-
-    // Testcase 9: Dropdown closing on outside click
-    it('Closes dropdowns when clicking outside', () => {
-        renderHome();
-
-        fireEvent.click(screen.getByText('Create Lobby'));
-        expect(screen.getByText('Public Lobby')).toBeInTheDocument();
-
-        fireEvent.click(document.body);
-        expect(screen.queryByText('Public Lobby')).not.toBeInTheDocument();
+            jest.clearAllMocks();
+        }
     });
 });

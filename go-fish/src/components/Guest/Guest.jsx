@@ -29,13 +29,18 @@ const Guest = () => {
     try {
       const guestId = 'guest_' + Math.random().toString(36).substr(2, 9); // Generate a random guest ID
 
+      // Initialize guest data for Firestore and local storage
+      const initialCurrency = 500;
+      const initialInventory = {}; // Start with an empty inventory
+      const initialUnlockedIcons = [selectedLogo]; // Initially unlock only the selected logo
+
       // Save guest data to Firestore
       await setDoc(doc(db, 'Guests', guestId), {
         username: username,
-
         logo: selectedLogo, // Store the selected logo identifier
-        
-        virtualCurrency: 500,
+        virtualCurrency: initialCurrency,
+        inventory: initialInventory,
+        unlockedIcons: initialUnlockedIcons,
       });
 
       // Store session type and guest info in local storage
@@ -43,6 +48,9 @@ const Guest = () => {
       localStorage.setItem('guestId', guestId); // Store guest ID for deletion later
       localStorage.setItem('username', username);
       localStorage.setItem('logo', selectedLogo);
+      localStorage.setItem('guestCurrency', initialCurrency);
+      localStorage.setItem('guestInventory', JSON.stringify(initialInventory));
+      localStorage.setItem('guestUnlockedIcons', JSON.stringify(initialUnlockedIcons));
 
       // Navigate to the Home page after joining as a guest
       navigate('/home');

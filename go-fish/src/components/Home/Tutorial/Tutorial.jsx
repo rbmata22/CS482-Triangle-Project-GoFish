@@ -34,12 +34,22 @@ const App = () => {
             ],
         },
         {
-            text: "Otherwise, the player says 'Go Fish!'",
+            text: "If they don’t have the rank, they say 'Go Fish!' The player then draws from the fish pile.",
             icon: <GiAnglerFish className="icon" />,
         },
         {
-            text: "If the current player gets cards from someone, they can go again",
+            text: "If the drawing player completes a set of 4 cards of the same rank, they place the set face down as a 'book'.",
+        },
+        {
+            text: "Players continue asking and fishing. If a player gets the requested cards, they go again.",
             icon: <FaArrowRotateLeft className="icon" />,
+        },
+        {
+            text: "The game ends when all sets have been created, or the fish pile is empty.",
+        },
+        {
+            text: "The player with the most sets (books) wins the game!",
+            icon: <IoPersonOutline className="icon" />,
         },
     ];
 
