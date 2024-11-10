@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
-import { Cat, Ghost, Dog, Bot, Bird, Check, X } from 'lucide-react';
+import { Cat, Ghost, Dog, Bot, Bird, Check, X, Clock } from 'lucide-react';
 import './JoinPublic.css';
 
 const renderUserLogo = (logo) => {
@@ -72,6 +72,7 @@ const JoinPublic = () => {
               <div className="lobby-details">
                 <p><strong>Lobby Type:</strong> {lobby.lobbyType}</p>
                 <p><strong>AI Fill:</strong> {lobby.useAI ? 'Enabled' : 'Disabled'}</p>
+                <p><strong>Deck Size:</strong> {lobby.deckSize} Cards </p>
                 <p><strong>Players:</strong></p>
                 <ul>
                   {lobby.players.map((player, index) => (
