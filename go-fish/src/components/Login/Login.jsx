@@ -13,7 +13,7 @@ const Login = () => {
   const [selectedLogo, setSelectedLogo] = useState('');
   const [step, setStep] = useState(1);
   const [error, setError] = useState('');
-  const [setIsGoogleUser] = useState(false);
+  const [isGoogleUser, setIsGoogleUser] = useState(false); // Track if Google login is used
   const navigate = useNavigate();
 
   const auth = getAuth();
@@ -22,22 +22,27 @@ const Login = () => {
   const initialIcons = ['Cat', 'Ghost', 'Dog', 'Bot', 'Bird'];
 
   useEffect(() => {
-    localStorage.clear(); // Clear any leftover user data on mount to prevent conflicts
+    localStorage.clear(); // Clear leftover user data on mount
   }, []);
 
-  const validateEmail = (email) => email.includes('@');
+  // Validate email format
+  const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
-  // Handle standard email/password login
+  // Handle email and password login
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError('');
 
     if (!email || !password) {
       setError('Please enter your email and password');
       return;
     }
-
     if (!validateEmail(email)) {
-      setError('Invalid email address');
+      setError('Please enter a valid email address');
+      return;
+    }
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters');
       return;
     }
 
@@ -46,7 +51,6 @@ const Login = () => {
       const user = userCredential.user;
 
       const userDoc = await getDoc(doc(db, 'Users', user.uid));
-
       if (userDoc.exists()) {
         const userData = userDoc.data();
 
@@ -63,7 +67,7 @@ const Login = () => {
       } else {
         setError('User does not exist');
       }
-    } catch  {
+    } catch (error) {
       setError('Invalid login credentials');
     }
   };
@@ -75,7 +79,6 @@ const Login = () => {
       const user = result.user;
 
       const userDoc = await getDoc(doc(db, 'Users', user.uid));
-
       if (userDoc.exists()) {
         const userData = userDoc.data();
 
@@ -90,15 +93,15 @@ const Login = () => {
 
         navigate('/home');
       } else {
-        // Prompt new Google user to select username and logo
-        setIsGoogleUser(true);
+        setIsGoogleUser(true); // New Google user
         setStep(2);
       }
-    } catch {
+    } catch (error) {
       setError('Failed to log in with Google');
     }
   };
 
+  // Submit for new Google user with selected logo and username
   const handleGoogleUsernameLogoSubmit = async () => {
     if (!selectedLogo || !username) {
       setError('Please choose a logo and enter a username');
@@ -108,7 +111,6 @@ const Login = () => {
     try {
       const user = auth.currentUser;
 
-      // Store new Google user data in Firestore
       await setDoc(doc(db, 'Users', user.uid), {
         username: username,
         logo: selectedLogo,
@@ -121,6 +123,7 @@ const Login = () => {
         unlockedIcons: [selectedLogo],
       });
 
+      // Store in localStorage
       localStorage.setItem('authType', 'Login');
       localStorage.setItem('username', username);
       localStorage.setItem('logo', selectedLogo);
@@ -135,16 +138,15 @@ const Login = () => {
     }
   };
 
-  const handleLogoClick = (logo) => {
-    setSelectedLogo(logo);
-  };
+  // Handle icon selection for new Google user
+  const handleLogoClick = (logo) => setSelectedLogo(logo);
 
   return (
-    <div className="login-container">
+    <div className="login-container" data-testid="login-container">
       {step === 1 ? (
         <>
           <h1 className="login-title">Login</h1>
-          {error && <p className="error-message">{error}</p>}
+          {error && <p className="error-message" data-testid="error-message">{error}</p>}
           <div className="login-form">
             <input 
               type="email" 
@@ -152,6 +154,7 @@ const Login = () => {
               value={email} 
               onChange={(e) => setEmail(e.target.value)} 
               className="login-input"
+              data-testid="email-input"
             />
             <input 
               type="password" 
@@ -159,29 +162,32 @@ const Login = () => {
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
               className="login-input"
+              data-testid="password-input"
             />
           </div>
-          <button className="login-button" onClick={handleLogin}>Login</button>
-          <button className="google-login-button" onClick={handleGoogleLogin}>Login with Google</button>
-          <button className="back-button" onClick={() => navigate(-1)}>Back</button>
+          <button className="login-button" onClick={handleLogin} data-testid="login-button">Login</button>
+          <button className="google-login-button" onClick={handleGoogleLogin} data-testid="google-login-button">Login with Google</button>
+          <button className="back-button" onClick={() => navigate(-1)} data-testid="back-button">Back</button>
         </>
       ) : (
         <>
           <h2 className="team-selection-title">Enter Username and Select Your Icon</h2>
-          {error && <p className="error-message">{error}</p>}
+          {error && <p className="error-message" data-testid="error-message">{error}</p>}
           <input 
             type="text" 
             placeholder="Username" 
             value={username} 
             onChange={(e) => setUsername(e.target.value)} 
             className="login-input"
+            data-testid="username-input"
           />
-          <div className="icon-container">
+          <div className="icon-container" data-testid="icon-container">
             {initialIcons.map((icon) => (
               <div
                 key={icon}
                 className={`team-logo ${selectedLogo === icon ? 'selected' : ''}`}
                 onClick={() => handleLogoClick(icon)}
+                data-testid={`${icon.toLowerCase()}-icon`}
               >
                 {icon === 'Cat' && <Cat className="glowing-icon" />}
                 {icon === 'Ghost' && <Ghost className="glowing-icon" />}
@@ -192,8 +198,8 @@ const Login = () => {
               </div>
             ))}
           </div>
-          <button className="login-button" onClick={handleGoogleUsernameLogoSubmit}>Complete Profile</button>
-          <button className="back-button" onClick={() => setStep(1)}>Back</button>
+          <button className="login-button" onClick={handleGoogleUsernameLogoSubmit} data-testid="complete-profile-button">Complete Profile</button>
+          <button className="back-button" onClick={() => setStep(1)} data-testid="back-to-login-button">Back</button>
         </>
       )}
     </div>

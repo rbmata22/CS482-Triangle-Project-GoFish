@@ -1,38 +1,22 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import JoinPrivate from "./JoinPrivate";
 import { BrowserRouter } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from 'react';
-import { db } from '../../config/firebase';
-import JoinPublic from "./JoinPublic"
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
-import { Cat, Ghost, Dog, Bot, Bird, Check, X } from 'lucide-react';
+import JoinPublic from "./JoinPublic";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { Cat, Ghost, Dog, Bird } from "lucide-react";
 
-// Mock the entire firebase.js config file
-jest.mock('../../config/firebase', () => ({
-    auth: {},
+// Mock Firebase Firestore functions
+jest.mock("../../config/firebase", () => ({
     db: {}
 }));
 
-// Mock Firebase Auth
-jest.mock('firebase/auth', () => ({
-    getAuth: jest.fn(() => ({})),
-    signInWithEmailAndPassword: jest.fn(),
-    signInWithPopup: jest.fn(),
-    GoogleAuthProvider: jest.fn(() => ({}))
-}));
-
-// Mock Firebase Firestore
 jest.mock("firebase/firestore", () => ({
     collection: jest.fn(),
     query: jest.fn(),
     where: jest.fn(),
-    getDocs: jest.fn(),
     onSnapshot: jest.fn()
 }));
 
-// Mock useNavigate from react-router-dom
 const mockNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
     ...jest.requireActual("react-router-dom"),
@@ -41,132 +25,199 @@ jest.mock("react-router-dom", () => ({
 
 describe("JoinPublic Component", () => {
     beforeEach(() => {
-      jest.clearAllMocks();
+        jest.clearAllMocks();
     });
-  
-    it("fetches and displays available lobbies", async () => {
-      // Arrange
-      const mockLobbies = [
-        { id: "1", players: [{ username: "Player1", logo: "Cat" }], playerLimit: 4, lobbyType: "public", useAI: true },
-        { id: "2", players: [{ username: "Player2", logo: "Dog" }], playerLimit: 4, lobbyType: "public", useAI: false },
-      ];
-  
-      onSnapshot.mockImplementationOnce((query, callback) => {
-        callback({
-          docs: mockLobbies.map((lobby) => ({
-            id: lobby.id,
-            data: () => lobby,
-          })),
+
+    const mockLobbyData = [
+        {
+            id: "1",
+            players: [{ username: "Player1", logo: "Cat" }],
+            playerLimit: 4,
+            lobbyType: "public",
+            useAI: true,
+            deckSize: 50
+        },
+        {
+            id: "2",
+            players: [{ username: "Player2", logo: "Dog" }],
+            playerLimit: 4,
+            lobbyType: "public",
+            useAI: false,
+            deckSize: 40
+        },
+        {
+            id: "3",
+            players: [{ username: "Player3", logo: "Ghost" }],
+            playerLimit: 4,
+            lobbyType: "private",
+            useAI: true,
+            deckSize: 30
+        },
+        {
+            id: "4",
+            players: [],
+            playerLimit: 4,
+            lobbyType: "public",
+            useAI: true,
+            deckSize: 20
+        }
+    ];
+
+    const setupSnapshotMock = (data) => {
+        onSnapshot.mockImplementationOnce((query, callback) => {
+            callback({
+                docs: data.map((lobby) => ({
+                    id: lobby.id,
+                    data: () => lobby
+                }))
+            });
+            return jest.fn(); // mock unsubscribe
         });
-        return jest.fn(); // mock unsubscribe
-      });
-  
-      render(
-        <BrowserRouter>
-          <JoinPublic />
-        </BrowserRouter>
-      );
-  
-      // Act & Assert
-      await waitFor(() => {
-        expect(screen.getByText("Open Lobbies")).toBeInTheDocument();
-        expect(screen.getByText("Player1")).toBeInTheDocument();
-        expect(screen.getByText("Player2")).toBeInTheDocument();
-      });
-    });
-  
-    it("expands and shows lobby details when clicked", async () => {
-      // Arrange
-      const mockLobbies = [
-        { id: "1", players: [{ username: "Player1", logo: "Cat" }], playerLimit: 4, lobbyType: "public", useAI: true },
-      ];
-  
-      onSnapshot.mockImplementationOnce((query, callback) => {
-        callback({
-          docs: mockLobbies.map((lobby) => ({
-            id: lobby.id,
-            data: () => lobby,
-          })),
+    };
+
+    const renderComponent = () => {
+        render(
+            <BrowserRouter>
+                <JoinPublic />
+            </BrowserRouter>
+        );
+    };
+
+    it("fetches and displays available lobbies, filtering out private lobbies", async () => {
+        setupSnapshotMock(mockLobbyData);
+
+        renderComponent();
+        await waitFor(() => {
+            expect(screen.getByText("Open Lobbies")).toBeInTheDocument();
+            expect(screen.getByText("Player1")).toBeInTheDocument();
+            expect(screen.getByText("Player2")).toBeInTheDocument();
+            expect(screen.queryByText("Player3")).not.toBeInTheDocument();
         });
-        return jest.fn(); // mock unsubscribe
-      });
-  
-      render(
-        <BrowserRouter>
-          <JoinPublic />
-        </BrowserRouter>
-      );
-  
-      // Act
-      fireEvent.click(screen.getByText("Player1"));
-  
-      // Assert
-      expect(screen.getByText("Lobby Type: public")).toBeInTheDocument();
-      expect(screen.getByText("AI Fill: Enabled")).toBeInTheDocument();
-      expect(screen.getByText("Join Lobby")).toBeInTheDocument();
     });
-  
-    it("navigates to the lobby page when Join Lobby is clicked", async () => {
-      // Arrange
-      const mockLobbies = [
-        { id: "1", players: [{ username: "Player1", logo: "Cat" }], playerLimit: 4, lobbyType: "public", useAI: true },
-      ];
-  
-      onSnapshot.mockImplementationOnce((query, callback) => {
-        callback({
-          docs: mockLobbies.map((lobby) => ({
-            id: lobby.id,
-            data: () => lobby,
-          })),
-        });
-        return jest.fn(); // mock unsubscribe
-      });
-  
-      render(
-        <BrowserRouter>
-          <JoinPublic />
-        </BrowserRouter>
-      );
-  
-      // Act
-      fireEvent.click(screen.getByText("Player1"));
-      fireEvent.click(screen.getByText("Join Lobby"));
-  
-      // Assert
-      expect(mockNavigate).toHaveBeenCalledWith("/lobby/1");
+
+    it("expands and shows lobby details when a lobby is clicked, then collapses on back click", async () => {
+        setupSnapshotMock(mockLobbyData);
+        renderComponent();
+
+        await waitFor(() => screen.getByText("Player1"));
+        fireEvent.click(screen.getByText("Player1"));
+
+        expect(screen.getByText("Lobby Type: public")).toBeInTheDocument();
+        expect(screen.getByText("AI Fill: Enabled")).toBeInTheDocument();
+        expect(screen.getByText("Deck Size: 50 Cards")).toBeInTheDocument();
+        expect(screen.getByText("Join Lobby")).toBeInTheDocument();
+
+        fireEvent.click(screen.getByText("Back"));
+        expect(screen.queryByText("Lobby Type: public")).not.toBeInTheDocument();
     });
-  
+
+    it("navigates to the correct lobby page when Join Lobby is clicked", async () => {
+        setupSnapshotMock(mockLobbyData);
+        renderComponent();
+
+        await waitFor(() => screen.getByText("Player1"));
+        fireEvent.click(screen.getByText("Player1"));
+        fireEvent.click(screen.getByText("Join Lobby"));
+
+        expect(mockNavigate).toHaveBeenCalledWith("/lobby/1");
+    });
+
     it("shows 'No lobbies available' message when no lobbies are available", async () => {
-      // Arrange
-      onSnapshot.mockImplementationOnce((query, callback) => {
-        callback({
-          docs: [],
+        setupSnapshotMock([]);
+        renderComponent();
+
+        await waitFor(() => {
+            expect(screen.getByText("No lobbies available at the moment.")).toBeInTheDocument();
         });
-        return jest.fn(); // mock unsubscribe
-      });
-  
-      render(
-        <BrowserRouter>
-          <JoinPublic />
-        </BrowserRouter>
-      );
-  
-      // Assert
-      expect(screen.getByText("No lobbies available at the moment.")).toBeInTheDocument();
     });
-  
+
     it("navigates back to the previous page when Back button is clicked", () => {
-      // Arrange
-      render(
-        <BrowserRouter>
-          <JoinPublic />
-        </BrowserRouter>
-      );
-  
-      // Act
-      fireEvent.click(screen.getByText("Back"));
-  
-      // Assert
-      expect(mockNavigate).toHaveBeenCalledWith(-1);
+        renderComponent();
+        fireEvent.click(screen.getByText("Back"));
+
+        expect(mockNavigate).toHaveBeenCalledWith(-1);
     });
-  });
+
+    it("renders correct user icons based on logo type and defaults to Bird icon for unknown types", async () => {
+        const iconData = [
+            { username: "Player1", logo: Cat },
+            { username: "Player2", logo: Dog },
+            { username: "UnknownPlayer", logo: Bird } // Default case
+        ];
+
+        setupSnapshotMock([
+            { id: "1", players: [{ username: "Player1", logo: "Cat" }], lobbyType: "public" },
+            { id: "2", players: [{ username: "Player2", logo: "Dog" }], lobbyType: "public" },
+            { id: "3", players: [{ username: "UnknownPlayer" }], lobbyType: "public" }
+        ]);
+        renderComponent();
+
+        await waitFor(() => {
+            iconData.forEach(({ username, logo }) => {
+                expect(screen.getByText(username)).toBeInTheDocument();
+                expect(screen.getByTestId(`icon-${username}`)).toBeInstanceOf(logo);
+            });
+        });
+    });
+
+    it("displays player count in the lobby summary for various scenarios", async () => {
+        setupSnapshotMock([
+            { id: "1", players: [{ username: "Player1" }], playerLimit: 4, lobbyType: "public" },
+            { id: "2", players: [], playerLimit: 4, lobbyType: "public" },
+            { id: "3", players: [{ username: "FullPlayer1" }, { username: "FullPlayer2" }], playerLimit: 2, lobbyType: "public" }
+        ]);
+        renderComponent();
+
+        await waitFor(() => {
+            expect(screen.getByText("1 / 4 Players")).toBeInTheDocument();
+            expect(screen.getByText("0 / 4 Players")).toBeInTheDocument();
+            expect(screen.getByText("2 / 2 Players")).toBeInTheDocument();
+        });
+    });
+
+    it("handles snapshot error gracefully and displays an error message", async () => {
+        onSnapshot.mockImplementationOnce(() => {
+            throw new Error("Failed to fetch lobbies");
+        });
+
+        renderComponent();
+        await waitFor(() => {
+            expect(screen.getByText("Error loading lobbies")).toBeInTheDocument();
+        });
+    });
+
+    it("unsubscribes from snapshot listener on component unmount", async () => {
+        const unsubscribeMock = jest.fn();
+        onSnapshot.mockImplementationOnce(() => unsubscribeMock);
+
+        const { unmount } = renderComponent();
+        unmount();
+
+        expect(unsubscribeMock).toHaveBeenCalled();
+    });
+
+    it("toggles expanded lobby view back to null if same lobby is clicked again", async () => {
+        setupSnapshotMock(mockLobbyData);
+        renderComponent();
+
+        await waitFor(() => screen.getByText("Player1"));
+        fireEvent.click(screen.getByText("Player1")); // First click to expand
+        expect(screen.getByText("Lobby Type: public")).toBeInTheDocument();
+
+        fireEvent.click(screen.getByText("Player1")); // Second click to collapse
+        expect(screen.queryByText("Lobby Type: public")).not.toBeInTheDocument();
+    });
+
+    it("navigates correctly on second join lobby after back button clicked", async () => {
+        setupSnapshotMock(mockLobbyData);
+        renderComponent();
+
+        await waitFor(() => screen.getByText("Player1"));
+        fireEvent.click(screen.getByText("Player1"));
+        fireEvent.click(screen.getByText("Back")); // Collapse details
+
+        fireEvent.click(screen.getByText("Player2")); // Expand second lobby
+        fireEvent.click(screen.getByText("Join Lobby"));
+        expect(mockNavigate).toHaveBeenCalledWith("/lobby/2");
+    });
+});

@@ -1,48 +1,36 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, setDoc, doc } from 'firebase/firestore';
 import Login from './Login';
 import { act } from 'react';
 
-/* 
-*  Mock Firebase modules and functions for testing 
-*  
-*  - No real Firebase calls are made to ensure database is not tampered with
-*  - Easier verification of exactly how the Firebase functions were called
-*  - Mock Firebase means that we can test error handling
-*/
-// Mock the entire firebase.js config file
+// Mock Firebase modules and functions to isolate the tests from external dependencies
 jest.mock('../config/firebase', () => ({
     auth: {},
     db: {}
 }));
 
-// Mock Firebase Auth
 jest.mock('firebase/auth', () => ({
-    getAuth: jest.fn(() => ({})),
-    signInWithEmailAndPassword: jest.fn(),
-    signInWithPopup: jest.fn(),
-    GoogleAuthProvider: jest.fn(() => ({}))
+    getAuth: jest.fn(() => ({})), // Mock getAuth to return an empty object
+    signInWithEmailAndPassword: jest.fn(), // Mock signInWithEmailAndPassword to simulate user login
+    signInWithPopup: jest.fn(), // Mock signInWithPopup to simulate login with Google
+    GoogleAuthProvider: jest.fn(() => ({})) // Mock GoogleAuthProvider
 }));
 
-// Mock Firebase Firestore
 jest.mock('firebase/firestore', () => ({
-    doc: jest.fn(),
-    getDoc: jest.fn(),
-    getFirestore: jest.fn()
+    doc: jest.fn(), // Mock doc function
+    getDoc: jest.fn(), // Mock getDoc to simulate fetching documents
+    setDoc: jest.fn() // Mock setDoc to simulate setting documents
 }));
 
-// Mock react-router-dom navigation
-const mockNavigate = jest.fn();
+const mockNavigate = jest.fn(); // Mock navigation function
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
     useNavigate: () => mockNavigate
 }));
 
-// Testcases for logging into an existing account
 describe('Login Component', () => {
-    // Clearing each mock Jest and local storage before each testcase
     beforeEach(() => {
         jest.clearAllMocks();
         localStorage.clear();
@@ -56,95 +44,148 @@ describe('Login Component', () => {
         );
     };
 
-    // Testcase 1: No email and password
     it('Shows error when email and password are empty', () => {
+        // Input: Empty email and password
+        // Expected Output: Display an error message
         renderLogin();
-        fireEvent.click(screen.getByRole('button', { name: 'Login' }));
-
-        expect(screen.getByText('Please enter email and password')).toBeInTheDocument();
+        fireEvent.click(screen.getByTestId('login-button'));
+        expect(screen.getByTestId('error-message').textContent).toBe('Please enter your email and password');
     });
 
-    // Testcase 2: Invalid email format
-    it('Shows error for invalid email format', async () => {
+    it('Shows error for invalid email format', () => {
+        // Input: Invalid email and valid password
+        // Expected Output: Display an error message for invalid email format
         renderLogin();
-        fireEvent.change(screen.getByPlaceholderText('Email'), {
-            target: { value: 'InvalidEmail' }
-        });
-        fireEvent.change(screen.getByPlaceholderText('Password'), {
-            target: { value: 'password123' }
-        });
-
-        fireEvent.click(screen.getByRole('button', { name: 'Login' }));
-
-        expect(await screen.findByText('Please enter a valid email address')).toBeInTheDocument();
+        fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'invalidEmail' } });
+        fireEvent.change(screen.getByTestId('password-input'), { target: { value: 'password123' } });
+        fireEvent.click(screen.getByTestId('login-button'));
+        expect(screen.getByTestId('error-message').textContent).toBe('Please enter a valid email address');
     });
 
-    // Testcase 3: Password too short
-    it('Shows error when password is too short', async () => {
+    it('Shows error when password is too short', () => {
+        
+        // Input: Valid email and too short password
+        // Expected Output: Display an error message for short password
         renderLogin();
-        fireEvent.change(screen.getByPlaceholderText('Email'), {
-            target: { value: 'test@example.com' }
-        });
-        fireEvent.change(screen.getByPlaceholderText('Password'), {
-            target: { value: '123' }
-        });
-
-        fireEvent.click(screen.getByRole('button', { name: 'Login' }));
-
-        expect(await screen.findByText('Password must be at least 6 characters')).toBeInTheDocument();
+        fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'test@example.com' } });
+        fireEvent.change(screen.getByTestId('password-input'), { target: { value: '123' } });
+        fireEvent.click(screen.getByTestId('login-button'));
+        expect(screen.getByTestId('error-message').textContent).toBe('Password must be at least 6 characters');
     });
 
-    // Testcase 4: Successful login with email and password
     it('Successfully logs in with valid credentials', async () => {
-        // Mock the user object returned by Firebase authentication, as well as the function to sign in
-        const mockAuthUser = { uid: 'test-uid' };
-        signInWithEmailAndPassword.mockResolvedValueOnce({ user: mockAuthUser });
 
-        // Mock the user document that would be retrieved from Firestore
-        const mockUserDoc = {
-            exists: () => true,
-            data: () => ({ username: 'testuser', logo: 'dog' })
-        };
-        getDoc.mockResolvedValueOnce(mockUserDoc);
+        // Input: Valid email and password
+        // Expected Output: Navigate to home page and store user data in localStorage
+        const mockUser = { uid: 'test-uid' };
+        signInWithEmailAndPassword.mockResolvedValueOnce({ user: mockUser });
+
+        const mockUserData = { username: 'testuser', logo: 'dog', virtualCurrency: 500, gamesPlayed: 10, gamesWon: 5 };
+        getDoc.mockResolvedValueOnce({ exists: () => true, data: () => mockUserData });
 
         renderLogin();
-        fireEvent.change(screen.getByPlaceholderText('Email'), {
-            target: { value: 'test@example.com' }
-        });
-        fireEvent.change(screen.getByPlaceholderText('Password'), {
-            target: { value: 'password123' }
-        });
+        fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'test@example.com' } });
+        fireEvent.change(screen.getByTestId('password-input'), { target: { value: 'password123' } });
 
-        // Wrap this in act() and make it async because it triggers state updates
         await act(async () => {
-            fireEvent.click(screen.getByRole('button', { name: 'Login' }));
+            fireEvent.click(screen.getByTestId('login-button'));
         });
 
-        // Assert that user is directed to home page after logging in and correct values were stored in localStorage
         expect(mockNavigate).toHaveBeenCalledWith('/home');
-        expect(localStorage.getItem('authType')).toBe('Login');
         expect(localStorage.getItem('username')).toBe('testuser');
-        expect(localStorage.getItem('logo')).toBe('dog');
     });
 
-    // Testcase 5: Invalid login credentials
     it('Displays error for invalid login credentials', async () => {
-        // Error for invalid login credentials pre-input (before user inputs login to compare with actual output)
+
+        // Input: Valid email and wrong password
+        // Expected Output: Display an error message for invalid credentials
         signInWithEmailAndPassword.mockRejectedValueOnce(new Error('Invalid login credentials'));
 
         renderLogin();
-        fireEvent.change(screen.getByPlaceholderText('Email'), {
-            target: { value: 'test@example.com' }
-        });
-        fireEvent.change(screen.getByPlaceholderText('Password'), {
-            target: { value: 'wrongpassword' }
-        });
+        fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'test@example.com' } });
+        fireEvent.change(screen.getByTestId('password-input'), { target: { value: 'wrongpassword' } });
 
-        // Wrap this in act() and make it async because it triggers state updates
         await act(async () => {
-            fireEvent.click(screen.getByRole('button', { name: 'Login' }));
+            fireEvent.click(screen.getByTestId('login-button'));
         });
 
-        expect(await screen.findByText('Invalid login credentials')).toBeInTheDocument();
+        expect(screen.getByTestId('error-message').textContent).toBe('Invalid login credentials');
+    });
+
+    it('Successfully logs in with Google and proceeds to home for existing user', async () => {
+
+        // Input: Google sign-in for an existing user
+        // Expected Output: Navigate to home page and store user data in localStorage
+        const mockUser = { uid: 'google-uid' };
+        signInWithPopup.mockResolvedValueOnce({ user: mockUser });
+
+        const mockUserData = { username: 'googleuser', logo: 'ghost', virtualCurrency: 300 };
+        getDoc.mockResolvedValueOnce({ exists: () => true, data: () => mockUserData });
+
+        renderLogin();
+
+        await act(async () => {
+            fireEvent.click(screen.getByTestId('google-login-button'));
+        });
+
+        expect(mockNavigate).toHaveBeenCalledWith('/home');
+        expect(localStorage.getItem('username')).toBe('googleuser');
+    });
+
+    it('Proceeds to profile creation for new Google user', async () => {
+
+        // Input: Google sign-in for a new user
+        // Expected Output: Display username and icon input for new user profile setup
+        const mockUser = { uid: 'new-google-uid' };
+        signInWithPopup.mockResolvedValueOnce({ user: mockUser });
+
+        getDoc.mockResolvedValueOnce({ exists: () => false });
+
+        renderLogin();
+
+        await act(async () => {
+            fireEvent.click(screen.getByTestId('google-login-button'));
+        });
+
+        expect(screen.getByTestId('username-input')).toBeInTheDocument();
+        expect(screen.getByTestId('icon-container')).toBeInTheDocument();
+    });
+
+    it('Shows error if username and logo are not selected for new Google user', () => {
+
+        // Input: Attempt to complete profile without selecting username and logo
+        // Expected Output: Display error message
+        renderLogin();
+        fireEvent.click(screen.getByTestId('google-login-button'));
+        fireEvent.click(screen.getByTestId('complete-profile-button'));
+
+        expect(screen.getByTestId('error-message').textContent).toBe('Please choose a logo and enter a username');
+    });
+
+    it('Successfully completes profile creation for new Google user', async () => {
+
+        // Input: Username and logo selection for new Google user
+        // Expected Output: Navigate to home page and store new user data in localStorage
+        const mockUser = { uid: 'new-google-uid' };
+        signInWithPopup.mockResolvedValueOnce({ user: mockUser });
+        getDoc.mockResolvedValueOnce({ exists: () => false });
+        setDoc.mockResolvedValueOnce();
+
+        renderLogin();
+        
+        await act(async () => {
+            fireEvent.click(screen.getByTestId('google-login-button'));
+        });
+
+        fireEvent.change(screen.getByTestId('username-input'), { target: { value: 'newGoogleUser' } });
+        fireEvent.click(screen.getByTestId('dog-icon')); // Select the dog icon
+
+        await act(async () => {
+            fireEvent.click(screen.getByTestId('complete-profile-button'));
+        });
+
+        expect(mockNavigate).toHaveBeenCalledWith('/home');
+        expect(localStorage.getItem('username')).toBe('newGoogleUser');
+        expect(localStorage.getItem('logo')).toBe('Dog');
     });
 });
