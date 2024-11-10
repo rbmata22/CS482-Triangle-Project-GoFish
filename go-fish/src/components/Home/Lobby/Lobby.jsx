@@ -17,38 +17,32 @@ const Lobby = () => {
   useEffect(() => {
     if (!lobbyId) return;
 
-    const fetchLobbyData = async () => {
-      const lobbyRef = doc(db, 'Lobbies', lobbyId);
+    const lobbyRef = doc(db, 'Lobbies', lobbyId);
+    const unsubscribe = onSnapshot(lobbyRef, (doc) => {
+      if (doc.exists()) {
+        setLobbyData(doc.data());
+      } else {
+        localStorage.setItem('ownerLeftMessage', 'Owner of session has left');
+        navigate('/home');
+      }
+    });
 
-      const unsubscribe = onSnapshot(lobbyRef, (doc) => {
-        if (doc.exists()) {
-          setLobbyData(doc.data());
-        } else {
-          // Lobby document was deleted (e.g., owner left)
-          localStorage.setItem('ownerLeftMessage', 'Owner of session has left');
-          navigate('/home');
-        }
-      });
+    return () => unsubscribe();
+  }, [lobbyId, navigate]);
 
-      return () => unsubscribe();
-    };
-
+  useEffect(() => {
     const fetchUserData = async () => {
       const authType = localStorage.getItem('authType');
-
       if (authType === 'Guest') {
-        const guestUsername = localStorage.getItem('username');
-        const guestLogo = localStorage.getItem('logo');
-        const guestId = localStorage.getItem('guestId');
-        setUserData({
-          username: guestUsername,
-          logo: guestLogo,
-          guestId: guestId,
+        const guestData = {
+          username: localStorage.getItem('username'),
+          logo: localStorage.getItem('logo'),
+          guestId: localStorage.getItem('guestId'),
           virtualCurrency: 500,
           isReady: false,
-        });
+        };
+        setUserData(guestData);
       } else {
-        // Fetch user data for newly signed-up users
         const userId = auth.currentUser?.uid;
         if (userId) {
           try {
@@ -68,14 +62,10 @@ const Lobby = () => {
         }
       }
     };
-
-    fetchLobbyData();
     fetchUserData();
-  }, [lobbyId, navigate]);
+  }, [navigate]);
 
-  const allRealUsersReady = (players) => {
-    return players.every(player => player.isReady || player.logo === "Bot");
-  };
+  const allRealUsersReady = (players) => players.every(player => player.isReady || player.logo === "Bot");
 
   const addAIPlayers = async () => {
     const emptySlots = lobbyData.playerLimit - lobbyData.players.length;
@@ -98,14 +88,16 @@ const Lobby = () => {
   };
 
   const renderUserLogo = (logo) => {
-    switch (logo) {
-      case 'Cat': return <Cat className="user-logo" />;
-      case 'Ghost': return <Ghost className="user-logo" />;
-      case 'Dog': return <Dog className="user-logo" />;
-      case 'Bot': return <Bot className="user-logo" />;
-      case 'Bird': return <Bird className="user-logo" />;
-      default: return <Dices className="user-logo" />;
-    }
+    const logoComponents = {
+      'Cat': Cat,
+      'Ghost': Ghost,
+      'Dog': Dog,
+      'Bot': Bot,
+      'Bird': Bird,
+      default: Dices,
+    };
+    const LogoComponent = logoComponents[logo] || logoComponents.default;
+    return <LogoComponent className="user-logo" />;
   };
 
   const handleReadyToggle = async () => {
@@ -124,10 +116,8 @@ const Lobby = () => {
 
   const handleLeaveLobby = async () => {
     if (lobbyData.owner === userData.username) {
-      // Owner is leaving, delete the lobby
       await deleteDoc(doc(db, 'Lobbies', lobbyId));
     } else {
-      // If not the owner, just navigate to home
       navigate('/home');
     }
   };
@@ -150,7 +140,7 @@ const Lobby = () => {
 
   const handleGoFish = () => {
     if (allPlayersReady) {
-      navigate('/game', { state: { numberOfPlayers: lobbyData.players.length } });
+      navigate(`/lobby/${lobbyId}/bet`, { state: { lobbyId, bettingTotal: lobbyData.bettingTotal } });
     } else {
       alert('Not all players are ready!');
     }
@@ -182,7 +172,6 @@ const Lobby = () => {
             <div className="player-list">
               {[...Array(lobbyData.playerLimit)].map((_, index) => {
                 const player = lobbyData.players[index];
-
                 return (
                   <div key={index} className="player-item">
                     {player ? (

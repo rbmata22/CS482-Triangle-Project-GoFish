@@ -1,136 +1,186 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { db } from '../../../../config/firebase';
-import { doc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
+import { doc, onSnapshot, updateDoc, getDoc } from 'firebase/firestore';
+import { db, auth } from '../../../../config/firebase';
+import { BadgeDollarSign, User, Clock } from 'lucide-react';
 import './Bet.css';
 
 const Bet = () => {
   const { lobbyId } = useParams();
   const [userData, setUserData] = useState({});
   const [betAmount, setBetAmount] = useState(0);
-  const [totalBetPool, setTotalBetPool] = useState(0);
+  const [totalBettingPool, setTotalBettingPool] = useState(0);
   const [allBetsPlaced, setAllBetsPlaced] = useState(false);
-  const [betPlaced, setBetPlaced] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [players, setPlayers] = useState([]);
+  const [betStatus, setBetStatus] = useState("pending"); // "pending", "placed", "skipped"
   const navigate = useNavigate();
 
-  // Function to fetch user data from localStorage
-  const fetchUserData = async () => {
-    const guestUsername = localStorage.getItem('username');
-    const guestLogo = localStorage.getItem('logo');
-    const guestId = localStorage.getItem('guestId');
-    setUserData({
-      username: guestUsername,
-      logo: guestLogo,
-      guestId: guestId,
-      virtualCurrency: 500,
-      isReady: false,
-    });
-  };
-
+  // Fetch user data from Firestore on component mount
   useEffect(() => {
+    const fetchUserData = async () => {
+      const userId = auth.currentUser?.uid;
+      if (userId) {
+        try {
+          const userDoc = await getDoc(doc(db, 'Users', userId));
+          if (userDoc.exists()) {
+            setUserData(userDoc.data());
+          }
+        } catch (error) {
+          console.error("Error fetching user data: ", error);
+        }
+      }
+    };
     fetchUserData();
   }, []);
 
-  const handleBetChange = (value) => {
-    if (value <= userData.virtualCurrency) {
-      setBetAmount(value);
-    }
-  };
-
-  const handlePlaceBet = async () => {
-    if (betAmount > 0 && betAmount <= userData.virtualCurrency) {
-      setIsLoading(true); // Show loading animation
-      try {
-        const betRef = doc(db, 'Bets', lobbyId);
-
-        // Update the Bets document with the user's bet and adjust the total
-        await updateDoc(betRef, {
-          players: arrayUnion({ username: userData.username, bet: betAmount }),
-          total: (totalBetPool || 0) + betAmount,
-        });
-
-        // Deduct the bet amount from user's currency
-        setUserData((prevData) => ({
-          ...prevData,
-          virtualCurrency: prevData.virtualCurrency - betAmount,
-        }));
-
-        // Set loading state and show "Bet Placed" message
-        setIsLoading(false);
-        setBetPlaced(true);
-
-        // Reset the "Bet Placed" message after 3 seconds
-        setTimeout(() => setBetPlaced(false), 3000);
-      } catch (error) {
-        console.error("Error placing bet:", error);
-        setIsLoading(false); // Reset loading if there's an error
-      }
-    }
-  };
-
-  // Watch the total bet pool in real-time and check if all players have placed their bets
+  // Real-time listener for lobby data to track bets and total pool
   useEffect(() => {
-    const unsubscribe = onSnapshot(doc(db, 'Bets', lobbyId), (doc) => {
+    if (!lobbyId) return;
+
+    const lobbyRef = doc(db, 'Lobbies', lobbyId);
+    const unsubscribe = onSnapshot(lobbyRef, (doc) => {
       if (doc.exists()) {
         const data = doc.data();
-        setTotalBetPool(data.total || 0);
+        setTotalBettingPool(data.bettingTotal || 0);
+        
+        // Update player data
+        const updatedPlayers = data.players.map(player => {
+          if (player.logo === "Bot" && !player.betPlaced) {
+            // Set default bet for AI if not placed
+            return { ...player, betAmount: 100, betPlaced: true };
+          }
+          return player;
+        });
 
-        if (data.players && data.players.length >= 2) { // Adjust '2' based on actual player limit
-          setAllBetsPlaced(true);
+        setPlayers(updatedPlayers);
+
+        // Update Firestore with AI bet defaults if they haven't been placed yet
+        if (updatedPlayers.some(player => player.logo === "Bot" && player.betAmount === 100 && !player.betPlaced)) {
+          updateDoc(lobbyRef, { 
+            players: updatedPlayers,
+            bettingTotal: (data.bettingTotal || 0) + 100 * updatedPlayers.filter(p => p.logo === "Bot" && p.betAmount === 100).length
+          });
         }
+
+        // Check if all players have either placed or skipped their bets
+        const allBets = updatedPlayers.every(player => player.betPlaced || player.betSkipped);
+        setAllBetsPlaced(allBets);
       }
     });
 
     return () => unsubscribe();
   }, [lobbyId]);
 
-  // Redirect all players to results page when all bets are placed
+  // Handle placing a bet
+  const handleBet = async () => {
+    if (betAmount > userData.virtualCurrency) {
+      alert('Insufficient virtual currency!');
+      return;
+    }
+
+    try {
+      const userId = auth.currentUser?.uid;
+      const lobbyRef = doc(db, 'Lobbies', lobbyId);
+
+      // Update the betting pool and this player's bet in Firestore
+      const updatedPlayers = players.map(player => 
+        player.userId === userId
+          ? { ...player, betAmount, betPlaced: true }
+          : player
+      );
+
+      await updateDoc(lobbyRef, {
+        bettingTotal: totalBettingPool + betAmount,
+        players: updatedPlayers,
+      });
+
+      setBetStatus("placed");
+
+      // Deduct bet amount from user's virtual currency
+      await updateDoc(doc(db, 'Users', userId), {
+        virtualCurrency: userData.virtualCurrency - betAmount,
+      });
+    } catch (error) {
+      console.error("Error placing bet:", error);
+    }
+  };
+
+  // Handle skipping a bet
+  const handleSkipBet = async () => {
+    try {
+      const userId = auth.currentUser?.uid;
+      const lobbyRef = doc(db, 'Lobbies', lobbyId);
+
+      // Update Firestore to mark this player's bet as skipped
+      const updatedPlayers = players.map(player => 
+        player.userId === userId
+          ? { ...player, betAmount: 0, betPlaced: false, betSkipped: true }
+          : player
+      );
+
+      await updateDoc(lobbyRef, {
+        players: updatedPlayers
+      });
+
+      setBetStatus("skipped");
+    } catch (error) {
+      console.error("Error skipping bet:", error);
+    }
+  };
+
+  // Redirect to Game.jsx when all bets are placed
   useEffect(() => {
     if (allBetsPlaced) {
-      navigate(`/results/${lobbyId}`);
+      navigate(`/lobby/${lobbyId}/game`);
     }
-  }, [allBetsPlaced, lobbyId, navigate]);
+  }, [allBetsPlaced, navigate, lobbyId]);
 
   return (
     <div className="bet-container">
-      <h2 className="bet-header">Place Your Bet</h2>
-      <div className="user-currency">Current Currency: ${userData.virtualCurrency}</div>
-
-      <Slider
-        min={0}
-        max={userData.virtualCurrency || 0}
-        value={betAmount}
-        onChange={handleBetChange}
-        trackStyle={{ backgroundColor: '#1E90FF', height: 8 }}
-        handleStyle={{
-          borderColor: '#00FFFF',
-          height: 24,
-          width: 24,
-          backgroundColor: '#111',
-        }}
-        railStyle={{ backgroundColor: '#333', height: 8 }}
-        className="bet-slider"
-      />
-      <div className="bet-amount">Bet Amount: ${betAmount}</div>
+      <h2>Place Your Bet</h2>
       
-      <button
-        className="place-bet-button"
-        onClick={handlePlaceBet}
-        disabled={betAmount === 0 || betPlaced || allBetsPlaced || isLoading}
-      >
-        {isLoading ? <span className="loading-spinner"></span> : "Place Bet"}
-      </button>
+      <div className="user-info">
+        <BadgeDollarSign className="currency-icon" />
+        <span>Balance: {userData.virtualCurrency}</span>
+      </div>
 
-      {betPlaced && <div className="bet-placed-message">Bet Placed!</div>}
-
-      {allBetsPlaced && (
-        <div className="total-bet-pool">
-          Total Bet Pool: ${totalBetPool}
-        </div>
+      {betStatus === "pending" ? (
+        <>
+          <div className="bet-input">
+            <input
+              type="number"
+              placeholder="Enter bet amount"
+              value={betAmount}
+              onChange={(e) => setBetAmount(Number(e.target.value))}
+            />
+            <button onClick={handleBet} disabled={betAmount <= 0}>Place Bet</button>
+            <button onClick={handleSkipBet} className="skip-button">Skip Bet</button>
+          </div>
+        </>
+      ) : (
+        <p className="waiting-message">
+          <Clock className="waiting-icon" />
+          Waiting for other players to finish betting...
+        </p>
       )}
+
+      <div className="bet-summary">
+        <h3>Total Betting Pool: {totalBettingPool}</h3>
+        <h4>Players' Bets:</h4>
+        <ul>
+          {players.map((player, index) => (
+            <li key={index} className="player-bet">
+              <User className="player-icon" />
+              <span>{player.username} - </span>
+              <span>
+                {player.betPlaced ? `$${player.betAmount}` : player.betSkipped ? "Skipped" : "Not Yet Bet"}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {allBetsPlaced && <p className="all-bets-placed-message">All players have placed their bets!</p>}
     </div>
   );
 };
