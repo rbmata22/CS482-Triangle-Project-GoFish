@@ -26,6 +26,12 @@
   width: 200px;
   height: 200px;
   margin-bottom: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.user-logo:hover {
+  transform: scale(1.05);
 }
 
 .username {
@@ -82,8 +88,8 @@
 }
 
 .central-dice {
-  width: 150px; /* Increase the size */
-  height: 150px; /* Same size for width and height */
+  width: 150px;
+  height: 150px;
   color: white;
   animation: dice-spin 2s infinite;
 }
@@ -103,6 +109,7 @@
   gap: 2rem;
 }
 
+/* Main buttons with Slide-in-from-Bottom Effect */
 .main-button {
   background-color: #1E90FF;
   color: white;
@@ -112,13 +119,30 @@
   font-size: 1.2rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  animation: slideInFromBottomButtons 0.6s ease forwards; /* Slide-in animation */
+  opacity: 0; /* Initially hidden for animation */
 }
 
+/* Hover effect for main buttons */
 .main-button:hover {
   background-color: #00FFFF;
   box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
 }
 
+/* Slide-in-from-Bottom animation for main buttons */
+@keyframes slideInFromBottomButtons {
+  0% {
+    opacity: 0;
+    transform: translateY(50px); /* Start below the initial position */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* Move to original position */
+  }
+}
+
+
+/* Alert message styling */
 .alert-message {
   position: fixed;
   top: 20px;
@@ -149,43 +173,212 @@
   animation: pulse 1s infinite;
 }
 
-@keyframes alertSlideIn {
+/* Player stats submenu */
+.player-menu {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 500px;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 12px;
+  color: white;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.5s ease-out;
+  z-index: 1000;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+.player-menu h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #009dff;
+}
+
+.player-menu p {
+  font-size: 1.1rem;
+  color: #cfcfcf;
+  margin-bottom: 0.8rem;
+}
+
+/* Close and Change Icon buttons in player menu */
+.player-menu button.close-button, .player-menu button.change-icon-button {
+  margin-top: 1.5rem;
+  padding: 0.8rem 1.5rem;
+  background-color: #1E90FF;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.player-menu button.close-button:hover, .player-menu button.change-icon-button:hover {
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 115, 255, 0.8);
+}
+
+/* Fade-in animation for player menu */
+@keyframes fadeIn {
   0% {
     opacity: 0;
-    transform: translateX(-50%) translateY(-10px);
+    transform: translate(-50%, -55%);
   }
   100% {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translate(-50%, -50%);
   }
 }
 
-@keyframes glowPulse {
-  0% {
-    box-shadow: 0 0 10px rgba(255, 75, 75, 0.6), 0 0 20px rgba(255, 75, 75, 0.4), 0 0 30px rgba(255, 75, 75, 0.2);
-  }
-  100% {
-    box-shadow: 0 0 15px rgba(255, 75, 75, 0.8), 0 0 25px rgba(255, 75, 75, 0.6), 0 0 40px rgba(255, 75, 75, 0.4);
-  }
+/* Icon Change Menu with Slide-in Effect */
+.icon-change-menu {
+  position: fixed;
+  top: 70%; /* Start off-screen at the bottom */
+  left: 50%;
+  transform: translate(-50%, 0); /* Initial position off the screen */
+  width: 80%;
+  max-width: 500px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 12px;
+  color: white;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  backdrop-filter: blur(8px);
+  animation: slideInFromBottom 0.6s ease forwards;
+  z-index: 1000;
 }
 
-@keyframes pulse {
+/* Title and description */
+.icon-change-menu h3 {
+  font-size: 2rem;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.icon-change-menu p {
+  font-size: 1rem;
+  color: #cfcfcf;
+  margin-bottom: 1.5rem;
+}
+
+/* Icon options grid */
+.icon-options {
+  display:inline-flex;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 40px;
+  justify-items: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Individual icon styling with hover effects */
+.icon-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.icon-option:hover {
+  transform: scale(1.3);
+}
+
+.icon-preview {
+  font-size: 32px;
+  width: 40px;
+  height: 40px;
+
+  margin-bottom: 5px;
+  transition: color 0.3s ease;
+}
+
+.icon-option:hover .icon-preview {
+  color: #ffffff;
+}
+
+/* Icon label */
+.icon-option p {
+  font-size: 0.9rem;
+  color: #cfcfcf;
+}
+
+/* Close button */
+.icon-change-menu .close-button {
+  padding: 0.8rem 1.5rem;
+  background-color: #009dff;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.icon-change-menu .close-button:hover {
+  background-color: #009dff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+/* Slide-in-from-Bottom animation */
+@keyframes slideInFromBottom {
   0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.5);
     opacity: 0;
-  }
-}
-
-@keyframes fadeOut {
-  0% {
-    opacity: 1;
+    transform: translate(-50%, 100%); /* Start below the screen */
   }
   100% {
-    opacity: 0;
+    opacity: 1;
+    transform: translate(-50%, -50%); /* Centered on the screen */
   }
 }
 
+/* Dropdown content styling for standalone buttons */
+.dropdown-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  position: absolute;
+  top: 75%; /* Adjust position directly below the main button */
+
+  transform: translate(-50%, 10px); /* Slight vertical offset */
+  opacity: 0;
+  animation: fadeInDropdown 0.4s ease forwards;
+  z-index: 500;
+}
+
+/* Dropdown button styling */
+.dropdown-content button {
+  background-color: #333; /* Gray background */
+  color: white;
+  padding: 0.8rem 3rem; /* Adjust padding for better alignment */
+  border: none;
+  border-radius: 15px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%; /* Full width to match the dropdown container */
+  text-align: center;
+}
+
+/* Hover effect to change to blue */
+.dropdown-content button:hover {
+  background-color: #1E90FF; /* Blue on hover */
+  box-shadow: 0 0 8px rgba(30, 144, 255, 0.7);
+}
+
+/* Fade-in animation for dropdown buttons */
+@keyframes fadeInDropdown {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

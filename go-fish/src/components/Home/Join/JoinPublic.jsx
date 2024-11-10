@@ -72,6 +72,7 @@ const JoinPublic = () => {
               <div className="lobby-details">
                 <p><strong>Lobby Type:</strong> {lobby.lobbyType}</p>
                 <p><strong>AI Fill:</strong> {lobby.useAI ? 'Enabled' : 'Disabled'}</p>
+                <p><strong>Deck Size:</strong> {lobby.deckSize} Cards </p>
                 <p><strong>Players:</strong></p>
                 <ul>
                   {lobby.players.map((player, index) => (

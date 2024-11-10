@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../config/firebase';
-import { Check, X, Cat, Ghost, Dog, Bot, Bird } from 'lucide-react';
+import { Check, X, Cat, Ghost, Dog, Bot, Bird, Clock } from 'lucide-react';
 import './JoinPrivate.css';
 
 const renderUserLogo = (logo) => {
@@ -71,6 +71,7 @@ const JoinPrivate = () => {
             <p><strong>Lobby Code:</strong> {lobbyCode}</p>
             <p><strong>Player Limit:</strong> {lobbyDetails.playerLimit}</p>
             <p><strong>AI Fill:</strong> {lobbyDetails.useAI ? 'Enabled' : 'Disabled'}</p>
+            <p><strong>Deck Size:</strong> {lobbyDetails.deckSize} Cards <Clock className="deck-size-icon" /></p>
             <p><strong>Players:</strong></p>
             <ul>
               {lobbyDetails.players.map((player, index) => (
