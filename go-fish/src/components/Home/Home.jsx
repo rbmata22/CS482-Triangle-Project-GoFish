@@ -65,7 +65,6 @@ const Home = () => {
       }
 
       if (userDocData) {
-        // Ensure all necessary fields are populated to avoid undefined issues
         setUserData({
           username: userDocData.username || 'User',
           logo: userDocData.logo || 'Dices',
@@ -138,7 +137,7 @@ const Home = () => {
   const renderIconChangeMenu = () => (
     <div className={`icon-change-menu ${showIconChangeMenu ? 'slide-in' : ''}`}>
       <h3>Choose Your Icon</h3>
-      <p>Select an icon you’ve unlocked.</p>
+      <p>Select an icon you've unlocked.</p>
       <div className="icon-options">
         {userData.unlockedIcons?.map((icon) => {
           const IconComponent = iconComponents[icon];
@@ -171,6 +170,26 @@ const Home = () => {
     </div>
   );
 
+  const renderSidebarOptions = () => {
+    if (authType === 'Guest') {
+      return (
+        <>
+          <button className="sidebar-button" onClick={() => handleNavigate('/shop')}>Shop</button>
+          <button className="sidebar-button" onClick={handleLogout}>Logout</button>
+        </>
+      );
+    }
+    
+    return (
+      <>
+        <button className="sidebar-button" onClick={() => handleNavigate('/Friends')}>Friends</button>
+        <button className="sidebar-button" onClick={() => handleNavigate('/Messages')}>Messages</button>
+        <button className="sidebar-button" onClick={() => handleNavigate('/shop')}>Shop</button>
+        <button className="sidebar-button" onClick={handleLogout}>Logout</button>
+      </>
+    );
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.dropdown') && !event.target.closest('.join-dropdown')) {
@@ -200,10 +219,7 @@ const Home = () => {
           </p>
         </div>
         <div className="sidebar-options">
-          <button className="sidebar-button" onClick={() => handleNavigate('/Friends')}>Friends</button>
-          <button className="sidebar-button" onClick={() => handleNavigate('/Messages')}>Messages</button>
-          <button className="sidebar-button" onClick={() => handleNavigate('/shop')}>Shop</button>
-          <button className="sidebar-button" onClick={handleLogout}>Logout</button>
+          {renderSidebarOptions()}
           <button className="support-button" onClick={toggleSupport}>Admin Support</button>
           {showSupport && <Support onClose={() => setShowSupport(false)} />}
         </div>

@@ -20,18 +20,37 @@
 }
 
 .accept-button {
-    padding: 6px 12px;
+    padding: 8px 16px;
+    width: 4vw;
+    background-color: #68ff5a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
+.accept-button:hover {
+    background-color: #68ff5a;
+    box-shadow: 0 0 15px #dfdfdf;
+  }
+
 .decline-button {
-    padding: 6px 12px;
-    background-color: #dc3545;
+    padding: 8px 16px;
+    width: 4vw;
+    background-color: #ff0000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
+
+.decline-button:hover {
+    background-color: #ff0000;
+    box-shadow: 0 0 15px #dfdfdf;
+  }

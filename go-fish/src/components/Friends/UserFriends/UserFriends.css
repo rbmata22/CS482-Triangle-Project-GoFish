@@ -20,10 +20,59 @@
     border-top: 2px solid #ddd;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+}
+
+.friend-actions {
+    display: flex; /* This makes the buttons appear side by side */
+    gap: 2px; /* This adds space between the buttons */
+    align-items: center;
 }
 
 .no-friends, .no-requests {
     color: #ffffff;
     text-align: center;
     padding: 20px;
+}
+
+.remove-friend-btn {
+    padding: 8px 16px;
+    width: 4vw;
+    background-color: #ff0000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.remove-friend-btn:hover {
+    background-color: #ff0000;
+    box-shadow: 0 0 30px #dfdfdf;
+  }
+
+.message-friend-btn {
+    padding: 8px 16px;
+    width: 4vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.send-currency-btn {
+    padding: 8px 16px;
+    width: 4vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }

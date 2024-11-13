@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { db, auth } from "../../config/firebase";
+import { UserX, UserPlus } from 'lucide-react';
 import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import "./FriendRequests.css";
 
@@ -82,13 +83,13 @@ const FriendRequests = () => {
                                     onClick={() => handleRequest(request.id, request.senderId, "accept")}
                                     className="accept-button"
                                 >
-                                    Accept
+                                    <UserPlus />
                                 </button>
                                 <button
                                     onClick={() => handleRequest(request.id, request.senderId, "decline")}
                                     className="decline-button"
                                 >
-                                    Decline
+                                    <UserX />
                                 </button>
                             </div>
                         </div>
