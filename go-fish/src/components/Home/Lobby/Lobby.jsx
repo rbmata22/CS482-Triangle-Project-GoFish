@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { doc, onSnapshot, updateDoc, deleteDoc, arrayUnion, getDoc } from 'firebase/firestore';
 import { db, auth } from '../../config/firebase';
+import BetPopUp from './BetPopUp';
 import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign, SquareCheck } from 'lucide-react';
 import './Lobby.css';
 
@@ -10,9 +11,12 @@ const botNames = ["SpongeBot Squarepants", "LeBot James", "Botman", "J.A.R.V.I.S
 const Lobby = () => {
   const { lobbyId } = useParams();
   const [lobbyData, setLobbyData] = useState(null);
+  const [showBet, setShowBet] = useState(false);
   const [userData, setUserData] = useState({});
   const [isReady, setIsReady] = useState(false);
   const navigate = useNavigate();
+
+  const toggleBet = () => setShowBet(!showBet);
 
   useEffect(() => {
     if (!lobbyId) return;
@@ -146,6 +150,38 @@ const Lobby = () => {
     }
   };
 
+  const handlePlaceBet = async (amount) => {
+    try {
+      const lobbyRef = doc(db, 'Lobbies', lobbyId);
+      const currentTotal = lobbyData.bettingTotal || 0;
+      
+      // Update the lobby's betting total
+      await updateDoc(lobbyRef, {
+        bettingTotal: currentTotal + amount
+      });
+  
+      // Update the player's bet status
+      const updatedPlayers = lobbyData.players.map(player =>
+        player.username === userData.username
+          ? { ...player, betPlaced: true, betAmount: amount }
+          : player
+      );
+      await updateDoc(lobbyRef, { players: updatedPlayers });
+  
+      // Update user's virtual currency
+      if (auth.currentUser?.uid) {
+        const userRef = doc(db, 'Users', auth.currentUser.uid);
+        await updateDoc(userRef, {
+          virtualCurrency: userData.virtualCurrency - amount
+        });
+      }
+      
+      setShowBet(false);
+    } catch (error) {
+      console.error("Error placing bet:", error);
+    }
+  };
+
   return (
     <div className="lobby-container">
       {lobbyData ? (
@@ -161,6 +197,14 @@ const Lobby = () => {
 
           <div className="lobby-card">
             <h2 className="lobby-header">{`${lobbyData.players[0]?.username || 'Lobby'}'s Lobby`}</h2>
+
+            <div className="bet-pool-display">
+              <h2 className='lobby-header'>- Current Bet Pool -</h2>
+              <div className='bet-pool-amount'>
+                <BadgeDollarSign />
+                <span>1000</span>
+              </div>
+            </div>
 
             {lobbyData.lobbyType === 'private' && (
               <div className="login-code-container">
@@ -196,6 +240,8 @@ const Lobby = () => {
             <button className="footer-button" onClick={handleReadyToggle}>
               {lobbyData.players.some(p => p.username === userData.username && p.isReady) ? 'Unready' : 'Ready'}
             </button>
+            <button className="footer-button" onClick={toggleBet}>Place Bet</button>
+            {showBet && (<BetPopUp onClose={() => setShowBet(false)} userData={userData} onPlaceBet={handlePlaceBet}/>)}
             <button className="go-fish-button" onClick={handleGoFish} disabled={!allPlayersReady} style={{ backgroundColor: allPlayersReady ? 'green' : '#555' }}>
               GO FISH!
             </button>
