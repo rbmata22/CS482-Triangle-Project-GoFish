@@ -1,0 +1,128 @@
+/* General Game Container */
+
+  
+  /* Welcome Message */
+  h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    margin-bottom: 1rem;
+  }
+  
+  /* Logo Animation Placeholder */
+  .game-center-logo {
+    background: linear-gradient(45deg, #0066ff, #0066ff );
+    color: black;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 1rem 2rem;
+    border-radius: 50%;
+    box-shadow: 0px 0px 20px 5px rgba(255, 255, 0, 0.7);
+    margin-bottom: 1.5rem;
+    animation: pulsate 1.5s infinite alternate;
+  }
+  
+  /* Pulsating Animation */
+  @keyframes pulsate {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.1);
+    }
+  }
+  
+  /* Player Hand Container */
+  .hand-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    box-shadow: 0px 0px 15px 3px rgba(0, 0, 0, 0.6);
+  }
+  
+  /* Individual Card Icon */
+  .card-icon {
+    width: 80px;
+    height: 120px;
+    background: linear-gradient(145deg, #ffffff, #dcdcdc);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .card-icon:hover {
+    transform: translateY(-10px) scale(1.2);
+  }
+  
+  /* Notification Container */
+  .notifications-container {
+    position: absolute;
+    top: 10%;
+    right: 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* Notification Styling */
+  .notification {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.5);
+    transform: translateY(-20px);
+  }
+  
+  /* Game Status Container */
+  .game-status {
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  .game-status p {
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .card-icon {
+    cursor: pointer;
+    padding: 10px;
+    background: white;
+    border-radius: 5px;
+    transition: transform 0.2s ease;
+  }
+  
+  .card-icon.selected {
+    border: 2px solid gold;
+  }
+  
+  .player-button {
+    margin: 5px;
+    padding: 10px;
+    background: lightblue;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .player-button.selected {
+    background: darkblue;
+    color: white;
+  }
+  
+  
