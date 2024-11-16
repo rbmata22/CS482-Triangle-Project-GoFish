@@ -1,15 +1,20 @@
-/**
- * Enhanced and optimized Game component with improved readability and performance
- */
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { doc, onSnapshot, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
-import { animated, useSpring } from 'react-spring';
 import * as Icons from 'react-icons/gi';
+import { Cat, Ghost, Dog, Bot, Bird, Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem, Dices } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import './Game.css';
 
-// Dynamically generate card components mapping
+
+const iconComponents = {
+  Cat, Ghost, Dog, Bot, Bird, Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem,
+  default: Dices,
+};
+
+
+// Card components generation
 const generateCardComponents = () => {
   const cardNames = [
     "10", "Ace", "King", "Queen", "Jack",
@@ -30,184 +35,466 @@ const generateCardComponents = () => {
 
 const cardComponents = generateCardComponents();
 
-const Game = () => {
+// Editable Text Component
+const EditableText = ({ text, isEditing: canEdit, onSave, className }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState(text);
+
+  const handleSave = () => {
+    if (editValue.trim() !== text) {
+      onSave(editValue);
+    }
+    setIsEditing(false);
+  };
+
+  if (!isEditing) {
+    return (
+      <div 
+        className={`${className} editable-text`}
+        onClick={() => canEdit && setIsEditing(true)}
+      >
+        {text}
+        {canEdit && <span className="edit-icon">✎</span>}
+      </div>
+    );
+  }
+
+  return (
+    <input
+      type="text"
+      className={`${className} editable-input`}
+      value={editValue}
+      onChange={(e) => setEditValue(e.target.value)}
+      onBlur={handleSave}
+      onKeyPress={(e) => e.key === 'Enter' && handleSave()}
+      autoFocus
+    />
+  );
+};
+
+// PlayerCard Component
+const PlayerCard = ({ player, isCurrentPlayer, isCurrentTurn, onCardSelect, gameState, username }) => {
+  const CardIcon = cardComponents[player.display];
+  const PlayerIcon = iconComponents[player.logo] || iconComponents.default;
+  
+  return (
+    <motion.div
+      className={`player-card ${isCurrentTurn ? 'current-turn' : ''}`}
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+    >
+      <div className="player-info">
+        <motion.div 
+          className="player-avatar"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <PlayerIcon 
+            size={32} 
+            className="player-icon"
+            strokeWidth={1.5}
+          />
+        </motion.div>
+        <div className="player-name">
+          {player.username}
+        </div>
+        <div className="player-stats">
+          <span>Cards: {gameState.playerHands[player.username]?.length || 0}</span>
+          <span>Sets: {gameState.sets[player.username]?.length || 0}</span>
+        </div>
+      </div>
+      
+      {isCurrentPlayer && (
+        <div className="player-hand">
+          <AnimatePresence>
+            {gameState.playerHands[player.username]?.map((card, index) => {
+              const CardIcon = cardComponents[card.display];
+              return (
+                <motion.div
+                  key={`${card.rank}-${card.suit}`}
+                  className={`card ${gameState.selectedCard === card ? 'selected' : ''}`}
+                  onClick={() => isCurrentTurn && onCardSelect(card)}
+                  initial={{ scale: 0, y: 50 }}
+                  animate={{ 
+                    scale: 1,
+                    y: 0,
+                    rotate: (index - (gameState.playerHands[player.username].length / 2)) * 5,
+                    x: index * 30 
+                  }}
+                  exit={{ scale: 0, y: 50 }}
+                  whileHover={{ y: -20, zIndex: 10 }}
+                  transition={{ type: 'spring', stiffness: 500 }}
+                >
+                  {CardIcon && <CardIcon size={60} />}
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
+      )}
+    </motion.div>
+  );
+};
+
+// Main Game Component
+const GoFishGame = () => {
   const { lobbyId } = useParams();
   const [gameState, setGameState] = useState(null);
-  const [playerHand, setPlayerHand] = useState([]);
+  const [lobbyData, setLobbyData] = useState(null);
   const [username] = useState(localStorage.getItem("username") || "Guest");
-  const [notifications, setNotifications] = useState([]);
-  const [selectedCard, setSelectedCard] = useState(null);
-  const [targetPlayer, setTargetPlayer] = useState("");
+  const [editingMessage, setEditingMessage] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  const [showSetAnimation, setShowSetAnimation] = useState(false);
+  const [lastCompletedSet, setLastCompletedSet] = useState(null);
 
-  // Sync game state from Firestore
-  useEffect(() => {
-    if (!lobbyId || !username) return;
+  // Create initial sets in the deck
+  const createInitialSets = () => {
+    const guaranteedSets = ['Ace', 'King', 'Queen'].map(rank => (
+      ['Hearts', 'Diamonds', 'Clubs', 'Spades'].map(suit => ({
+        rank,
+        suit,
+        display: `${rank} of ${suit}`
+      }))
+    )).flat();
 
-    const lobbyRef = doc(db, "Lobbies", lobbyId);
-    const unsubscribe = onSnapshot(
-      lobbyRef,
-      (docSnapshot) => {
-        if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
-          setGameState(data);
-          setPlayerHand(data.playerHands?.[username] || []);
-        }
-      },
-      (error) => console.error("Error syncing with Firestore:", error)
+    const remainingRanks = ["Jack", "10", "9", "8", "7", "6", "5", "4", "3", "2"];
+    const remainingCards = remainingRanks.flatMap(rank =>
+      ["Hearts", "Diamonds", "Clubs", "Spades"].map(suit => ({
+        rank,
+        suit,
+        display: `${rank} of ${suit}`
+      }))
     );
 
-    return () => unsubscribe();
-  }, [lobbyId, username]);
+    return shuffle([...guaranteedSets, ...remainingCards]);
+  };
 
-  // Handle notifications
+  // Shuffle array function
+  const shuffle = (array) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  };
+
+  // Sync with Firestore
   useEffect(() => {
-    if (gameState?.logs) {
-      const newNotification = gameState.logs.at(-1);
-      if (newNotification) {
-        setNotifications((prev) => [...prev, newNotification]);
-        const timer = setTimeout(() => {
-          setNotifications((prev) => prev.slice(1));
-        }, 3000);
-        return () => clearTimeout(timer);
+    if (!lobbyId) return;
+
+    const lobbyRef = doc(db, "Lobbies", lobbyId);
+    const unsubscribe = onSnapshot(lobbyRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data();
+        setLobbyData(data);
+        
+        if (!data.gameState) {
+          initializeGame(data.players, data.playerLimit);
+        } else {
+          setGameState(data.gameState);
+        }
       }
-    }
-  }, [gameState?.logs]);
+    });
 
-  // Check for completed sets of four cards
-  const checkForCompletedSets = useCallback((hand) => {
-    const rankCount = hand.reduce((acc, card) => {
-      acc[card.rank] = (acc[card.rank] || 0) + 1;
-      return acc;
-    }, {});
+    return () => unsubscribe();
+  }, [lobbyId]);
 
-    return Object.keys(rankCount).filter((rank) => rankCount[rank] === 4);
-  }, []);
+  // Initialize game
+  const initializeGame = async (players, playerLimit) => {
+    const deck = createInitialSets();
+    const playerHands = {};
+    const sets = {};
+    
+    players.forEach(player => {
+      const initialCards = deck.splice(0, 5);
+      playerHands[player.username] = initialCards;
+      sets[player.username] = [];
+    });
 
-  // Determine the next player's turn
-  const getNextPlayerTurn = useCallback((state) => {
-    const players = Object.keys(state.playerHands || {});
-    const currentIndex = players.indexOf(state.currentTurn);
-    return players[(currentIndex + 1) % players.length];
-  }, []);
+    const initialGameState = {
+      deck,
+      playerHands,
+      sets,
+      currentPlayerIndex: 0,
+      players: players.map(p => p.username),
+      currentTurn: players[0].username,
+      selectedCard: null,
+      selectedPlayer: null,
+      message: `Game started! ${players[0].username}'s turn.`,
+      lastAction: null,
+      history: [],
+      totalSets: 0,
+    };
 
-  // Ask another player for a card
-  const handleAskCard = async () => {
-    if (!gameState || gameState.currentTurn !== username) {
-      alert("It's not your turn!");
-      return;
-    }
-    if (!selectedCard || !targetPlayer) {
-      alert("Please select a card and a player to ask.");
-      return;
-    }
+    const lobbyRef = doc(db, "Lobbies", lobbyId);
+    await updateDoc(lobbyRef, {
+      gameState: initialGameState
+    });
 
-    try {
-      const targetHand = gameState.playerHands[targetPlayer] || [];
-      const matchedCards = targetHand.filter((card) => card.rank === selectedCard.rank);
+    setGameState(initialGameState);
+  };
 
+  // Check for completed sets
+  const checkForSets = async (hand, player) => {
+    const rankCounts = {};
+    hand.forEach(card => {
+      rankCounts[card.rank] = (rankCounts[card.rank] || 0) + 1;
+    });
+
+    let setsFound = false;
+    const newHand = [...hand];
+    const newSets = [...(gameState.sets[player] || [])];
+
+    Object.entries(rankCounts).forEach(([rank, count]) => {
+      if (count === 4) {
+        const setCards = newHand.filter(card => card.rank === rank);
+        newHand.splice(0, newHand.length, ...newHand.filter(card => card.rank !== rank));
+        newSets.push(setCards);
+        setsFound = true;
+        
+        setShowSetAnimation(true);
+        setLastCompletedSet({ player, cards: setCards });
+        setTimeout(() => setShowSetAnimation(false), 2000);
+      }
+    });
+
+    if (setsFound) {
       const lobbyRef = doc(db, "Lobbies", lobbyId);
-
-      if (matchedCards.length > 0) {
-        // Transfer cards from target player to current player
-        const updatedPlayerHands = {
+      await updateDoc(lobbyRef, {
+        'gameState.playerHands': {
           ...gameState.playerHands,
-          [targetPlayer]: targetHand.filter((card) => card.rank !== selectedCard.rank),
-          [username]: [...playerHand, ...matchedCards],
-        };
+          [player]: newHand
+        },
+        'gameState.sets': {
+          ...gameState.sets,
+          [player]: newSets
+        },
+        'gameState.totalSets': gameState.totalSets + 1,
+        'gameState.message': `${player} completed a set!`
+      });
 
-        const completedSets = checkForCompletedSets(updatedPlayerHands[username]);
-
-        await updateDoc(lobbyRef, {
-          playerHands: updatedPlayerHands,
-          logs: arrayUnion(`${username} asked ${targetPlayer} for ${selectedCard.rank}s and got ${matchedCards.length}!`),
-          tableSets: {
-            ...gameState.tableSets,
-            [username]: [...(gameState.tableSets[username] || []), ...completedSets],
-          },
-        });
-      } else {
-        // Go Fish logic
-        const deck = [...(gameState.deck || [])];
-        const drawnCard = deck.pop();
-        const updatedPlayerHands = {
-          ...gameState.playerHands,
-          [username]: [...playerHand, drawnCard],
-        };
-
-        await updateDoc(lobbyRef, {
-          playerHands: updatedPlayerHands,
-          deck,
-          logs: arrayUnion(`${username} asked ${targetPlayer} for ${selectedCard.rank}s but went fishing!`),
-          currentTurn: getNextPlayerTurn(gameState),
-        });
+      if (gameState.totalSets + 1 === 13) {
+        handleGameEnd();
       }
-
-      setSelectedCard(null);
-      setTargetPlayer("");
-    } catch (error) {
-      console.error("Error updating game state:", error);
     }
   };
 
-  // Render player hand
-  const renderHand = () => {
-    return playerHand.map((card, index) => {
-      const CardIcon = cardComponents[`${card.rank} of ${card.suit}`];
-      return (
-        <animated.div
-          key={index}
-          className={`card-icon ${selectedCard === card ? "selected" : ""}`}
-          style={useSpring({ transform: selectedCard === card ? "scale(1.2)" : "scale(1)" })}
-          onClick={() => setSelectedCard(card)}
-        >
-          {CardIcon && <CardIcon />}
-        </animated.div>
+  // Ask for card
+  const askForCard = async () => {
+    if (!gameState.selectedCard || !gameState.selectedPlayer) return;
+
+    const lobbyRef = doc(db, "Lobbies", lobbyId);
+    const currentPlayer = gameState.currentTurn;
+    const targetPlayer = gameState.selectedPlayer;
+    const targetHand = gameState.playerHands[targetPlayer];
+    const matchingCards = targetHand.filter(card => 
+      card.rank === gameState.selectedCard.rank
+    );
+
+    if (matchingCards.length > 0) {
+      const newTargetHand = targetHand.filter(card => 
+        card.rank !== gameState.selectedCard.rank
       );
+      const newCurrentHand = [
+        ...gameState.playerHands[currentPlayer],
+        ...matchingCards
+      ];
+
+      await updateDoc(lobbyRef, {
+        'gameState.playerHands': {
+          ...gameState.playerHands,
+          [targetPlayer]: newTargetHand,
+          [currentPlayer]: newCurrentHand
+        },
+        'gameState.message': `${currentPlayer} got ${matchingCards.length} ${gameState.selectedCard.rank}(s) from ${targetPlayer}!`,
+        'gameState.selectedCard': null,
+        'gameState.selectedPlayer': null
+      });
+
+      await checkForSets(newCurrentHand, currentPlayer);
+    } else {
+      if (gameState.deck.length > 0) {
+        const drawnCard = gameState.deck[0];
+        const newDeck = gameState.deck.slice(1);
+        const newHand = [...gameState.playerHands[currentPlayer], drawnCard];
+        const nextPlayerIndex = (gameState.players.indexOf(currentPlayer) + 1) % gameState.players.length;
+
+        await updateDoc(lobbyRef, {
+          'gameState.deck': newDeck,
+          'gameState.playerHands': {
+            ...gameState.playerHands,
+            [currentPlayer]: newHand
+          },
+          'gameState.currentTurn': gameState.players[nextPlayerIndex],
+          'gameState.message': `Go Fish! ${currentPlayer} drew a card. ${gameState.players[nextPlayerIndex]}'s turn.`,
+          'gameState.selectedCard': null,
+          'gameState.selectedPlayer': null
+        });
+
+        await checkForSets(newHand, currentPlayer);
+      }
+    }
+  };
+
+  const handleCardSelect = async (card) => {
+    if (!isCurrentPlayersTurn) return;
+    const lobbyRef = doc(db, "Lobbies", lobbyId);
+    await updateDoc(lobbyRef, {
+      'gameState.selectedCard': card
     });
   };
 
-  // Render player list for target selection
-  const renderPlayers = () => {
-    return Object.keys(gameState?.playerHands || {}).map((player) => (
-      player !== username && (
-        <button
-          key={player}
-          className={`player-button ${targetPlayer === player ? "selected" : ""}`}
-          onClick={() => setTargetPlayer(player)}
-        >
-          {player}
-        </button>
-      )
-    ));
-  };
+  const isCurrentPlayersTurn = gameState?.currentTurn === username;
+
+  if (!gameState || !lobbyData) {
+    return (
+      <div className="loading-container">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          className="loading-spinner"
+        />
+        Loading game...
+      </div>
+    );
+  }
 
   return (
     <div className="game-container">
-      <h2>Welcome to Go Fish, {username}!</h2>
-      <div className="game-center-logo">Go Fish</div>
-      <div className="hand-container">{renderHand()}</div>
-      <div className="player-list">{renderPlayers()}</div>
-      <div className="game-actions">
-        <button onClick={handleAskCard}>Ask for Card</button>
-      </div>
-      <div className="game-status">
-        {gameState && (
-          <>
-            <p>Current Turn: {gameState.currentTurn}</p>
-            <p>Deck Size: {gameState.deck?.length || 0}</p>
-            <p>Your Sets: {gameState.tableSets?.[username]?.length || 0}</p>
-          </>
+      <motion.div 
+        className="game-board"
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+      >
+        <div className="game-header">
+          <motion.h1 
+            className="game-title"
+            initial={{ y: -50 }}
+            animate={{ y: 0 }}
+          >
+            Go Fish
+          </motion.h1>
+          
+          <div className="current-turn">
+            {isEditing ? (
+              <input
+                type="text"
+                className="editable-input"
+                value={editingMessage}
+                onChange={(e) => setEditingMessage(e.target.value)}
+                onBlur={() => handleMessageEdit(editingMessage)}
+                onKeyPress={(e) => e.key === 'Enter' && handleMessageEdit(editingMessage)}
+                autoFocus
+              />
+            ) : (
+              <motion.span
+                onClick={() => {
+                  if (isCurrentPlayersTurn) {
+                    setEditingMessage(gameState.message);
+                    setIsEditing(true);
+                  }
+                }}
+                animate={{ 
+                  scale: isCurrentPlayersTurn ? [1, 1.1, 1] : 1 
+                }}
+                transition={{ 
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatType: "reverse"
+                }}
+              >
+                {gameState.currentTurn}'s Turn
+                {isCurrentPlayersTurn && <span className="edit-icon">✎</span>}
+              </motion.span>
+            )}
+          </div>
+        </div>
+
+        <div className="players-container">
+          {gameState.players.map((player, index) => (
+            <PlayerCard
+              key={player}
+              player={{ username: player }}
+              isCurrentPlayer={player === username}
+              isCurrentTurn={player === gameState.currentTurn}
+              onCardSelect={handleCardSelect}
+              gameState={gameState}
+              username={username}
+            />
+          ))}
+        </div>
+
+        {isCurrentPlayersTurn && (
+          <motion.div 
+            className="game-controls"
+            initial={{ y: 100 }}
+            animate={{ y: 0 }}
+          >
+            <select
+              className="player-select"
+              value={gameState.selectedPlayer || ''}
+              onChange={async (e) => {
+                const lobbyRef = doc(db, "Lobbies", lobbyId);
+                await updateDoc(lobbyRef, {
+                  'gameState.selectedPlayer': e.target.value
+                });
+              }}
+            >
+              <option value="">Select Player</option>
+              {gameState.players
+                .filter(player => player !== username)
+                .map(player => (
+                  <option key={player} value={player}>{player}</option>
+                ))}
+            </select>
+
+            <motion.button
+              className="ask-button"
+              onClick={askForCard}
+              disabled={!gameState.selectedCard || !gameState.selectedPlayer}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Ask for Card
+            </motion.button>
+          </motion.div>
         )}
-      </div>
-      <div className="notifications-container">
-        {notifications.map((notification, index) => (
-          <animated.div key={index} className="notification">
-            {notification}
-          </animated.div>
-        ))}
-      </div>
+
+        <AnimatePresence>
+          {showSetAnimation && lastCompletedSet && (
+            <motion.div
+              className="set-completion"
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              exit={{ scale: 0, rotate: 180 }}
+            >
+              <div className="set-text">
+                {lastCompletedSet.player} completed a set!
+              </div>
+              <div className="set-cards">
+                {lastCompletedSet.cards.map((card, index) => {
+                  const CardIcon = cardComponents[card.display];
+                  return CardIcon && (
+                    <motion.div
+                      key={index}
+                      initial={{ rotate: 0 }}
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, delay: index * 0.2 }}
+                    >
+                      <CardIcon size={60} />
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 };
 
-export default Game;
+export default GoFishGame;
