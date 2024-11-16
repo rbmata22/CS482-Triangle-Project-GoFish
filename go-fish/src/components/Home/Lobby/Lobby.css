@@ -13,6 +13,14 @@
   overflow: hidden;
 }
 
+.lobby-content-wrapper {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  align-items: flex-start;
+  justify-content: center;
+}
+
 /* User info on the top left */
 .user-info-top-left {
   position: absolute;
@@ -53,7 +61,7 @@
   max-width: 800px;
   box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.7);
   text-align: center;
-  margin-top: 60px;
+  margin-top: 15vh;
   animation: slideUp 0.8s ease-out;
 }
 
@@ -160,6 +168,28 @@
 /* Fish icon animation */
 .go-fish-button .fish-icon {
   animation: swim 1.5s infinite;
+}
+
+.bet-pool-display {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.bet-pool-amount {
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 0.5rem;
+  margin-top: -2.5vh; 
+  font-size: 2rem; 
+  font-weight: bold;
+  color: green;
+}
+
+.bet-popup-wrapper {
+  position: relative;
+  top: 0;
+  margin-top: 20vh; /* Align with the lobby card content */
 }
 
 /* Animations */
