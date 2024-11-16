@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { doc, onSnapshot, updateDoc, deleteDoc, arrayUnion, getDoc } from 'firebase/firestore';
 import { db, auth } from '../../config/firebase';
-import Bet from './Game/Bet/Bet';
-import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign, SquareCheck } from 'lucide-react';
+import { Cat, Ghost, Dog, Bot, Bird, Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem, Dices, BadgeDollarSign, SquareCheck } from 'lucide-react';
 import './Lobby.css';
 
 const botNames = ["SpongeBot Squarepants", "LeBot James", "Botman", "J.A.R.V.I.S", "Ultron", "Cyborg"];
@@ -105,6 +104,14 @@ const Lobby = () => {
       'Dog': Dog,
       'Bot': Bot,
       'Bird': Bird,
+      'Apple': Apple,
+      'Banana': Banana,
+      'Cherry': Cherry,
+      'Grape': Grape,
+      'Candy': Candy,
+      'Pizza': Pizza,
+      'Croissant': Croissant,
+      'Gem': Gem,
       default: Dices,
     };
     const LogoComponent = logoComponents[logo] || logoComponents.default;
@@ -173,7 +180,7 @@ const Lobby = () => {
       await Promise.all(promises);
 
       // Navigate to the game
-      navigate(`/lobby/${lobbyId}/bet`, { 
+      navigate(`/lobby/${lobbyId}/game`, { 
         state: { 
           lobbyId, 
           bettingTotal: lobbyData.bettingTotal 
