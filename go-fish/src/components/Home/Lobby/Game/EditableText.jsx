@@ -18,7 +18,6 @@ const EditableText = ({ text, isEditing: canEdit, onSave, className }) => {
         onClick={() => canEdit && setIsEditing(true)}
       >
         {text}
-        {canEdit && <span className="edit-icon">✎</span>}
       </div>
     );
   }
