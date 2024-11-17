@@ -56,6 +56,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  bottom: 100%;
 }
 
 .turn-indicator {
@@ -159,7 +160,7 @@
 /* Player Hand Layout */
 .player-hand {
   position: absolute;
-  bottom: 2rem;
+  bottom: -5rem;
   left: 220%;  /* Change from right: 50% to left: 50% */
   transform: translateX(-50%);  /* Keep this the same */
   display: flex;
@@ -298,38 +299,118 @@
   }
 }
 
-.sets-display {
-  margin-top: 1rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  max-width: 300px;
-}
-
-.set-container {
+/* Game Message */
+.game-message {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 1rem;
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
-  padding: 0.75rem;
   backdrop-filter: blur(8px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.set-header {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 0.5rem;
+.game-message:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.game-message.editing {
+  background: rgba(79, 209, 197, 0.2);
+  border-color: #4fd1c5;
+  box-shadow: 0 0 20px rgba(79, 209, 197, 0.3);
+}
+
+/* Set Completion Animation */
+.set-completion {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+.set-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 .set-cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
-.set-card {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 0.25rem;
-  padding: 0.5rem;
+.set-cards > div {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Loading Spinner */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #4fd1c5;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Ambient Background Noise */
+@keyframes backgroundNoise {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+.game-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.05) 0px,
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  background-size: 20px 20px;
+  animation: backgroundNoise 8s linear infinite;
 }

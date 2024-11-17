@@ -8,15 +8,27 @@ import PlayerCard, { cardComponents } from './PlayerCard';
 import EditableText from './EditableText';
 
 const Game = () => {
+  // Get the lobby ID from the URL parameters
   const { lobbyId } = useParams();
+
+  // State to hold the current game state
   const [gameState, setGameState] = useState(null);
+
+  // State to hold the lobby data
   const [lobbyData, setLobbyData] = useState(null);
+
+  // Get the player's username from localStorage, or use "Guest" if not set
   const [username] = useState(localStorage.getItem("username") || "Guest");
+
+  // State to manage editing the game message
   const [editingMessage, setEditingMessage] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+
+  // State to manage the set completion animation
   const [showSetAnimation, setShowSetAnimation] = useState(false);
   const [lastCompletedSet, setLastCompletedSet] = useState(null);
 
+  // Fetch the lobby data and initialize the game if needed
   useEffect(() => {
     if (!lobbyId) return;
 
@@ -26,6 +38,7 @@ const Game = () => {
         const data = docSnapshot.data();
         setLobbyData(data);
         
+        // If there's no game state, initialize the game
         if (!data.gameState) {
           initializeGame(data.players, data.playerLimit);
         } else {
@@ -34,10 +47,13 @@ const Game = () => {
       }
     });
 
+    // Unsubscribe from the real-time updates when the component unmounts
     return () => unsubscribe();
   }, [lobbyId]);
 
+  // Create the initial set of cards for the game
   const createInitialSets = () => {
+    // Generate the guaranteed sets (Ace, King, Queen of each suit)
     const guaranteedSets = ['Ace', 'King', 'Queen'].map(rank => (
       ['Hearts', 'Diamonds', 'Clubs', 'Spades'].map(suit => ({
         rank,
@@ -46,6 +62,7 @@ const Game = () => {
       }))
     )).flat();
 
+    // Generate the remaining cards
     const remainingRanks = ["Jack", "10", "9", "8", "7", "6", "5", "4", "3", "2"];
     const remainingCards = remainingRanks.flatMap(rank =>
       ["Hearts", "Diamonds", "Clubs", "Spades"].map(suit => ({
@@ -55,9 +72,11 @@ const Game = () => {
       }))
     );
 
+    // Shuffle the deck
     return shuffle([...guaranteedSets, ...remainingCards]);
   };
 
+  // Shuffle the cards in an array
   const shuffle = (array) => {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
@@ -67,17 +86,21 @@ const Game = () => {
     return newArray;
   };
 
+  // Initialize the game state
   const initializeGame = async (players, playerLimit) => {
+    // Create the initial deck of cards
     const deck = createInitialSets();
+
+    // Initialize the player hands and sets
     const playerHands = {};
     const sets = {};
-    
     players.forEach(player => {
       const initialCards = deck.splice(0, 7);
       playerHands[player.username] = initialCards;
       sets[player.username] = [];
     });
 
+    // Create the initial game state
     const initialGameState = {
       deck,
       deckSize: deck.length,
@@ -92,14 +115,17 @@ const Game = () => {
       lastAction: null,
       history: [],
       totalSets: 0,
+      status: 'in-progress'
     };
 
+    // Save the initial game state to Firestore
     const lobbyRef = doc(db, "Lobbies", lobbyId);
     await updateDoc(lobbyRef, {
       gameState: initialGameState
     });
   };
 
+  // Handle editing the game message
   const handleMessageEdit = async (newMessage) => {
     if (newMessage.trim() !== gameState.message) {
       const lobbyRef = doc(db, "Lobbies", lobbyId);
@@ -110,6 +136,7 @@ const Game = () => {
     setIsEditing(false);
   };
 
+  // Handle a player selecting a card
   const handleCardSelect = async (card) => {
     if (!isCurrentPlayersTurn) return;
     
@@ -120,6 +147,7 @@ const Game = () => {
     });
   };
 
+  // Implement the "Go Fish" game logic
   const askForCard = async () => {
     if (!gameState.selectedCard || !gameState.selectedPlayer) return;
 
@@ -132,6 +160,7 @@ const Game = () => {
     );
 
     if (matchingCards.length > 0) {
+      // The target player has the requested card(s)
       const newTargetHand = targetHand.filter(card => 
         card.rank !== gameState.selectedCard.rank
       );
@@ -154,7 +183,9 @@ const Game = () => {
 
       await checkForSets(newCurrentHand, currentPlayer);
     } else {
+      // The target player doesn't have the requested card
       if (gameState.deck.length > 0) {
+        // Draw a card from the deck
         const drawnCard = gameState.deck[0];
         const newDeck = gameState.deck.slice(1);
         const newHand = [...gameState.playerHands[currentPlayer], drawnCard];
@@ -178,6 +209,7 @@ const Game = () => {
 
         await checkForSets(newHand, currentPlayer);
       } else {
+        // No cards left in the deck, move to the next player
         const nextPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
         await updateDoc(lobbyRef, {
           'gameState.currentTurn': gameState.players[nextPlayerIndex].username,
@@ -191,6 +223,7 @@ const Game = () => {
     }
   };
 
+  // Check for and complete sets in the player's hand
   const checkForSets = async (hand, player) => {
     const rankCounts = {};
     hand.forEach(card => {
@@ -239,6 +272,7 @@ const Game = () => {
     }
   };
 
+  // Handle the game ending
   const handleGameEnd = async () => {
     const winners = Object.entries(gameState.sets)
       .sort(([,a], [,b]) => b.length - a.length);
@@ -251,11 +285,15 @@ const Game = () => {
     });
   };
 
+  // Determine if it's the current player's turn
   const isCurrentPlayersTurn = gameState?.currentTurn === username;
+
+  // Get the username of the next player
   const nextPlayer = gameState?.players[
     (gameState.currentPlayerIndex + 1) % gameState.players.length
   ]?.username;
 
+  // If the game state or lobby data is not ready, show a loading spinner
   if (!gameState || !lobbyData) {
     return (
       <div className="loading-container">
