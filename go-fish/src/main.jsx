@@ -15,7 +15,7 @@ import JoinPrivate from './components/Home/Join/JoinPrivate';
 import Lobby from './components/Home/Lobby/Lobby';
 import Shop from './components/Home/Shop/Shop';
 import Tutorial from './components/Home/Tutorial/Tutorial';
-import Game from './components/Home/Lobby/Game';
+import Game from './components/Home/Lobby/Game/Game';
 import './index.css';
 
 createRoot(document.getElementById('root')).render(
