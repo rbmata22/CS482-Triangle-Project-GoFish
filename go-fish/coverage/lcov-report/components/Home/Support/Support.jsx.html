@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">88.88% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/14</span>
+                <span class='fraction'>16/18</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">83.33% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">75% </span>
-                <span class="quiet">Branches</span>
+                <span class="quiet">Functions</span>
                 <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>3/3</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">88.23% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>15/17</span>
             </div>
         
             
@@ -107,12 +107,28 @@
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
@@ -129,6 +145,12 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -138,7 +160,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -154,10 +182,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db, auth } from "../../config/firebase";
+import { Check } from "lucide-react";
 import "./Support.css";
 &nbsp;
 const Support = ({ onClose }) =&gt; {
     const [message, setMessage] = useState("");
+    const [showNotification, setShowNotification] = useState(false);
 &nbsp;
     const handleSubmit = async (e) =&gt; {
         e.preventDefault();
@@ -171,25 +201,37 @@ const Support = ({ onClose }) =&gt; {
                 timestamp: new Date()
             });
             setMessage("");
-            onClose();
+            setShowNotification(true);
+            
+            // Auto hide notification and close form after 2 seconds
+            setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >                setShowNotification(false);</span>
+<span class="cstat-no" title="statement not covered" >                onClose();</span>
+            }, 2000);
         } catch (error) {
             console.error("Error sending message: ", error);
         }
     };
 &nbsp;
     return (
-        &lt;div className="support-popup"&gt;
-            &lt;form onSubmit={handleSubmit}&gt;
-                &lt;textarea
-                    value={message}
-                    onChange={(e) =&gt; setMessage(e.target.value)}
-                    placeholder="What do you need help with?"
-                /&gt;
-                &lt;div className="button-group"&gt;
-                    &lt;button type="submit"&gt;Send&lt;/button&gt;
-                    &lt;button type="button" onClick={onClose}&gt;Close&lt;/button&gt;
-                &lt;/div&gt;
-            &lt;/form&gt;
+        &lt;div className="relative"&gt;
+            {showNotification &amp;&amp; (
+                alert("Thank you for submitting a support message! An admin will begin working on your message shortly :)")
+            )}
+&nbsp;
+            &lt;div className="support-popup"&gt;
+                &lt;form onSubmit={handleSubmit}&gt;
+                    &lt;textarea
+                        value={message}
+                        onChange={(e) =&gt; setMessage(e.target.value)}
+                        placeholder="What do you need help with?"
+                    /&gt;
+                    &lt;div className="button-group"&gt;
+                        &lt;button type="submit"&gt;Send&lt;/button&gt;
+                        &lt;button type="button" onClick={onClose}&gt;Close&lt;/button&gt;
+                    &lt;/div&gt;
+                &lt;/form&gt;
+            &lt;/div&gt;
         &lt;/div&gt;
     );
 };
@@ -202,7 +244,7 @@ export default Support;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-10T03:46:45.465Z
+                at 2024-11-17T23:25:00.136Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

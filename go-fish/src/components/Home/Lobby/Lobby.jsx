@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { doc, onSnapshot, updateDoc, deleteDoc, arrayUnion, getDoc } from 'firebase/firestore';
 import { db, auth } from '../../config/firebase';
-import Bet from './Game/Bet/Bet';
 import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign, SquareCheck } from 'lucide-react';
 import './Lobby.css';
 
@@ -12,6 +11,7 @@ const Lobby = () => {
   const { lobbyId } = useParams();
   const [lobbyData, setLobbyData] = useState(null);
   const [showBet, setShowBet] = useState(false);
+  const [betAmount, setBetAmount] = useState(0);
   const [userData, setUserData] = useState({});
   const [isReady, setIsReady] = useState(false);
   const navigate = useNavigate();
@@ -173,7 +173,7 @@ const Lobby = () => {
       await Promise.all(promises);
 
       // Navigate to the game
-      navigate(`/lobby/${lobbyId}/bet`, { 
+      navigate(`/lobby/${lobbyId}/game`, { 
         state: { 
           lobbyId, 
           bettingTotal: lobbyData.bettingTotal 
@@ -185,20 +185,25 @@ const Lobby = () => {
     }
   };
 
-  const handlePlaceBet = async (amount) => {
+  const handlePlaceBet = async () => {
     try {
-      const lobbyRef = doc(db, 'Lobbies', lobbyId);
-      
+      if (!betAmount || betAmount <= 0) {
+        alert('Please enter a valid bet amount!');
+        return;
+      }
+
       // Validate that bet amount doesn't exceed virtual currency
-      if (amount > userData.virtualCurrency) {
+      if (betAmount > userData.virtualCurrency) {
         alert('Insufficient funds!');
         return;
       }
+
+      const lobbyRef = doc(db, 'Lobbies', lobbyId);
       
       // Update the players array with the new bet
       const updatedPlayers = lobbyData.players.map(player =>
         player.username === userData.username
-          ? { ...player, betAmount: amount }
+          ? { ...player, betAmount: betAmount }
           : player
       );
 
@@ -206,7 +211,23 @@ const Lobby = () => {
       await updateDoc(lobbyRef, { 
         players: updatedPlayers,
       });
+
+      // If user is authenticated, update their virtual currency in the Users collection
+      if (auth.currentUser?.uid) {
+        const userRef = doc(db, 'Users', auth.currentUser.uid);
+        await updateDoc(userRef, {
+          virtualCurrency: userData.virtualCurrency - betAmount
+        });
+        
+        // Update local userData state
+        setUserData(prev => ({
+          ...prev,
+          virtualCurrency: prev.virtualCurrency - betAmount
+        }));
+      }
       
+      // Reset bet amount and close popup
+      setBetAmount(0);
       setShowBet(false);
     } catch (error) {
       console.error("Error placing bet:", error);
@@ -242,6 +263,39 @@ const Lobby = () => {
     );
   };
 
+  const BetPopup = () => (
+    <div className="bet-popup-wrapper">
+      <div className="bet-popup">
+        <button className="close-button" onClick={() => {
+          setShowBet(false);
+          setBetAmount(0);
+        }}>
+          Close
+        </button>
+        <h2>Place Your Bet</h2>
+        <div className="bet-info">
+          <p>Available Balance: ${userData.virtualCurrency}</p>
+          {betAmount > 0 && <p>Remaining Balance: ${userData.virtualCurrency - betAmount}</p>}
+        </div>
+        <input
+          type="number"
+          min="1"
+          max={userData.virtualCurrency}
+          value={betAmount}
+          onChange={(e) => setBetAmount(Math.max(0, parseInt(e.target.value) || 0))}
+          placeholder="Enter bet amount"
+        />
+        <button 
+          onClick={handlePlaceBet}
+          disabled={betAmount <= 0 || betAmount > userData.virtualCurrency}
+          className="place-bet-button"
+        >
+          Place Bet
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <div className="lobby-container">
       {lobbyData ? (
@@ -260,8 +314,8 @@ const Lobby = () => {
               <h2 className="lobby-header">{`${lobbyData.players[0]?.username || 'Lobby'}'s Lobby`}</h2>
 
               <div className="bet-pool-display">
-                <h2 className='lobby-header'>- Current Bet Pool -</h2>
-                <div className='bet-pool-amount'>
+                <h2 className="lobby-header">- Current Bet Pool -</h2>
+                <div className="bet-pool-amount">
                   <BadgeDollarSign />
                   <span>{lobbyData.bettingTotal || 0}</span>
                 </div>
@@ -283,16 +337,8 @@ const Lobby = () => {
               </div>
             </div>
 
-            {showBet && (
-              <div className="bet-popup-wrapper">
-                <Bet 
-                  onClose={() => setShowBet(false)} 
-                  userData={userData} 
-                  onPlaceBet={handlePlaceBet}
-                  currentBet={lobbyData.players.find(p => p.username === userData.username)?.betAmount || 0}
-                />
-              </div>
-            )}
+            {showBet && <BetPopup />}
+
           </div>
 
           <div className="lobby-footer">
