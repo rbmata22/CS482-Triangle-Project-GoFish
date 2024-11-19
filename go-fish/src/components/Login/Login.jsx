@@ -5,6 +5,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird } from 'lucide-react';
 import './Login.css';
+import loginMusic from '../../../assets/login-music.mp3';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -14,16 +15,38 @@ const Login = () => {
   const [step, setStep] = useState(1);
   const [error, setError] = useState('');
   const [ setIsGoogleUser] = useState(false); // Track if Google login is used
+  const [isPlaying, setIsPlaying] = useState(true); 
+  const [ setIsGoogleUser] = useState(false); 
   const navigate = useNavigate();
 
   const auth = getAuth();
   const googleProvider = new GoogleAuthProvider();
 
   const initialIcons = ['Cat', 'Ghost', 'Dog', 'Bot', 'Bird'];
+  const [audio] = useState(new Audio(loginMusic));
 
   useEffect(() => {
     localStorage.clear(); // Clear leftover user data on mount
   }, []);
+
+  useEffect(() => {
+    audio.loop = true; 
+    audio.play().catch((err) => console.log("Music playback error:", err)); 
+    return () => {
+      audio.pause();
+      audio.currentTime = 0; 
+    };
+  }, [audio]);
+
+  const toggleMusic = () => {
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch((err) => console.log("Music playback error:", err));
+    }
+    setIsPlaying(!isPlaying);
+  };
+
 
   // Validate email format
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
@@ -62,6 +85,9 @@ const Login = () => {
         localStorage.setItem('gamesPlayed', userData.gamesPlayed);
         localStorage.setItem('gamesWon', userData.gamesWon);
         localStorage.setItem('unlockedIcons', JSON.stringify(userData.unlockedIcons || []));
+
+        audio.pause();
+        navigate('/home');
 
         navigate('/home');
       } else {
