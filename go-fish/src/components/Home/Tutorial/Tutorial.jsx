@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GiCardPickup, GiCardAceHearts, GiCard2Clubs, GiCard3Spades, GiAnglerFish } from 'react-icons/gi';
 import { IoTabletLandscape, IoPersonOutline } from 'react-icons/io5';
 import { FaArrowRotateLeft } from 'react-icons/fa6';
 import './Tutorial.css';
-import tutorialMusic from '../../../assets/tutorial-music.mp3'; // Corrected import path
+import tutorialMusic from '../../../assets/tutorial-music.mp3';
 
 const App = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false); // Music state
-    const audioRef = useRef(null);
+    const audioRef = useRef(null); // Persist audio across renders
     const navigate = useNavigate();
 
     const steps = [
@@ -37,21 +37,17 @@ const App = () => {
         { text: "The player with the most sets (books) wins the game!", icon: <IoPersonOutline className="icon" /> },
     ];
 
-    const handleNext = () => {
-        if (currentStep < steps.length - 1) {
-            setCurrentStep(currentStep + 1);
-        }
-    };
-
     useEffect(() => {
-    
+        // Initialize audio once
         audioRef.current = new Audio(tutorialMusic);
         audioRef.current.loop = true;
 
+        // Attempt to autoplay
         audioRef.current.play().then(() => {
             setIsPlaying(true);
         }).catch(err => console.log("Autoplay blocked:", err));
 
+        // Cleanup audio on unmount
         return () => {
             if (audioRef.current) {
                 audioRef.current.pause();
@@ -75,6 +71,12 @@ const App = () => {
         }
     };
 
+    const handleNext = () => {
+        if (currentStep < steps.length - 1) {
+            setCurrentStep(currentStep + 1);
+        }
+    };
+
     const handlePrevious = () => {
         if (currentStep > 0) {
             setCurrentStep(currentStep - 1);
@@ -87,28 +89,6 @@ const App = () => {
             audioRef.current.currentTime = 0;
         }
         navigate('/home');
-    };
-
-    useEffect(() => {
-
-        audio.loop = true; 
-        audio.play().then(() => {
-            setIsPlaying(true);
-        }).catch(err => console.log("Autoplay blocked:", err));
-
-        return () => {
-            audio.pause();
-            audio.currentTime = 0;
-        };
-    }, [audio]);
-
-    const toggleMusic = () => {
-        if (isPlaying) {
-            audio.pause();
-        } else {
-            audio.play().catch(err => console.log("Music playback error:", err));
-        }
-        setIsPlaying(!isPlaying);
     };
 
     return (
@@ -134,6 +114,17 @@ const App = () => {
                 </button>
             </div>
 
+            <div className="music-controls">
+                {!isPlaying ? (
+                    <button onClick={handlePlayMusic} className="music-button">
+                        Play Music
+                    </button>
+                ) : (
+                    <button onClick={handlePauseMusic} className="music-button">
+                        Pause Music
+                    </button>
+                )}
+            </div>
 
             <button onClick={handleBackToHome} className="back-button">
                 Back to Home
