@@ -16,6 +16,7 @@ import Lobby from './components/Home/Lobby/Lobby';
 import Shop from './components/Home/Shop/Shop';
 import Tutorial from './components/Home/Tutorial/Tutorial';
 import Game from './components/Home/Lobby/Game/Game';
+import Results from './components/Home/Lobby/Game/Results';
 import './index.css';
 
 createRoot(document.getElementById('root')).render(
@@ -37,6 +38,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/lobby/:lobbyId/game" element={<Game />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/tutorial" element={<Tutorial />} />
+        <Route path="/lobby/:lobbyId/game/results" element={<Results />} />
       </Routes>
     </Router>
   </StrictMode>

@@ -414,3 +414,263 @@
   background-size: 20px 20px;
   animation: backgroundNoise 8s linear infinite;
 }
+
+
+/* Game Mode Indicator */
+.game-mode-indicator {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 215, 0, 0.15);
+  backdrop-filter: blur(8px);
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 0 20px rgba(255, 215, 0, 0.2);
+  z-index: 10;
+}
+
+.game-mode-indicator .mode-icon {
+  color: gold;
+  animation: trophyGlow 2s infinite ease-in-out;
+}
+
+.game-mode-indicator span {
+  color: gold;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+
+/* Check Sets Button */
+.check-sets-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #4fd1c5, #319795);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 0 20px rgba(79, 209, 197, 0.3);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.check-sets-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 8px rgba(0, 0, 0, 0.15),
+    0 0 25px rgba(79, 209, 197, 0.4);
+}
+
+.check-sets-button .eye-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Sets Modal */
+.sets-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.sets-modal {
+  background: linear-gradient(135deg, #2a2f4e 0%, #161b33 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 0 50px rgba(79, 209, 197, 0.2);
+}
+
+.sets-modal h2 {
+  color: white;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+.sets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.set-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.set-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(79, 209, 197, 0.2);
+}
+
+.set-card svg {
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+}
+
+.set-card p {
+  font-size: 1rem;
+  color: white;
+  margin: 0;
+  text-align: center;
+}
+
+/* Animations */
+@keyframes trophyGlow {
+  0%, 100% { 
+    filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.6));
+    transform: scale(1);
+  }
+  50% { 
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
+    transform: scale(1.1);
+  }
+}
+
+/* Responsive Design Updates */
+@media (max-width: 768px) {
+  .game-mode-indicator {
+    top: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .check-sets-button {
+    bottom: 5rem;
+    right: 50%;
+    transform: translateX(50%);
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .sets-modal {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  .sets-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+  }
+}
+
+/* First to Set Win Animation */
+@keyframes winPulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 30px rgba(79, 209, 197, 0.3);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 50px rgba(79, 209, 197, 0.5);
+  }
+}
+
+.winning-set {
+  animation: winPulse 2s infinite ease-in-out;
+}
+
+/* Set Completion Animation Updates */
+.set-completion {
+  position: fixed !important; /* Force fixed position */
+  top: 40% !important; /* Keep it consistently at 40% from top */
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem 3rem;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.2),
+    0 0 50px rgba(79, 209, 197, 0.3);
+  z-index: 1000;
+  width: auto;
+  min-width: 300px;
+  margin: 0 !important; /* Prevent any margin interference */
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.set-cards > div {
+  transition: transform 0.3s ease;
+}
+
+.set-cards > div:hover {
+  transform: scale(1.1) rotate(5deg) !important;
+}
