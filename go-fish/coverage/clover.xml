@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1731885900161" clover="3.2.0">
-  <project timestamp="1731885900161" name="All files">
-    <metrics statements="507" coveredstatements="370" conditionals="297" coveredconditionals="211" methods="137" coveredmethods="95" elements="941" coveredelements="676" complexity="0" loc="507" ncloc="507" packages="8" files="9" classes="9"/>
+<coverage generated="1732030207146" clover="3.2.0">
+  <project timestamp="1732030207146" name="All files">
+    <metrics statements="552" coveredstatements="390" conditionals="305" coveredconditionals="215" methods="153" coveredmethods="100" elements="1010" coveredelements="705" complexity="0" loc="552" ncloc="552" packages="9" files="11" classes="11"/>
     <package name="components">
       <metrics statements="5" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="1"/>
       <file name="App.jsx" path="/Users/silas_green/CS482-Triangle-Project-GoFish/go-fish/src/components/App.jsx">
@@ -166,6 +166,60 @@
         <line num="250" count="0" type="stmt"/>
         <line num="251" count="0" type="stmt"/>
         <line num="255" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.Home.Create">
+      <metrics statements="45" coveredstatements="20" conditionals="8" coveredconditionals="4" methods="16" coveredmethods="5"/>
+      <file name="CreatePrivate.jsx" path="/Users/silas_green/CS482-Triangle-Project-GoFish/go-fish/src/components/Home/Create/CreatePrivate.jsx">
+        <metrics statements="23" coveredstatements="18" conditionals="4" coveredconditionals="4" methods="8" coveredmethods="5"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="7" type="stmt"/>
+        <line num="19" count="7" type="stmt"/>
+        <line num="20" count="7" type="stmt"/>
+        <line num="21" count="7" type="stmt"/>
+        <line num="22" count="7" type="stmt"/>
+        <line num="24" count="7" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="48" count="7" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="54" count="7" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="75" count="35" type="stmt"/>
+        <line num="89" count="1" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
+        <line num="106" count="21" type="stmt"/>
+      </file>
+      <file name="CreatePublic.jsx" path="/Users/silas_green/CS482-Triangle-Project-GoFish/go-fish/src/components/Home/Create/CreatePublic.jsx">
+        <metrics statements="22" coveredstatements="2" conditionals="4" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
       </file>
     </package>
     <package name="components.Home.Join">

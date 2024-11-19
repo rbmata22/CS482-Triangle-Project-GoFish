@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { doc, onSnapshot, updateDoc, deleteDoc, arrayUnion, getDoc } from 'firebase/firestore';
 import { db, auth } from '../../config/firebase';
-import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign, SquareCheck } from 'lucide-react';
+import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign, Trophy, SquareCheck } from 'lucide-react';
 import './Lobby.css';
 
 const botNames = ["SpongeBot Squarepants", "LeBot James", "Botman", "J.A.R.V.I.S", "Ultron", "Cyborg"];
@@ -313,16 +313,22 @@ const Lobby = () => {
             <div className="lobby-card">
               <h2 className="lobby-header">{`${lobbyData.players[0]?.username || 'Lobby'}'s Lobby`}</h2>
 
-              <div className="bet-pool-display">
-                <h2 className="lobby-header">- Current Bet Pool -</h2>
-                <div className="bet-pool-amount">
-                  <BadgeDollarSign />
-                  <span>{lobbyData.bettingTotal || 0}</span>
-                </div>
-              </div>
+            <div className="bet-pool-display">
+              <h2 className="lobby-header">- Current Bet Pool -</h2>
+            <div className="bet-pool-amount">
+              <BadgeDollarSign />
+          <span>{lobbyData.bettingTotal || 0}</span>
+        </div>
+      </div>
 
-              {lobbyData.lobbyType === 'private' && (
-                <div className="login-code-container">
+  <div className="game-mode-display">
+    <span className="mode-text">
+      {lobbyData.gameMode === 'firstToSet' ? 'First to Set Wins!' : 'Classic Mode'}
+    </span>
+  </div>
+
+  {lobbyData.lobbyType === 'private' && (
+    <div className="login-code-container">
                   <p className="login-code-label">Login Code:</p>
                   <p className="login-code-value">{lobbyData.lobbyCode}</p>
                 </div>
