@@ -6,6 +6,7 @@ import { Cat, Ghost, Dog, Bot, Bird, Apple, Banana, Cherry, Grape, Candy, Pizza,
 import { signOut } from 'firebase/auth';
 import Support from './Support/Support';
 import './Home.css';
+import homeMusic from '../assets/home-music.mp3';
 
 const Home = () => {
   const [showSupport, setShowSupport] = useState(false);
@@ -15,6 +16,8 @@ const Home = () => {
   const [showPlayerMenu, setShowPlayerMenu] = useState(false);
   const [showIconChangeMenu, setShowIconChangeMenu] = useState(false);
   const [ownerLeftMessage, setOwnerLeftMessage] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false); 
+  const [audio] = useState(new Audio(homeMusic)); 
   const navigate = useNavigate();
   const authType = localStorage.getItem('authType');
 
@@ -79,6 +82,28 @@ const Home = () => {
 
     fetchUserData();
   }, [authType]);
+
+  audio.loop = true;
+  audio.play().then(() => {
+    setIsPlaying(true);
+  }).catch((err) => {
+    console.log('Autoplay blocked:', err);
+  });
+  return () => {
+    audio.pause();
+    audio.currentTime = 0;
+  };
+}, [authType, audio]);
+
+const toggleMusic = () => {
+  if (isPlaying) {
+    audio.pause();
+  } else {
+    audio.play().catch(err => console.log('Music playback error:', err));
+  }
+  setIsPlaying(!isPlaying);
+};
+
 
   const handleNavigate = (path) => {
     navigate(path);
