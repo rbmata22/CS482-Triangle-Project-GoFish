@@ -4,7 +4,8 @@ import { GiCardPickup, GiCardAceHearts, GiCard2Clubs, GiCard3Spades, GiAnglerFis
 import { IoTabletLandscape, IoPersonOutline } from 'react-icons/io5';
 import { FaArrowRotateLeft } from 'react-icons/fa6';
 import './Tutorial.css';
-import tutorialMusic from '../../assets/tutorial-music.mp3';
+import tutorialMusic from '../../../assets/tutorial-music.mp3';
+
 
 const App = () => {
     const [currentStep, setCurrentStep] = useState(0);
