@@ -4,7 +4,7 @@ import { doc, onSnapshot, updateDoc, deleteDoc, arrayUnion, getDoc } from 'fireb
 import { db, auth } from '../../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign, SquareCheck } from 'lucide-react';
 import './Lobby.css';
-import lobbyMusic from '../../assets/lobby-music.mp3';
+import lobbyMusic from '../../../assets/lobby-music.mp3';
 
 const botNames = ["SpongeBot Squarepants", "LeBot James", "Botman", "J.A.R.V.I.S", "Ultron", "Cyborg"];
 
