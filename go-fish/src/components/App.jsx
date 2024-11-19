@@ -7,6 +7,9 @@ import titleScreenMusic from '../assets/tittlescreen-music.mp3';
 function App() {
   const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(true);
+  // THIS IS HIP TOO - Marley Holt-Williams 
+  /* I think adding the music is a great touch and brings the whole project together. I got inspiration from my shop and wanted the whole project to be that way. I think it can set us apart from other groups.
+    */
   const [audio] = useState(new Audio(titleScreenMusic)); // Initialize title screen music
 
   useEffect(() => {
