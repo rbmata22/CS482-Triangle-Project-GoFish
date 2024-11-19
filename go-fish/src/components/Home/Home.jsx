@@ -6,7 +6,7 @@ import { Cat, Ghost, Dog, Bot, Bird, Apple, Banana, Cherry, Grape, Candy, Pizza,
 import { signOut } from 'firebase/auth';
 import Support from './Support/Support';
 import './Home.css';
-import homeMusic from '../../../assets/home-music.mp3';
+import homeMusic from '../../assets/home-music.mp3';
 
 
 const Home = () => {
