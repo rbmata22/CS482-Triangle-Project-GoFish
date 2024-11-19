@@ -365,11 +365,87 @@
   text-align: center;
 }
 
+/* Icon change menu styles */
+.icon-change-menu {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  text-align: center;
+}
+
+.icon-change-menu h3 {
+  margin-bottom: 10px;
+}
+
+.icon-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.icon-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.icon-preview {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 5px;
+}
+
+.close-button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  background-color: #c0392b;
+}
+
 /* Hover effect to change to blue */
 .dropdown-content button:hover {
   background-color: #1E90FF; /* Blue on hover */
   box-shadow: 0 0 8px rgba(30, 144, 255, 0.7);
 }
+
+.unlocked-icons {
+  margin: 20px;
+  text-align: center;
+}
+
+.icon-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.icon-option {
+  margin: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.icon-preview {
+  width: 50px;
+  height: 50px;
+}
+
 
 /* Fade-in animation for dropdown buttons */
 @keyframes fadeInDropdown {

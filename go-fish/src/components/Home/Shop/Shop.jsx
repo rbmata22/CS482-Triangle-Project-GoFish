@@ -9,6 +9,7 @@ import { Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem } from 'luci
 import purchaseErrorSound from '../../../assets/purchase-error.mp3';
 import purchaseSuccessSound from '../../../assets/purchase-succesful.mp3';
 
+// Define shop items with prices and icons
 const shopItems = [
   { id: 1, name: "Apple", price: 200, icon: Apple },
   { id: 2, name: "Banana", price: 200, icon: Banana },
@@ -35,12 +36,14 @@ const Shop = () => {
   const successAudio = new Audio(purchaseSuccessSound);
   const errorAudio = new Audio(purchaseErrorSound);
 
+  // Navigate back to Home and stop background music
   const goHome = () => {
     audio.pause();
     audio.currentTime = 0;
     navigate('/home');
   };
 
+  // Play music on mount, pause on unmount
   useEffect(() => {
     audio.loop = true;
     audio.play();
@@ -51,6 +54,7 @@ const Shop = () => {
     };
   }, [audio]);
 
+  // Toggle background music
   const toggleMusic = () => {
     if (isPlaying) {
       audio.pause();
@@ -60,6 +64,7 @@ const Shop = () => {
     setIsPlaying(!isPlaying);
   };
 
+  // Fetch user data (currency and inventory)
   useEffect(() => {
     const fetchUserData = async () => {
       if (authType === 'Guest') {
@@ -80,6 +85,7 @@ const Shop = () => {
     fetchUserData();
   }, [authType, auth]);
 
+  // Handle purchase logic
   const handlePurchase = async (item) => {
     if (userCurrency < item.price) {
       setError("You need more money");
@@ -93,30 +99,30 @@ const Shop = () => {
     }
 
     if (authType === 'Guest') {
+      // Update guest data in localStorage and Firestore
       const guestId = localStorage.getItem('guestId');
       const newBalance = userCurrency - item.price;
       const updatedInventory = { ...inventory, [item.id]: true };
+
       setUserCurrency(newBalance);
       setInventory(updatedInventory);
 
-      // Update guest unlocked icons in local storage and Firestore
       const guestUnlockedIcons = JSON.parse(localStorage.getItem('guestUnlockedIcons')) || [];
       guestUnlockedIcons.push(item.name);
+
       localStorage.setItem('guestCurrency', newBalance);
       localStorage.setItem('guestInventory', JSON.stringify(updatedInventory));
       localStorage.setItem('guestUnlockedIcons', JSON.stringify(guestUnlockedIcons));
 
-      // Update Firestore with the guest's new balance, inventory, and unlocked icons
       try {
         const guestRef = doc(db, 'Guests', guestId);
         await setDoc(guestRef, {
           virtualCurrency: newBalance,
           inventory: updatedInventory,
-          unlockedIcons: arrayUnion(item.name)
+          unlockedIcons: arrayUnion(item.name),
         }, { merge: true });
       } catch (error) {
         setError("Error updating guest data: " + error.message);
-        console.error("Error updating guest data in Firestore:", error);
         errorAudio.play();
         return;
       }
@@ -126,6 +132,7 @@ const Shop = () => {
       setTimeout(() => setSuccessMessage(''), 3000);
     } else {
       try {
+        // Update user data in Firestore
         const userRef = doc(db, 'Users', auth.currentUser.uid);
         await runTransaction(db, async (transaction) => {
           const userDoc = await transaction.get(userRef);
@@ -134,21 +141,16 @@ const Shop = () => {
           const currentBalance = userDoc.data().virtualCurrency || 0;
           const currentInventory = userDoc.data().inventory || {};
 
-          if (currentBalance < item.price) {
-            throw "Insufficient funds";
-          }
-          if (currentInventory[item.id]) {
-            throw "Item already purchased";
-          }
+          if (currentBalance < item.price) throw "Insufficient funds";
+          if (currentInventory[item.id]) throw "Item already purchased";
 
           const newBalance = currentBalance - item.price;
           const updatedInventory = { ...currentInventory, [item.id]: true };
 
-          // Update currency, inventory, and add item to unlockedIcons array
           transaction.update(userRef, {
             virtualCurrency: newBalance,
             inventory: updatedInventory,
-            unlockedIcons: arrayUnion(item.name) // Adds item name to unlockedIcons array
+            unlockedIcons: arrayUnion(item.name),
           });
 
           setUserCurrency(newBalance);
@@ -160,12 +162,12 @@ const Shop = () => {
         setTimeout(() => setSuccessMessage(''), 3000);
       } catch (error) {
         setError("Transaction failed: " + error);
-        console.error("Error during transaction:", error);
         errorAudio.play();
       }
     }
   };
 
+  // Render the icon for each shop item
   const renderItemIcon = (itemId, IconComponent) => {
     const isPurchased = inventory[itemId];
     return <IconComponent className={`item-icon ${!isPurchased ? "spin" : ""}`} />;

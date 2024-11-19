@@ -21,12 +21,13 @@ const Home = () => {
   const navigate = useNavigate();
   const authType = localStorage.getItem('authType');
 
+  // Define all available icons
   const iconComponents = {
     Cat, Ghost, Dog, Bot, Bird, Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem,
     default: Dices,
   };
 
-
+  // Play music on component mount and stop it on unmount
   useEffect(() => {
     audio.loop = true;
     audio.play().then(() => {
@@ -39,6 +40,8 @@ const Home = () => {
       audio.currentTime = 0;
     };
   }, [audio]);
+
+  // Toggle music playback
   const toggleMusic = () => {
     if (isPlaying) {
       audio.pause();
@@ -47,6 +50,8 @@ const Home = () => {
     }
     setIsPlaying(!isPlaying);
   };
+
+  // Fetch user data on component mount
   useEffect(() => {
     const message = localStorage.getItem('ownerLeftMessage');
     if (message) {
@@ -103,12 +108,14 @@ const Home = () => {
     fetchUserData();
   }, [authType]);
 
+  // Handle navigation to different paths
   const handleNavigate = (path) => {
     navigate(path);
     setShowDropdown(false);
     setShowJoinDropdown(false);
   };
 
+  // Logout functionality for both guest and authenticated users
   const handleLogout = async () => {
     try {
       if (authType === 'Guest') {
@@ -127,6 +134,7 @@ const Home = () => {
 
   const toggleSupport = () => setShowSupport(!showSupport);
 
+  // Render user logo and handle icon change
   const renderUserLogo = () => {
     const LogoComponent = iconComponents[userData.logo] || iconComponents.default;
     return (
