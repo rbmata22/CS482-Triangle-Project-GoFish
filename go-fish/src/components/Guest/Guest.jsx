@@ -4,18 +4,40 @@ import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird } from 'lucide-react';
 import './Guest.css';
+import guestMusic from '../assets/guest-music.mp3';
 
 const Guest = () => {
   const [username, setUsername] = useState('');
   const [selectedLogo, setSelectedLogo] = useState('');
   const [step, setStep] = useState(1); // Multi-step form step
   const [error, setError] = useState('');
+  const [audio] = useState(new Audio(guestMusic));
   const navigate = useNavigate();
   
   useEffect(() => {
     // Clear local storage when visiting Guest login to prevent previous user data from being retained
     localStorage.clear();
-  }, []);
+
+    audio.loop = true;
+    audio.play().catch((err) => console.log("Music playback error:", err));
+
+    return () => {
+
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [audio]);
+
+  
+  const toggleMusic = () => {
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch((err) => console.log("Music playback error:", err));
+    }
+    setIsPlaying(!isPlaying);
+  };
+
 
   // Handle guest account creation
   const handleGuestSignup = async (e) => {
@@ -52,13 +74,13 @@ const Guest = () => {
       localStorage.setItem('guestInventory', JSON.stringify(initialInventory));
       localStorage.setItem('guestUnlockedIcons', JSON.stringify(initialUnlockedIcons));
 
-      // Navigate to the Home page after joining as a guest
+      // Stop the music when navigating to the Home page
+      audio.pause();
       navigate('/home');
     } catch (error) {
       setError(error.message);
     }
   };
-
   const handleNextStep = () => {
     if (username) {
       setStep(2);
