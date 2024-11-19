@@ -1,9 +1,29 @@
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 import { Dices, Diamond, Heart, Club, Spade, LogIn, Plus, VenetianMask } from 'lucide-react';
+import titleScreenMusic from '../../assets/title-screen-music.mp3';
 
 function App() {
   const navigate = useNavigate();
+  const [isPlaying, setIsPlaying] = useState(true); 
+  const [audio] = useState(new Audio(titleScreenMusic)); 
+  useEffect(() => {
+    audio.loop = true;
+    audio.play().catch((err) => console.log('Music playback error:', err));
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [audio]);
+  const toggleMusic = () => {
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch((err) => console.log('Music playback error:', err));
+    }
+    setIsPlaying(!isPlaying);
+  };
+
 
   return (
     <div className="app-container">
