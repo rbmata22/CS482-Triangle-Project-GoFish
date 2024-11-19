@@ -1,21 +1,27 @@
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import './App.css';
 import { Dices, Diamond, Heart, Club, Spade, LogIn, Plus, VenetianMask } from 'lucide-react';
-import titleScreenMusic from '../../assets/tittlescreen-music.mp3';
-
+import titleScreenMusic from '../assets/tittlescreen-music.mp3'; 
 
 function App() {
   const navigate = useNavigate();
-  const [isPlaying, setIsPlaying] = useState(true); 
-  const [audio] = useState(new Audio(titleScreenMusic)); 
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [audio] = useState(new Audio(titleScreenMusic)); // Initialize title screen music
+
   useEffect(() => {
+    // Play music when the component mounts
     audio.loop = true;
     audio.play().catch((err) => console.log('Music playback error:', err));
+
     return () => {
+      // Stop music when the component unmounts
       audio.pause();
       audio.currentTime = 0;
     };
   }, [audio]);
+
+  // Toggle music playback
   const toggleMusic = () => {
     if (isPlaying) {
       audio.pause();
@@ -25,7 +31,6 @@ function App() {
     setIsPlaying(!isPlaying);
   };
 
-
   return (
     <div className="app-container">
       {/* Animated Background Aura */}
@@ -33,7 +38,7 @@ function App() {
 
       {/* Main Logo Icon on Top */}
       <div className="icon-on-top">
-        <Dices className="glowing-dice" size={160} /> {/* Adjusted size directly */}
+        <Dices className="glowing-dice" size={160} />
       </div>
 
       {/* Main Title with Aura Glow */}
