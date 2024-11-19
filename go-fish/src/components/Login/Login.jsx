@@ -16,7 +16,6 @@ const Login = () => {
   const [error, setError] = useState('');
   const [ setIsGoogleUser] = useState(false); // Track if Google login is used
   const [isPlaying, setIsPlaying] = useState(true); 
-  const [ setIsGoogleUser] = useState(false); 
   const navigate = useNavigate();
 
   const auth = getAuth();
