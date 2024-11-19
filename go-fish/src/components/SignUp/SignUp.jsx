@@ -5,6 +5,7 @@ import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird } from 'lucide-react';
 import './SignUp.css';
+import signupMusic from '../../assets/signup-music.mp3';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -15,7 +16,7 @@ const SignUp = () => {
   const [error, setError] = useState('');
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const navigate = useNavigate();
-
+  const [audio] = useState(new Audio(signupMusic));
   const auth = getAuth();
   const googleProvider = new GoogleAuthProvider();
 
@@ -24,9 +25,26 @@ const SignUp = () => {
   const unlockableIcons = ['Apple', 'Banana', 'Cherry', 'Grape', 'Candy', 'Pizza', 'Croissant', 'Gem'];
 
   useEffect(() => {
-    // Clear any leftover user data on mount to prevent conflicts
+    // Clear leftover data and play music on component mount
     localStorage.clear();
-  }, []);
+    audio.loop = true;
+    audio.play().catch((err) => console.log('Music playback error:', err));
+
+    return () => {
+      // Stop music on unmount
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [audio]);
+
+  const toggleMusic = () => {
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch((err) => console.log('Music playback error:', err));
+    }
+    setIsPlaying(!isPlaying);
+  };
 
   // Handle email and password signup
   const handleSignUp = async (e) => {
@@ -41,7 +59,7 @@ const SignUp = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Save user details in Firestore, including timestamp and unlocked icons
+      // Save user details in Firestore
       await setDoc(doc(db, 'Users', user.uid), {
         username: username,
         logo: selectedLogo,
@@ -57,6 +75,8 @@ const SignUp = () => {
         createdAt: serverTimestamp(),
       });
 
+      // Stop music on navigation
+      audio.pause();
       localStorage.setItem('authType', 'SignUp');
       localStorage.setItem('username', username);
       localStorage.setItem('logo', selectedLogo);
@@ -129,6 +149,7 @@ const SignUp = () => {
         createdAt: serverTimestamp(),
       });
 
+      audio.pause(); 
       localStorage.setItem('authType', 'SignUp');
       navigate('/home');
     } catch (error) {
