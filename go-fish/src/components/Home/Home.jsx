@@ -6,7 +6,7 @@ import { Cat, Ghost, Dog, Bot, Bird, Apple, Banana, Cherry, Grape, Candy, Pizza,
 import { signOut } from 'firebase/auth';
 import Support from './Support/Support';
 import './Home.css';
-import homeMusic from '../assets/home-music.mp3';
+import homeMusic from '../assets/home-music.mp3'; 
 
 const Home = () => {
   const [showSupport, setShowSupport] = useState(false);
@@ -16,8 +16,8 @@ const Home = () => {
   const [showPlayerMenu, setShowPlayerMenu] = useState(false);
   const [showIconChangeMenu, setShowIconChangeMenu] = useState(false);
   const [ownerLeftMessage, setOwnerLeftMessage] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false); 
-  const [audio] = useState(new Audio(homeMusic)); 
+  const [isPlaying, setIsPlaying] = useState(false); // Music state
+  const [audio] = useState(new Audio(homeMusic)); // Initialize home music
   const navigate = useNavigate();
   const authType = localStorage.getItem('authType');
 
@@ -27,12 +27,14 @@ const Home = () => {
   };
 
   useEffect(() => {
+    // Handle owner-left message
     const message = localStorage.getItem('ownerLeftMessage');
     if (message) {
       setOwnerLeftMessage(message);
       localStorage.removeItem('ownerLeftMessage');
     }
 
+    // Fetch user data
     const fetchUserData = async () => {
       let userDocData = null;
 
@@ -81,29 +83,26 @@ const Home = () => {
     };
 
     fetchUserData();
-  }, [authType]);
+    audio.loop = true;
+    audio.play().then(() => {
+      setIsPlaying(true);
+    }).catch((err) => {
+      console.log('Autoplay blocked:', err);
+    });
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [authType, audio]);
 
-  audio.loop = true;
-  audio.play().then(() => {
-    setIsPlaying(true);
-  }).catch((err) => {
-    console.log('Autoplay blocked:', err);
-  });
-  return () => {
-    audio.pause();
-    audio.currentTime = 0;
+  const toggleMusic = () => {
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch(err => console.log('Music playback error:', err));
+    }
+    setIsPlaying(!isPlaying);
   };
-}, [authType, audio]);
-
-const toggleMusic = () => {
-  if (isPlaying) {
-    audio.pause();
-  } else {
-    audio.play().catch(err => console.log('Music playback error:', err));
-  }
-  setIsPlaying(!isPlaying);
-};
-
 
   const handleNavigate = (path) => {
     navigate(path);
@@ -140,61 +139,6 @@ const toggleMusic = () => {
     );
   };
 
-  const handleIconChange = async (newIcon) => {
-    if (authType === 'Guest') {
-      localStorage.setItem('logo', newIcon);
-      setUserData({ ...userData, logo: newIcon });
-    } else {
-      const userId = auth.currentUser?.uid;
-      if (userId) {
-        try {
-          const userRef = doc(db, 'Users', userId);
-          await updateDoc(userRef, { logo: newIcon });
-          setUserData({ ...userData, logo: newIcon });
-        } catch (error) {
-          console.error("Error updating icon for user: ", error);
-        }
-      }
-    }
-    setShowIconChangeMenu(false);
-  };
-
-  const renderIconChangeMenu = () => (
-    <div className={`icon-change-menu ${showIconChangeMenu ? 'slide-in' : ''}`}>
-      <h3>Choose Your Icon</h3>
-      <p>Select an icon you've unlocked.</p>
-      <div className="icon-options">
-        {userData.unlockedIcons?.map((icon) => {
-          const IconComponent = iconComponents[icon];
-          return IconComponent ? (
-            <div
-              key={icon}
-              className="icon-option"
-              onClick={() => handleIconChange(icon)}
-            >
-              <IconComponent className="icon-preview" />
-              <p>{icon}</p>
-            </div>
-          ) : null;
-        })}
-      </div>
-      <button className="close-button" onClick={() => setShowIconChangeMenu(false)}>Close</button>
-    </div>
-  );
-
-  const renderPlayerMenu = () => (
-    <div className="player-menu">
-      <h3>Player Stats</h3>
-      <p><strong>Username:</strong> {userData.username || 'User'}</p>
-      <p><strong>Games Played:</strong> {userData.gamesPlayed || 0}</p>
-      <p><strong>Games Won:</strong> {userData.gamesWon || 0}</p>
-      <p><strong>Virtual Currency:</strong> {userData.virtualCurrency || 500}</p>
-      <p><strong>Account Created:</strong> {userData.createdAt || new Date().toLocaleDateString()}</p>
-      <button onClick={() => setShowIconChangeMenu(true)}>Change Icon</button>
-      <button onClick={() => setShowPlayerMenu(false)}>Close</button>
-    </div>
-  );
-
   const renderSidebarOptions = () => {
     if (authType === 'Guest') {
       return (
@@ -214,17 +158,6 @@ const toggleMusic = () => {
       </>
     );
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.target.closest('.dropdown') && !event.target.closest('.join-dropdown')) {
-        setShowDropdown(false);
-        setShowJoinDropdown(false);
-      }
-    };
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
 
   return (
     <div className="home-container">
@@ -255,36 +188,12 @@ const toggleMusic = () => {
           <Dices className="central-dice" />
         </div>
         <div className="main-options">
-          <div className="dropdown">
-            <button className="main-button create-lobby-button" onClick={() => setShowDropdown(!showDropdown)}>
-              Create Lobby <ChevronDown className="dropdown-icon" size={150} />
-            </button>
-            {showDropdown && (
-              <div className="dropdown-content show">
-                <button onClick={() => handleNavigate('/create-public')}>Public Lobby</button>
-                <button onClick={() => handleNavigate('/create-private')}>Private Lobby</button>
-              </div>
-            )}
-          </div>
-          <div className="join-dropdown">
-            <button className="main-button join-lobby-button" onClick={() => setShowJoinDropdown(!showJoinDropdown)}>
-              Join Lobby <ChevronDown className="dropdown-icon" size={150} />
-            </button>
-            {showJoinDropdown && (
-              <div className="dropdown-content show">
-                <button onClick={() => handleNavigate('/join-public')}>Join Public</button>
-                <button onClick={() => handleNavigate('/join-private')}>Join Private</button>
-              </div>
-            )}
-          </div>
+          <button className="main-button" onClick={() => handleNavigate('/create-lobby')}>Create Lobby</button>
+          <button className="main-button" onClick={() => handleNavigate('/join-lobby')}>Join Lobby</button>
           <button className="main-button" onClick={() => handleNavigate('/tutorial')}>Tutorial</button>
         </div>
       </div>
-
-      {showPlayerMenu && renderPlayerMenu()}
-      {showIconChangeMenu && renderIconChangeMenu()}
     </div>
   );
 };
-
 export default Home;
