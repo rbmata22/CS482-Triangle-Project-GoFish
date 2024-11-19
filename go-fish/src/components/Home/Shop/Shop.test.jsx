@@ -4,7 +4,7 @@ import Shop from "./Shop";
 
 import { getDoc, doc } from "firebase/firestore";
 import { BrowserRouter } from "react-router-dom";
-jest.mock('../config/firebase', () => ({
+jest.mock('../../config/firebase', () => ({
     auth: {},
     db: {},
     provider: {}
