@@ -8,8 +8,8 @@ import tutorialMusic from '../../../assets/tutorial-music.mp3'; // Corrected imp
 
 const App = () => {
     const [currentStep, setCurrentStep] = useState(0);
-    const [isPlaying, setIsPlaying] = useState(false); 
-    const audio = new Audio(tutorialMusic);
+    const [isPlaying, setIsPlaying] = useState(false); // Music state
+    const audioRef = useRef(null);
     const navigate = useNavigate();
 
     const steps = [
@@ -43,6 +43,38 @@ const App = () => {
         }
     };
 
+    useEffect(() => {
+    
+        audioRef.current = new Audio(tutorialMusic);
+        audioRef.current.loop = true;
+
+        audioRef.current.play().then(() => {
+            setIsPlaying(true);
+        }).catch(err => console.log("Autoplay blocked:", err));
+
+        return () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+            }
+        };
+    }, []);
+
+    const handlePlayMusic = () => {
+        if (audioRef.current) {
+            audioRef.current.play()
+                .then(() => setIsPlaying(true))
+                .catch(err => console.log("Music playback error:", err));
+        }
+    };
+
+    const handlePauseMusic = () => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            setIsPlaying(false);
+        }
+    };
+
     const handlePrevious = () => {
         if (currentStep > 0) {
             setCurrentStep(currentStep - 1);
@@ -50,9 +82,10 @@ const App = () => {
     };
 
     const handleBackToHome = () => {
-       
-        audio.pause();
-        audio.currentTime = 0;
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+        }
         navigate('/home');
     };
 
