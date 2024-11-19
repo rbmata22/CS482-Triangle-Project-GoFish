@@ -101,6 +101,13 @@ const UserFriends = () => {
         }
     };
 
+    // THIS IS HIP TOO - Ryland Mata
+    /* Figuring out how to send virtual currency between users was a bit
+     * troubling, so finally figuring it out was really satisfying. This
+     * was cool because it allows for updating the information of two different
+     * users at the same time. It is also a cool, different feature outside
+     * of just adding or removing a friend.
+    */
     const handleSendCurrency = async (friendId) => {
         if (userCurrency < 100) {
             alert("You do not have enough currency to send!");
