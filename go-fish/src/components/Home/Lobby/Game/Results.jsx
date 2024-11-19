@@ -12,9 +12,11 @@ const Results = () => {
   const navigate = useNavigate();
   const [results, setResults] = useState(null);
   const [showReward, setShowReward] = useState(false);
+  const [statsUpdated, setStatsUpdated] = useState(false);
+  const [error, setError] = useState(null);
 
+  // Confetti animation effect
   useEffect(() => {
-    // Trigger confetti animation on component mount
     const duration = 3 * 1000;
     const animationEnd = Date.now() + duration;
 
@@ -28,72 +30,110 @@ const Results = () => {
         return;
       }
 
+      // Left side confetti
       confetti({
         particleCount: 3,
         angle: 60,
         spread: 55,
         origin: { x: 0 },
-        colors: ['#ff0000', '#00ff00', '#0000ff']
+        colors: ['#FFD700', '#4fd1c5', '#00FF00'] // Gold, teal, green
       });
       
+      // Right side confetti
       confetti({
         particleCount: 3,
         angle: 120,
         spread: 55,
         origin: { x: 1 },
-        colors: ['#ff0000', '#00ff00', '#0000ff']
+        colors: ['#FFD700', '#4fd1c5', '#00FF00']
       });
     }, 50);
 
     return () => clearInterval(confettiAnimation);
   }, []);
 
+  // Fetch and update game results
   useEffect(() => {
-    if (!lobbyId) return;
+    if (!lobbyId || statsUpdated) return;
 
     const fetchResults = async () => {
-      const lobbyRef = doc(db, 'Lobbies', lobbyId);
-      const lobbySnap = await getDoc(lobbyRef);
-      
-      if (lobbySnap.exists()) {
-        const lobbyData = lobbySnap.data();
-        const gameState = lobbyData.gameState;
+      try {
+        const lobbyRef = doc(db, 'Lobbies', lobbyId);
+        const lobbySnap = await getDoc(lobbyRef);
         
-        // Calculate total betting pool
-        const totalBetPool = lobbyData.players.reduce((sum, player) => 
-          sum + (player.betAmount || 0), 0
-        );
+        if (lobbySnap.exists()) {
+          const lobbyData = lobbySnap.data();
+          const gameState = lobbyData.gameState;
+          
+          // Calculate total betting pool
+          const totalBetPool = lobbyData.players.reduce((sum, player) => 
+            sum + (player.betAmount || 0), 0
+          );
 
-        // Sort players by number of sets
-        const playerResults = lobbyData.players.map(player => ({
-          username: player.username,
-          logo: player.logo,
-          sets: gameState.sets[player.username]?.length || 0,
-          betAmount: player.betAmount || 0
-        })).sort((a, b) => b.sets - a.sets);
+          // Sort players by number of sets
+          const playerResults = lobbyData.players.map(player => ({
+            username: player.username,
+            logo: player.logo,
+            sets: gameState.sets[player.username]?.length || 0,
+            betAmount: player.betAmount || 0
+          })).sort((a, b) => b.sets - a.sets);
 
-        // Award betting pool to winner
-        if (totalBetPool > 0) {
-          const winnerRef = doc(db, 'Users', playerResults[0].username);
-          const winnerSnap = await getDoc(winnerRef);
-          if (winnerSnap.exists()) {
-            await updateDoc(winnerRef, {
-              virtualCurrency: winnerSnap.data().virtualCurrency + totalBetPool
-            });
-          }
+          // Update stats for all players
+          const updatePromises = playerResults.map(async (player) => {
+            try {
+              const userRef = doc(db, 'Users', player.username);
+              const userSnap = await getDoc(userRef);
+              
+              if (userSnap.exists()) {
+                const userData = userSnap.data();
+                const isWinner = player === playerResults[0];
+                
+                const updates = {
+                  gamesPlayed: (userData.gamesPlayed || 0) + 1,
+                  ...(isWinner && {
+                    gamesWon: (userData.gamesWon || 0) + 1,
+                    ...(totalBetPool > 0 && {
+                      virtualCurrency: (userData.virtualCurrency || 0) + totalBetPool
+                    })
+                  })
+                };
+
+                await updateDoc(userRef, updates);
+              }
+            } catch (error) {
+              console.error(`Error updating stats for ${player.username}:`, error);
+              throw error;
+            }
+          });
+
+          // Wait for all updates to complete
+          await Promise.all(updatePromises);
+
+          setResults({
+            players: playerResults,
+            totalBetPool,
+            gameMode: lobbyData.gameMode
+          });
+          setShowReward(true);
+          setStatsUpdated(true);
         }
-
-        setResults({
-          players: playerResults,
-          totalBetPool,
-          gameMode: lobbyData.gameMode
-        });
-        setShowReward(true);
+      } catch (error) {
+        console.error("Error in fetchResults:", error);
+        setError("Error loading results. Please try again.");
       }
     };
 
     fetchResults();
-  }, [lobbyId]);
+  }, [lobbyId, statsUpdated]);
+
+  if (error) {
+    return (
+      <div className="results-error">
+        <p>{error}</p>
+        <button onClick={() => navigate('/home')}>Return Home</button>
+      </div>
+    );
+  }
 
   if (!results) {
     return (
@@ -103,7 +143,7 @@ const Results = () => {
           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
           className="loading-spinner"
         />
-        Loading results...
+        <p>Loading results...</p>
       </div>
     );
   }
@@ -144,6 +184,9 @@ const Results = () => {
               <div className="player-info">
                 <span className="username">{player.username}</span>
                 <span className="sets-count">{player.sets} sets</span>
+                {index === 0 && results.totalBetPool > 0 && (
+                  <span className="winnings">+${results.totalBetPool}</span>
+                )}
               </div>
               {index === 0 && <Trophy className="trophy-icon" />}
               {index === 1 && <Medal className="silver-medal" />}
@@ -152,6 +195,13 @@ const Results = () => {
             </motion.div>
           ))}
         </div>
+
+        <motion.div className="game-stats">
+          <h3>Game Mode: {results.gameMode === 'firstToSet' ? 'First to Set' : 'Classic'}</h3>
+          {results.totalBetPool > 0 && (
+            <h3>Total Bet Pool: ${results.totalBetPool}</h3>
+          )}
+        </motion.div>
 
         <motion.button
           className="home-button"
