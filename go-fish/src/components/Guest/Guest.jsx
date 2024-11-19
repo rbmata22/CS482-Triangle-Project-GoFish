@@ -4,7 +4,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird } from 'lucide-react';
 import './Guest.css';
-import guestMusic from '../assets/guest-music.mp3';
+import guestMusic from '../../assets/guest-music.mp3';
 
 const Guest = () => {
   const [username, setUsername] = useState('');
