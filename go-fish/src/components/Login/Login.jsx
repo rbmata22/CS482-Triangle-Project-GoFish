@@ -5,7 +5,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird } from 'lucide-react';
 import './Login.css';
-import loginMusic from '../../../assets/login-music.mp3';
+import loginMusic from '../assets/login-music.mp3';
 
 const Login = () => {
   const [email, setEmail] = useState('');
