@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 import { Dices, Diamond, Heart, Club, Spade, LogIn, Plus, VenetianMask } from 'lucide-react';
-import titleScreenMusic from '../assets/tittlescreen-music.mp3';
+import titleScreenMusic from '../../assets/tittlescreen-music.mp3';
 
 
 function App() {
