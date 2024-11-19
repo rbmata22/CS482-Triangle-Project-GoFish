@@ -74,6 +74,26 @@ const App = () => {
         audio.currentTime = 0;
         navigate('/home');
     };
+    useEffect(() => {
+        audio.loop = true; 
+        audio.play().then(() => {
+            setIsPlaying(true);
+        }).catch(err => console.log("Autoplay blocked:", err));
+        return () => {
+            audio.pause();
+            audio.currentTime = 0;
+        };
+    }, [audio]);
+
+    const toggleMusic = () => {
+        if (isPlaying) {
+            audio.pause();
+        } else {
+            audio.play().catch(err => console.log("Music playback error:", err));
+        }
+        setIsPlaying(!isPlaying);
+    };
+
 
     return (
         <div className="tutorial-container">
