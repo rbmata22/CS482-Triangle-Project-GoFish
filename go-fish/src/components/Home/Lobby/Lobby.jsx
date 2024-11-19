@@ -4,6 +4,7 @@ import { doc, onSnapshot, updateDoc, deleteDoc, arrayUnion, getDoc } from 'fireb
 import { db, auth } from '../../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign, SquareCheck } from 'lucide-react';
 import './Lobby.css';
+import lobbyMusic from '../../assets/lobby-music.mp3';
 
 const botNames = ["SpongeBot Squarepants", "LeBot James", "Botman", "J.A.R.V.I.S", "Ultron", "Cyborg"];
 
@@ -14,6 +15,8 @@ const Lobby = () => {
   const [betAmount, setBetAmount] = useState(0);
   const [userData, setUserData] = useState({});
   const [isReady, setIsReady] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false); 
+  const [audio] = useState(new Audio(lobbyMusic));
   const navigate = useNavigate();
 
   const toggleBet = () => setShowBet(!showBet);
@@ -75,6 +78,28 @@ const Lobby = () => {
     };
     fetchUserData();
   }, [navigate]);
+
+  useEffect(() => {
+    audio.loop = true;
+    audio.play().then(() => {
+      setIsPlaying(true);
+    }).catch((err) => {
+      console.log("Autoplay blocked:", err);
+    });
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [audio]);
+
+  const toggleMusic = () => {
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch((err) => console.log("Music playback error:", err));
+    }
+    setIsPlaying(!isPlaying);
+  };
 
   const allRealUsersReady = (players) => players.every(player => player.isReady || player.logo === "Bot");
 
