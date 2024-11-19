@@ -1,27 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GiCardPickup, GiCardAceHearts, GiCard2Clubs, GiCard3Spades, GiAnglerFish } from 'react-icons/gi';
 import { IoTabletLandscape, IoPersonOutline } from 'react-icons/io5';
 import { FaArrowRotateLeft } from 'react-icons/fa6';
 import './Tutorial.css';
-import tutorialMusic from '../../../assets/tutorial-music.mp3';
-
+import tutorialMusic from '../../../assets/tutorial-music.mp3'; // Corrected import path
 
 const App = () => {
     const [currentStep, setCurrentStep] = useState(0);
-    const navigate = useNavigate();
     const [isPlaying, setIsPlaying] = useState(false); 
     const audio = new Audio(tutorialMusic);
+    const navigate = useNavigate();
 
     const steps = [
-        {
-            text: "Each player is dealt 5 cards.",
-            icon: <GiCardPickup className="icon" />,
-        },
-        {
-            text: "Place remaining cards in the middle of the table.",
-            icon: <IoTabletLandscape className="icon" />,
-        },
+        { text: "Each player is dealt 5 cards.", icon: <GiCardPickup className="icon" /> },
+        { text: "Place remaining cards in the middle of the table.", icon: <IoTabletLandscape className="icon" /> },
         {
             text: "Player asks any other player if they have cards of a certain rank (Aces, twos, threes, etc.).",
             icons: [
@@ -37,24 +30,11 @@ const App = () => {
                 <GiCardAceHearts key="ace" className="icon" />,
             ],
         },
-        {
-            text: "If they don’t have the rank, they say 'Go Fish!' The player then draws from the fish pile.",
-            icon: <GiAnglerFish className="icon" />,
-        },
-        {
-            text: "If the drawing player completes a set of 4 cards of the same rank, they place the set face down as a 'book'.",
-        },
-        {
-            text: "Players continue asking and fishing. If a player gets the requested cards, they go again.",
-            icon: <FaArrowRotateLeft className="icon" />,
-        },
-        {
-            text: "The game ends when all sets have been created, or the fish pile is empty.",
-        },
-        {
-            text: "The player with the most sets (books) wins the game!",
-            icon: <IoPersonOutline className="icon" />,
-        },
+        { text: "If they don’t have the rank, they say 'Go Fish!' The player then draws from the fish pile.", icon: <GiAnglerFish className="icon" /> },
+        { text: "If the drawing player completes a set of 4 cards of the same rank, they place the set face down as a 'book'." },
+        { text: "Players continue asking and fishing. If a player gets the requested cards, they go again.", icon: <FaArrowRotateLeft className="icon" /> },
+        { text: "The game ends when all sets have been created, or the fish pile is empty." },
+        { text: "The player with the most sets (books) wins the game!", icon: <IoPersonOutline className="icon" /> },
     ];
 
     const handleNext = () => {
@@ -70,15 +50,19 @@ const App = () => {
     };
 
     const handleBackToHome = () => {
-        audio.pause(); 
+       
+        audio.pause();
         audio.currentTime = 0;
         navigate('/home');
     };
+
     useEffect(() => {
+
         audio.loop = true; 
         audio.play().then(() => {
             setIsPlaying(true);
         }).catch(err => console.log("Autoplay blocked:", err));
+
         return () => {
             audio.pause();
             audio.currentTime = 0;
@@ -94,15 +78,14 @@ const App = () => {
         setIsPlaying(!isPlaying);
     };
 
-
     return (
         <div className="tutorial-container">
             <h2 className="tutorial-title">Game Tutorial</h2>
             <div className="tutorial-content">
                 <div className="step-icon">
-                    {steps[currentStep].icons 
+                    {steps[currentStep].icons
                         ? steps[currentStep].icons.map((icon, index) => (
-                            <span key={index}>{icon}</span>
+                              <span key={index}>{icon}</span>
                           ))
                         : steps[currentStep].icon}
                 </div>
@@ -114,9 +97,10 @@ const App = () => {
                     Previous
                 </button>
                 <button onClick={handleNext} disabled={currentStep === steps.length - 1} className="control-button">
-                    Next 
+                    Next
                 </button>
             </div>
+
 
             <button onClick={handleBackToHome} className="back-button">
                 Back to Home
