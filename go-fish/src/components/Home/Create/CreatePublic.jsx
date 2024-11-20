@@ -100,21 +100,6 @@ const CreatePublic = () => {
 
           <div className="setting-group">
             <label className="setting-label">
-              <Bot className="setting-icon" />
-              Fill Empty Slots with AI
-            </label>
-            <label className="toggle">
-              <input
-                type="checkbox"
-                checked={useAI}
-                onChange={(e) => setUseAI(e.target.checked)}
-              />
-              <span className="toggle-slider"></span>
-            </label>
-          </div>
-
-          <div className="setting-group">
-            <label className="setting-label">
               <Clock className="setting-icon" />
               Deck Size (Game Length)
             </label>

@@ -164,12 +164,12 @@
 .player-hand {
   position: absolute;
   bottom: -5rem;
-  left: 220%;  /* Change from right: 50% to left: 50% */
-  transform: translateX(-50%);  /* Keep this the same */
+  left: 270%;  /* Change from right: 50% to left: 50% */
+  transform: translateX(-90%);  /* Keep this the same */
   display: flex;
   gap: 0.5rem;
-  padding: 2rem;
-  min-height: 100px;
+  padding: 2.5rem;
+  min-height: 110px;
   perspective: 1000px;
 }
 

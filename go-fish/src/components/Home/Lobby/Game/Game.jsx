@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, collection, getDoc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../../config/firebase';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Eye } from 'lucide-react';
@@ -19,11 +19,8 @@ const Game = () => {
   const [username] = useState(localStorage.getItem("username") || "Guest");
 
   // UI state
-  const [editingMessage, setEditingMessage] = useState('');
-  const [isEditing, setIsEditing] = useState(false);
+  const [setIsEditing] = useState(false);
   const [showSetsModal, setShowSetsModal] = useState(false);
-  const [showSetAnimation, setShowSetAnimation] = useState(false);
-  const [lastCompletedSet, setLastCompletedSet] = useState(null);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [showGameEndAnimation, setShowGameEndAnimation] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
@@ -159,27 +156,77 @@ const Game = () => {
     });
   };
 
-  // Game end handling
+  // Game End Handling
   const handleGameEnd = async (winner = null) => {
     const lobbyRef = doc(db, "Lobbies", lobbyId);
-    
+    const totalPlayers = gameState.players.length;
+    const totalPot = lobbyData.betAmount * totalPlayers; // Calculate total pot from all players
+
+    // Function to update winner's currency
+    const updateWinnerCurrency = async (winnerUsername) => {
+      try {
+        // First determine if winner is a guest or registered user
+        const authType = localStorage.getItem('authType');
+        
+        if (authType === 'Guest') {
+          // For guest winners
+          const guestId = localStorage.getItem('guestId');
+          if (guestId) {
+            const guestRef = doc(db, 'Guests', guestId);
+            const guestDoc = await getDoc(guestRef);
+            
+            if (guestDoc.exists()) {
+              const currentCurrency = guestDoc.data().virtualCurrency || 0;
+              await updateDoc(guestRef, {
+                virtualCurrency: currentCurrency + totalPot
+              });
+              // Update local storage for guest
+              localStorage.setItem('guestCurrency', (currentCurrency + totalPot).toString());
+            }
+          }
+        } else {
+          // For registered users
+          const usersRef = collection(db, 'Users');
+          const q = query(usersRef, where('username', '==', winnerUsername));
+          const querySnapshot = await getDocs(q);
+          
+          if (!querySnapshot.empty) {
+            const winnerDoc = querySnapshot.docs[0];
+            const currentCurrency = winnerDoc.data().virtualCurrency || 0;
+            await updateDoc(doc(db, 'Users', winnerDoc.id), {
+              virtualCurrency: currentCurrency + totalPot,
+              lastWin: {
+                amount: totalPot,
+                timestamp: new Date().toISOString(),
+                gameId: lobbyId
+              }
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error updating winner's currency:", error);
+      }
+    };
+
     if (lobbyData.gameMode === 'firstToSet') {
+      await updateWinnerCurrency(winner);
       await updateDoc(lobbyRef, {
         'gameState.status': 'completed',
         'gameState.winner': winner,
-        'gameState.message': `Game Over! ${winner} wins by completing the first set!`
+        'gameState.message': `Game Over! ${winner} wins by completing the first set and receives ${totalPot} coins!`,
+        'gameState.finalPot': totalPot
       });
-      // Remove the navigation from here since it's handled by the useEffect
     } else {
       const winners = Object.entries(gameState.sets)
         .sort(([,a], [,b]) => b.length - a.length);
       
+      await updateWinnerCurrency(winners[0][0]);
       await updateDoc(lobbyRef, {
         'gameState.status': 'completed',
         'gameState.winners': winners,
-        'gameState.message': `Game Over! ${winners[0][0]} wins with ${winners[0][1].length} sets!`
+        'gameState.message': `Game Over! ${winners[0][0]} wins with ${winners[0][1].length} sets and receives ${totalPot} coins!`,
+        'gameState.finalPot': totalPot
       });
-      // Remove the navigation from here since it's handled by the useEffect
     }
   };
 
@@ -322,107 +369,6 @@ const Game = () => {
       }
     }
   };
-
-  // Add GameEndAnimation component within the Game component
-  const GameEndAnimation = () => (
-    <motion.div
-      className="game-end-overlay"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: isWinner ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 1000,
-        backdropFilter: 'blur(4px)'
-      }}
-    >
-      <motion.div
-        className="game-end-content"
-        initial={{ scale: 0, y: -100 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0, y: 100 }}
-        style={{
-          background: 'rgba(255, 255, 255, 0.95)',
-          padding: '2rem',
-          borderRadius: '1rem',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-          textAlign: 'center',
-          border: `4px solid ${isWinner ? '#2ecc71' : '#e74c3c'}`
-        }}
-      >
-        {isWinner ? (
-          <>
-            <motion.div
-              initial={{ rotate: 0 }}
-              animate={{ rotate: [0, -10, 10, -10, 10, 0] }}
-              transition={{ duration: 0.5, repeat: Infinity }}
-              style={{ fontSize: '4rem', marginBottom: '1rem' }}
-            >
-              🎉
-            </motion.div>
-            <motion.h2
-              initial={{ y: 20 }}
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 0.5, repeat: Infinity }}
-              style={{ 
-                color: '#2ecc71',
-                fontSize: '2.5rem',
-                fontWeight: 'bold',
-                marginBottom: '1rem'
-              }}
-            >
-              You Win!
-            </motion.h2>
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 0.5, repeat: Infinity }}
-              style={{ fontSize: '4rem' }}
-            >
-              🏆
-            </motion.div>
-          </>
-        ) : (
-          <>
-            <motion.div
-              initial={{ y: 0 }}
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 10, repeat: Infinity }}
-              style={{ fontSize: '4rem', marginBottom: '1rem' }}
-            >
-              😢
-            </motion.div>
-            <motion.h2
-              style={{ 
-                color: '#e74c3c',
-                fontSize: '2.5rem',
-                fontWeight: 'bold',
-                marginBottom: '1rem'
-              }}
-            >
-              You Lose...
-            </motion.h2>
-            <motion.div
-              initial={{ rotate: 0 }}
-              animate={{ rotate: [-5, 5, -5, 5, 0] }}
-              transition={{ duration: 10, repeat: Infinity }}
-              style={{ fontSize: '4rem' }}
-            >
-              💔
-            </motion.div>
-          </>
-        )}
-      </motion.div>
-    </motion.div>
-  );
 
   // UI Components
   const SetsModal = () => (

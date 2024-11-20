@@ -144,10 +144,6 @@ const Lobby = () => {
 
     await updateDoc(lobbyRef, { players: updatedPlayers });
     setIsReady(!isReady);
-
-    if (lobbyData.useAI && allRealUsersReady(updatedPlayers)) {
-      addAIPlayers();
-    }
   };
 
   const handleLeaveLobby = async () => {
