@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Bot, ArrowLeft, Clock } from 'lucide-react';
+import { Users, Bot, ArrowLeft, Clock, Trophy } from 'lucide-react';
 import { db } from '../../config/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import './CreatePublic.css';
@@ -13,10 +13,16 @@ const deckOptions = {
   6: [35, 50, 52],
 };
 
+const gameModes = {
+  classic: "Classic (Most Sets Wins)",
+  firstToSet: "First to Set Wins"
+};
+
 const CreatePublic = () => {
   const [playerLimit, setPlayerLimit] = useState(4);
   const [useAI, setUseAI] = useState(true);
   const [deckSize, setDeckSize] = useState(deckOptions[4][0]); // Default to first option for 4 players
+  const [gameMode, setGameMode] = useState('classic'); // Add game mode state
   const navigate = useNavigate();
 
   const handleCreateLobby = async () => {
@@ -28,6 +34,7 @@ const CreatePublic = () => {
         playerLimit,
         useAI,
         deckSize,
+        gameMode, // Add game mode to lobby data
         players: [],
         status: 'setting up', // Initial status
         createdAt: new Date(),
@@ -59,11 +66,29 @@ const CreatePublic = () => {
         <div className="lobby-settings">
           <div className="setting-group">
             <label className="setting-label">
+              <Trophy className="setting-icon" />
+              Game Mode
+            </label>
+            <select
+              value={gameMode}
+              onChange={(e) => setGameMode(e.target.value)}
+              className="setting-select"
+            >
+              {Object.entries(gameModes).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="setting-group">
+            <label className="setting-label">
               <Users className="setting-icon" />
               Player Limit
             </label>
-            <select 
-              value={playerLimit} 
+            <select
+              value={playerLimit}
               onChange={handlePlayerLimitChange}
               className="setting-select"
             >
@@ -93,8 +118,8 @@ const CreatePublic = () => {
               <Clock className="setting-icon" />
               Deck Size (Game Length)
             </label>
-            <select 
-              value={deckSize} 
+            <select
+              value={deckSize}
               onChange={(e) => setDeckSize(Number(e.target.value))}
               className="setting-select"
             >
