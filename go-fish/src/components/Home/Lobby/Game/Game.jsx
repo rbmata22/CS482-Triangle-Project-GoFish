@@ -610,7 +610,7 @@ return (
             >
               {isWinner ? (
                 <>
-                  <motion.div 
+                  <motion.div // Will this push?
                     initial={{ rotate: 0 }}
                     animate={{ rotate: [0, -10, 10, -10, 10, 0] }}
                     transition={{ duration: 0.5, repeat: Infinity }}
