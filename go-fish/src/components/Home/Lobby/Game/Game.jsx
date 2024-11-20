@@ -432,12 +432,15 @@ const Game = () => {
   // Main render
 return (
   <div className="game-container">
+    {/* Main game board with entrance animation */}
     <motion.div 
       className="game-board"
       initial={{ scale: 0.9, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
     >
+      {/* Header section containing turn info and game mode */}
       <div className="game-header">
+        {/* Turn status display */}
         <div className="turn-status">
           <div className="current-turn">
             Current Turn: {gameState.currentTurn}
@@ -447,11 +450,13 @@ return (
           </div>
         </div>
         
+        {/* Game mode indicator with trophy icon */}
         <div className="game-mode-indicator">
           <Trophy className="mode-icon" />
           <span>{lobbyData.gameMode === 'firstToSet' ? 'First to Set Wins!' : 'Classic Mode'}</span>
         </div>
 
+        {/* Editable game message component */}
         <EditableText
           text={gameState.message}
           isEditing={isCurrentPlayersTurn}
@@ -460,6 +465,7 @@ return (
         />
       </div>
 
+      {/* Container for all player cards */}
       <div className="players-container">
         {gameState.players.map((player) => (
           <PlayerCard
@@ -474,14 +480,17 @@ return (
         ))}
       </div>
 
+      {/* Center area displaying deck information */}
       <div className="center-area">
         <div className="deck-counter">
           <span className="count">Cards in Deck: {gameState.deckSize}</span>
         </div>
       </div>
 
+      {/* Game controls visible only during player's turn */}
       {isCurrentPlayersTurn && (
         <div className="game-controls">
+          {/* Player selection dropdown */}
           <select
             className="player-select"
             value={gameState.selectedPlayer || ''}
@@ -502,6 +511,7 @@ return (
               ))}
           </select>
 
+          {/* Ask for card button with animations */}
           <motion.button
             className="ask-button"
             onClick={askForCard}
@@ -514,6 +524,7 @@ return (
         </div>
       )}
 
+      {/* Sets display button - only visible if player has sets */}
       {username && gameState.sets[username]?.length > 0 && (
         <motion.button
           className="check-sets-button"
@@ -526,10 +537,12 @@ return (
         </motion.button>
       )}
 
+      {/* Sets modal with animation */}
       <AnimatePresence>
         {showSetsModal && <SetsModal />}
       </AnimatePresence>
 
+      {/* Set completion animation overlay */}
       <AnimatePresence>
         {gameState.showSetAnimation && gameState.lastCompletedSet && (
           <motion.div
@@ -545,6 +558,7 @@ return (
               transform: 'translate(-50%, -50%)'
             }}
           >
+            {/* Set completion announcement and card display */}
             <div className="set-text">
               {gameState.lastCompletedSet.player} completed a set!
             </div>
@@ -572,10 +586,11 @@ return (
         )}
       </AnimatePresence>
 
+      {/* Game end animation overlay */}
       <AnimatePresence>
         {showGameEndAnimation && (
           <motion.div
-            className="game-end-overlay"
+            className="game-end-overlay" 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -593,9 +608,12 @@ return (
               backdropFilter: 'blur(4px)'
             }}
           >
+            {/* Win/Lose animation content */}
             <motion.div
-              className="game-end-content" // THIS IS HIP TOO!!! AFTER A LONG BATTLE, THE
-              // GAME FINALLY RUNS! Can't wait to present!!!
+
+            // THIS IS HIP TOO!!! AFTER A LONG BATTLE, THE
+            // GAME FINALLY RUNS! Can't wait to present!!!
+              className="game-end-content"
               initial={{ scale: 0, y: -100 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0, y: 100 }}
@@ -608,9 +626,11 @@ return (
                 border: `4px solid ${isWinner ? '#2ecc71' : '#e74c3c'}`
               }}
             >
+              {/* Conditional render for win/lose animations */}
               {isWinner ? (
                 <>
-                  <motion.div // Will this push?
+                  {/* Winner celebration animations */}
+                  <motion.div 
                     initial={{ rotate: 0 }}
                     animate={{ rotate: [0, -10, 10, -10, 10, 0] }}
                     transition={{ duration: 0.5, repeat: Infinity }}
@@ -626,7 +646,6 @@ return (
                       color: '#2ecc71',
                       fontSize: '2.5rem',
                       fontWeight: 'bold',
-                      repeat:4,
                       marginBottom: '1rem'
                     }}
                   >
@@ -643,6 +662,7 @@ return (
                 </>
               ) : (
                 <>
+                  {/* Loser animation sequence */}
                   <motion.div
                     initial={{ y: 0 }}
                     animate={{ y: [0, -10, 0] }}
@@ -656,8 +676,7 @@ return (
                       color: '#e74c3c',
                       fontSize: '2.5rem',
                       fontWeight: 'bold',
-                      marginBottom: '1rem',
-                      repeat:4
+                      marginBottom: '1rem'
                     }}
                   >
                     You Lose...
@@ -680,5 +699,4 @@ return (
   </div>
 );
 };
-
 export default Game;

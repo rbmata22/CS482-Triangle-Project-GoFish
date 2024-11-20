@@ -1,13 +1,16 @@
+// Essential imports for animations and icons - keeping our UI smooth
 import { motion, AnimatePresence } from 'framer-motion';
 import * as Icons from 'react-icons/gi';
 import { Cat, Ghost, Dog, Bot, Bird, Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem, Dices } from 'lucide-react';
 
+// Available player avatars - keeping it clean with a default fallback
 const iconComponents = {
   Cat, Ghost, Dog, Bot, Bird, Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem,
   default: Dices,
 };
 
-// Card components generation
+// Dynamically generates our card components
+// Maps each card name to its corresponding icon for clean rendering
 const generateCardComponents = () => {
   const cardNames = [
     "10", "Ace", "King", "Queen", "Jack",
@@ -28,18 +31,23 @@ const generateCardComponents = () => {
 
 const cardComponents = generateCardComponents();
 
+// Main component handling player display and interactions
+// Shows player info, current hand, and completed sets
 const PlayerCard = ({ player, isCurrentPlayer, isCurrentTurn, onCardSelect, gameState, username }) => {
+  // Get the right icons for this player's display
   const CardIcon = cardComponents[player.display];
   const PlayerIcon = iconComponents[player.logo] || iconComponents.default;
   
   return (
     <motion.div
       className={`player-card ${isCurrentTurn ? 'current-turn' : ''}`}
+      // Clean entry animation
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
       transition={{ type: 'spring', stiffness: 500, damping: 30 }}
     >
       <div className="player-info">
+        {/* Player avatar with interactive animations */}
         <motion.div 
           className="player-avatar"
           whileHover={{ scale: 1.1 }}
@@ -50,8 +58,11 @@ const PlayerCard = ({ player, isCurrentPlayer, isCurrentTurn, onCardSelect, game
             className="player-icon"
             strokeWidth={1.5}
           />
+          {/* Visual indicator for active turn */}
           {isCurrentTurn && <div className="current-turn-indicator" />}
         </motion.div>
+        
+        {/* Player stats display */}
         <div className="player-name">
           {player.username}
         </div>
@@ -59,26 +70,30 @@ const PlayerCard = ({ player, isCurrentPlayer, isCurrentTurn, onCardSelect, game
           <span>Cards: {gameState.playerHands[player.username]?.length || 0}</span>
           <br />
           <span>Sets: {gameState.sets[player.username]?.length || 0}</span>
-          </div>
+        </div>
 
+        {/* Display area for completed sets with transitions */}
         <div className="sets-display">
           <AnimatePresence mode="popLayout">
             {gameState.sets[player.username]?.map((set, setIndex) => (
               <motion.div
                 key={`${set[0].rank}-${setIndex}`}
                 className="set-container"
+                // Smooth set reveal animation
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0, opacity: 0 }}
               >
                 <div className="set-header">Set of {set[0].rank}s</div>
                 <div className="set-cards">
+                  {/* Individual cards within the set */}
                   {set.map((card, cardIndex) => {
                     const CardIcon = cardComponents[card.display];
                     return (
                       <motion.div
                         key={`${card.rank}-${card.suit}-${cardIndex}`}
                         className="set-card"
+                        // Clean flip animation for each card
                         initial={{ rotate: -180, opacity: 0 }}
                         animate={{ rotate: 0, opacity: 1 }}
                         transition={{ delay: cardIndex * 0.1 }}
@@ -94,11 +109,13 @@ const PlayerCard = ({ player, isCurrentPlayer, isCurrentTurn, onCardSelect, game
         </div>
       </div>
 
+      {/* Active player's hand with fan layout and interactions */}
       {isCurrentPlayer && (
         <div className="player-hand">
           <AnimatePresence>
             {gameState.playerHands[player.username]?.map((card, index) => {
               const CardIcon = cardComponents[card.display];
+              // Calculate fan spread positioning
               const total = gameState.playerHands[player.username].length;
               const offset = (index - (total / 2)) * 30;
               
@@ -107,6 +124,7 @@ const PlayerCard = ({ player, isCurrentPlayer, isCurrentTurn, onCardSelect, game
                   key={`${card.rank}-${card.suit}`}
                   className={`card ${gameState.selectedCard === card ? 'selected' : ''}`}
                   onClick={() => isCurrentTurn && onCardSelect(card)}
+                  // Smooth card animations and positioning
                   initial={{ scale: 0, y: 50 }}
                   animate={{ 
                     scale: 1,
