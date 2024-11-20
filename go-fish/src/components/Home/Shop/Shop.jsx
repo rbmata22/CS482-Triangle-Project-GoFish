@@ -43,7 +43,7 @@ const Shop = () => {
     navigate('/home');
   };
 
-  // Play music on mount, pause on unmount
+  // Play music on mount and pause on unmount
   useEffect(() => {
     audio.loop = true;
     audio.play();
