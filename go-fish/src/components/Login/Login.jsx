@@ -51,7 +51,20 @@ const Login = () => {
   // Validate email format
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
-  // Handle email and password login
+  const checkAdminCredentials = async (email, password) => {
+    try {
+      const adminDoc = await getDoc(doc(db, 'Admin', 'ADMIN_GOFISH'));
+      if (adminDoc.exists()) {
+        const adminData = adminDoc.data();
+        return adminData.email === email && adminData.password === password;
+      }
+      return false;
+    } catch (error) {
+      console.error("Error checking admin credentials:", error);
+      return false;
+    }
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
@@ -60,6 +73,22 @@ const Login = () => {
       setError('Please enter your email and password');
       return;
     }
+
+    // Check if trying to login as admin
+    const isAdmin = await checkAdminCredentials(email, password);
+    if (isAdmin) {
+      // Set admin session data
+      localStorage.setItem('isAdmin', 'true');
+      localStorage.setItem('username', 'admin');
+      localStorage.setItem('adminId', 'ADMIN_GOFISH');
+      
+      // Stop music and redirect to admin page
+      audio.pause();
+      navigate('/Admin');
+      return;
+    }
+
+    // Regular user authentication flow
     if (!validateEmail(email)) {
       setError('Please enter a valid email address');
       return;
@@ -77,7 +106,6 @@ const Login = () => {
       if (userDoc.exists()) {
         const userData = userDoc.data();
 
-        // Store user data in localStorage
         localStorage.setItem('authType', 'Login');
         localStorage.setItem('username', userData.username);
         localStorage.setItem('logo', userData.logo);
@@ -88,12 +116,10 @@ const Login = () => {
 
         audio.pause();
         navigate('/home');
-
-        navigate('/home');
       } else {
         setError('User does not exist');
       }
-    } catch  {
+    } catch {
       setError('Invalid login credentials');
     }
   };
