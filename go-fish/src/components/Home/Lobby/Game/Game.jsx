@@ -1,34 +1,34 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../../../config/firebase';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Trophy, Eye } from 'lucide-react';
 import './Game.css';
 import PlayerCard, { cardComponents } from './PlayerCard';
 import EditableText from './EditableText';
 
 const Game = () => {
-  // Get the lobby ID from the URL parameters
+  // URL and navigation
   const { lobbyId } = useParams();
+  const navigate = useNavigate();
 
-  // State to hold the current game state
+  // Core state
   const [gameState, setGameState] = useState(null);
-
-  // State to hold the lobby data
   const [lobbyData, setLobbyData] = useState(null);
-
-  // Get the player's username from localStorage, or use "Guest" if not set
   const [username] = useState(localStorage.getItem("username") || "Guest");
 
-  // State to manage editing the game message
+  // UI state
   const [editingMessage, setEditingMessage] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-
-  // State to manage the set completion animation
+  const [showSetsModal, setShowSetsModal] = useState(false);
   const [showSetAnimation, setShowSetAnimation] = useState(false);
   const [lastCompletedSet, setLastCompletedSet] = useState(null);
+  const [gameCompleted, setGameCompleted] = useState(false);
+  const [showGameEndAnimation, setShowGameEndAnimation] = useState(false);
+  const [isWinner, setIsWinner] = useState(false);
 
-  // Fetch the lobby data and initialize the game if needed
+  // Fetch and initialize game data
   useEffect(() => {
     if (!lobbyId) return;
 
@@ -38,22 +38,41 @@ const Game = () => {
         const data = docSnapshot.data();
         setLobbyData(data);
         
-        // If there's no game state, initialize the game
         if (!data.gameState) {
           initializeGame(data.players, data.playerLimit);
         } else {
           setGameState(data.gameState);
         }
+      } else {
+        navigate('/home');
       }
     });
 
-    // Unsubscribe from the real-time updates when the component unmounts
     return () => unsubscribe();
-  }, [lobbyId]);
+  }, [lobbyId, navigate]);
 
-  // Create the initial set of cards for the game
+  useEffect(() => {
+    if (gameState?.status === 'completed' && !gameCompleted) {
+      setGameCompleted(true);
+      
+      // Determine if current user is the winner
+      const winner = gameState.winner || (gameState.winners?.[0]?.[0]);
+      const didWin = winner === username;
+      setIsWinner(didWin);
+      setShowGameEndAnimation(true);
+
+      // Delay navigation to results page to show animation
+      setTimeout(() => {
+        setShowGameEndAnimation(false);
+        setTimeout(() => {
+          navigate(`/home`);
+        }, 500);
+      }, 3000);
+    }
+  }, [gameState?.status, gameCompleted, lobbyId, navigate, username, gameState?.winner, gameState?.winners]);
+
+  // Card deck creation and shuffling
   const createInitialSets = () => {
-    // Generate the guaranteed sets (Ace, King, Queen of each suit)
     const guaranteedSets = ['Ace', 'King', 'Queen'].map(rank => (
       ['Hearts', 'Diamonds', 'Clubs', 'Spades'].map(suit => ({
         rank,
@@ -62,7 +81,6 @@ const Game = () => {
       }))
     )).flat();
 
-    // Generate the remaining cards
     const remainingRanks = ["Jack", "10", "9", "8", "7", "6", "5", "4", "3", "2"];
     const remainingCards = remainingRanks.flatMap(rank =>
       ["Hearts", "Diamonds", "Clubs", "Spades"].map(suit => ({
@@ -72,11 +90,9 @@ const Game = () => {
       }))
     );
 
-    // Shuffle the deck
     return shuffle([...guaranteedSets, ...remainingCards]);
   };
 
-  // Shuffle the cards in an array
   const shuffle = (array) => {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
@@ -86,21 +102,18 @@ const Game = () => {
     return newArray;
   };
 
-  // Initialize the game state
+  // Game initialization
   const initializeGame = async (players, playerLimit) => {
-    // Create the initial deck of cards
     const deck = createInitialSets();
-
-    // Initialize the player hands and sets
     const playerHands = {};
     const sets = {};
+    
     players.forEach(player => {
-      const initialCards = deck.splice(0, 7);
+      const initialCards = deck.splice(0, 5);
       playerHands[player.username] = initialCards;
       sets[player.username] = [];
     });
 
-    // Create the initial game state
     const initialGameState = {
       deck,
       deckSize: deck.length,
@@ -118,14 +131,13 @@ const Game = () => {
       status: 'in-progress'
     };
 
-    // Save the initial game state to Firestore
     const lobbyRef = doc(db, "Lobbies", lobbyId);
     await updateDoc(lobbyRef, {
       gameState: initialGameState
     });
   };
 
-  // Handle editing the game message
+  // Message handling
   const handleMessageEdit = async (newMessage) => {
     if (newMessage.trim() !== gameState.message) {
       const lobbyRef = doc(db, "Lobbies", lobbyId);
@@ -136,7 +148,7 @@ const Game = () => {
     setIsEditing(false);
   };
 
-  // Handle a player selecting a card
+  // Card selection handling
   const handleCardSelect = async (card) => {
     if (!isCurrentPlayersTurn) return;
     
@@ -147,7 +159,31 @@ const Game = () => {
     });
   };
 
-  // Implement the "Go Fish" game logic
+  // Game end handling
+  const handleGameEnd = async (winner = null) => {
+    const lobbyRef = doc(db, "Lobbies", lobbyId);
+    
+    if (lobbyData.gameMode === 'firstToSet') {
+      await updateDoc(lobbyRef, {
+        'gameState.status': 'completed',
+        'gameState.winner': winner,
+        'gameState.message': `Game Over! ${winner} wins by completing the first set!`
+      });
+      // Remove the navigation from here since it's handled by the useEffect
+    } else {
+      const winners = Object.entries(gameState.sets)
+        .sort(([,a], [,b]) => b.length - a.length);
+      
+      await updateDoc(lobbyRef, {
+        'gameState.status': 'completed',
+        'gameState.winners': winners,
+        'gameState.message': `Game Over! ${winners[0][0]} wins with ${winners[0][1].length} sets!`
+      });
+      // Remove the navigation from here since it's handled by the useEffect
+    }
+  };
+
+  // Core game logic
   const askForCard = async () => {
     if (!gameState.selectedCard || !gameState.selectedPlayer) return;
 
@@ -160,7 +196,6 @@ const Game = () => {
     );
 
     if (matchingCards.length > 0) {
-      // The target player has the requested card(s)
       const newTargetHand = targetHand.filter(card => 
         card.rank !== gameState.selectedCard.rank
       );
@@ -183,9 +218,7 @@ const Game = () => {
 
       await checkForSets(newCurrentHand, currentPlayer);
     } else {
-      // The target player doesn't have the requested card
       if (gameState.deck.length > 0) {
-        // Draw a card from the deck
         const drawnCard = gameState.deck[0];
         const newDeck = gameState.deck.slice(1);
         const newHand = [...gameState.playerHands[currentPlayer], drawnCard];
@@ -209,7 +242,6 @@ const Game = () => {
 
         await checkForSets(newHand, currentPlayer);
       } else {
-        // No cards left in the deck, move to the next player
         const nextPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
         await updateDoc(lobbyRef, {
           'gameState.currentTurn': gameState.players[nextPlayerIndex].username,
@@ -223,17 +255,16 @@ const Game = () => {
     }
   };
 
-  // Check for and complete sets in the player's hand
   const checkForSets = async (hand, player) => {
     const rankCounts = {};
     hand.forEach(card => {
       rankCounts[card.rank] = (rankCounts[card.rank] || 0) + 1;
     });
-
+  
     let setsFound = false;
     const newHand = [...hand];
     const newSets = [...(gameState.sets[player] || [])];
-
+  
     Object.entries(rankCounts).forEach(([rank, count]) => {
       if (count === 4) {
         const setCards = newHand.filter(card => card.rank === rank);
@@ -241,16 +272,36 @@ const Game = () => {
         newSets.push(setCards);
         setsFound = true;
         
-        setShowSetAnimation(true);
-        setLastCompletedSet({ 
-          player, 
+        // Instead of using local state, store the animation state in the game state
+        const setCompletionData = {
+          player,
           cards: setCards,
-          rank: rank
+          rank: rank,
+          timestamp: Date.now() // Add timestamp to ensure animation triggers for each new set
+        };
+  
+        // Update the game state with the animation data
+        const lobbyRef = doc(db, "Lobbies", lobbyId);
+        updateDoc(lobbyRef, {
+          'gameState.lastCompletedSet': setCompletionData,
+          'gameState.showSetAnimation': true
         });
-        setTimeout(() => setShowSetAnimation(false), 2000);
+  
+        // Clear the animation after a delay
+        setTimeout(async () => {
+          const lobbyRef = doc(db, "Lobbies", lobbyId);
+          await updateDoc(lobbyRef, {
+            'gameState.showSetAnimation': false
+          });
+        }, 3000);
+  
+        if (lobbyData.gameMode === 'firstToSet') {
+          handleGameEnd(player);
+          return;
+        }
       }
     });
-
+  
     if (setsFound) {
       const lobbyRef = doc(db, "Lobbies", lobbyId);
       await updateDoc(lobbyRef, {
@@ -263,37 +314,162 @@ const Game = () => {
           [player]: newSets
         },
         'gameState.totalSets': gameState.totalSets + 1,
-        'gameState.message': `${player} completed a set of ${lastCompletedSet.rank}s!`
+        'gameState.message': `${player} completed a set of ${gameState.lastCompletedSet?.rank}s!`
       });
-
-      if (gameState.totalSets + 1 === 13) {
+  
+      if (gameState.totalSets + 1 === 13 && lobbyData.gameMode !== 'firstToSet') {
         handleGameEnd();
       }
     }
   };
 
-  // Handle the game ending
-  const handleGameEnd = async () => {
-    const winners = Object.entries(gameState.sets)
-      .sort(([,a], [,b]) => b.length - a.length);
-    
-    const lobbyRef = doc(db, "Lobbies", lobbyId);
-    await updateDoc(lobbyRef, {
-      'gameState.status': 'completed',
-      'gameState.winners': winners,
-      'gameState.message': `Game Over! ${winners[0][0]} wins with ${winners[0][1].length} sets!`
-    });
-  };
+  // Add GameEndAnimation component within the Game component
+  const GameEndAnimation = () => (
+    <motion.div
+      className="game-end-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: isWinner ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1000,
+        backdropFilter: 'blur(4px)'
+      }}
+    >
+      <motion.div
+        className="game-end-content"
+        initial={{ scale: 0, y: -100 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0, y: 100 }}
+        style={{
+          background: 'rgba(255, 255, 255, 0.95)',
+          padding: '2rem',
+          borderRadius: '1rem',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          textAlign: 'center',
+          border: `4px solid ${isWinner ? '#2ecc71' : '#e74c3c'}`
+        }}
+      >
+        {isWinner ? (
+          <>
+            <motion.div
+              initial={{ rotate: 0 }}
+              animate={{ rotate: [0, -10, 10, -10, 10, 0] }}
+              transition={{ duration: 0.5, repeat: Infinity }}
+              style={{ fontSize: '4rem', marginBottom: '1rem' }}
+            >
+              🎉
+            </motion.div>
+            <motion.h2
+              initial={{ y: 20 }}
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 0.5, repeat: Infinity }}
+              style={{ 
+                color: '#2ecc71',
+                fontSize: '2.5rem',
+                fontWeight: 'bold',
+                marginBottom: '1rem'
+              }}
+            >
+              You Win!
+            </motion.h2>
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 0.5, repeat: Infinity }}
+              style={{ fontSize: '4rem' }}
+            >
+              🏆
+            </motion.div>
+          </>
+        ) : (
+          <>
+            <motion.div
+              initial={{ y: 0 }}
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 10, repeat: Infinity }}
+              style={{ fontSize: '4rem', marginBottom: '1rem' }}
+            >
+              😢
+            </motion.div>
+            <motion.h2
+              style={{ 
+                color: '#e74c3c',
+                fontSize: '2.5rem',
+                fontWeight: 'bold',
+                marginBottom: '1rem'
+              }}
+            >
+              You Lose...
+            </motion.h2>
+            <motion.div
+              initial={{ rotate: 0 }}
+              animate={{ rotate: [-5, 5, -5, 5, 0] }}
+              transition={{ duration: 10, repeat: Infinity }}
+              style={{ fontSize: '4rem' }}
+            >
+              💔
+            </motion.div>
+          </>
+        )}
+      </motion.div>
+    </motion.div>
+  );
 
-  // Determine if it's the current player's turn
+  // UI Components
+  const SetsModal = () => (
+    <motion.div
+      className="sets-modal-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={() => setShowSetsModal(false)}
+    >
+      <motion.div
+        className="sets-modal"
+        initial={{ scale: 0.5, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.5, opacity: 0 }}
+        onClick={e => e.stopPropagation()}
+      >
+        <button className="close-modal" onClick={() => setShowSetsModal(false)}>×</button>
+        <h2>Your Sets</h2>
+        <div className="sets-grid">
+          {gameState.sets[username]?.map((set, index) => {
+            const CardIcon = cardComponents[`${set[0].rank} of Hearts`];
+            return (
+              <motion.div
+                key={index}
+                className="set-card"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                {CardIcon && <CardIcon size={100} />}
+                <p>Set of {set[0].rank}s</p>
+              </motion.div>
+            );
+          })}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+
+  // Utility checks
   const isCurrentPlayersTurn = gameState?.currentTurn === username;
-
-  // Get the username of the next player
   const nextPlayer = gameState?.players[
     (gameState.currentPlayerIndex + 1) % gameState.players.length
   ]?.username;
 
-  // If the game state or lobby data is not ready, show a loading spinner
+  // Loading state
   if (!gameState || !lobbyData) {
     return (
       <div className="loading-container">
@@ -307,117 +483,256 @@ const Game = () => {
     );
   }
 
-  return (
-    <div className="game-container">
-      <motion.div 
-        className="game-board"
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-      >
-        <div className="game-header">
-          <div className="turn-status">
-            <div className="current-turn">
-              Current Turn: {gameState.currentTurn}
-            </div>
-            <div className="next-turn">
-              Next Turn: {nextPlayer}
-            </div>
+  // Main render
+return (
+  <div className="game-container">
+    <motion.div 
+      className="game-board"
+      initial={{ scale: 0.9, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+    >
+      <div className="game-header">
+        <div className="turn-status">
+          <div className="current-turn">
+            Current Turn: {gameState.currentTurn}
           </div>
-          
-          <EditableText
-            text={gameState.message}
-            isEditing={isCurrentPlayersTurn}
-            onSave={handleMessageEdit}
-            className="game-message"
+          <div className="next-turn">
+            Next Turn: {nextPlayer}
+          </div>
+        </div>
+        
+        <div className="game-mode-indicator">
+          <Trophy className="mode-icon" />
+          <span>{lobbyData.gameMode === 'firstToSet' ? 'First to Set Wins!' : 'Classic Mode'}</span>
+        </div>
+
+        <EditableText
+          text={gameState.message}
+          isEditing={isCurrentPlayersTurn}
+          onSave={handleMessageEdit}
+          className="game-message"
+        />
+      </div>
+
+      <div className="players-container">
+        {gameState.players.map((player) => (
+          <PlayerCard
+            key={player.username}
+            player={player}
+            isCurrentPlayer={player.username === username}
+            isCurrentTurn={player.username === gameState.currentTurn}
+            onCardSelect={handleCardSelect}
+            gameState={gameState}
+            username={username}
           />
-        </div>
+        ))}
+      </div>
 
-        <div className="players-container">
-          {gameState.players.map((player) => (
-            <PlayerCard
-              key={player.username}
-              player={player}
-              isCurrentPlayer={player.username === username}
-              isCurrentTurn={player.username === gameState.currentTurn}
-              onCardSelect={handleCardSelect}
-              gameState={gameState}
-              username={username}
-            />
-          ))}
+      <div className="center-area">
+        <div className="deck-counter">
+          <span className="count">Cards in Deck: {gameState.deckSize}</span>
         </div>
+      </div>
 
-        <div className="center-area">
-          <div className="deck-counter">
-            <span className="count">Cards in Deck: {gameState.deckSize}</span>
-          </div>
+      {isCurrentPlayersTurn && (
+        <div className="game-controls">
+          <select
+            className="player-select"
+            value={gameState.selectedPlayer || ''}
+            onChange={(e) => {
+              const lobbyRef = doc(db, "Lobbies", lobbyId);
+              updateDoc(lobbyRef, {
+                'gameState.selectedPlayer': e.target.value
+              });
+            }}
+          >
+            <option value="">Select Player</option>
+            {gameState.players
+              .filter(player => player.username !== username)
+              .map(player => (
+                <option key={player.username} value={player.username}>
+                  {player.username}
+                </option>
+              ))}
+          </select>
+
+          <motion.button
+            className="ask-button"
+            onClick={askForCard}
+            disabled={!gameState.selectedCard || !gameState.selectedPlayer}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Ask for Card
+          </motion.button>
         </div>
+      )}
 
-        {isCurrentPlayersTurn && (
-          <div className="game-controls">
-            <select
-              className="player-select"
-              value={gameState.selectedPlayer || ''}
-              onChange={(e) => {
-                const lobbyRef = doc(db, "Lobbies", lobbyId);
-                updateDoc(lobbyRef, {
-                  'gameState.selectedPlayer': e.target.value
-                });
+      {username && gameState.sets[username]?.length > 0 && (
+        <motion.button
+          className="check-sets-button"
+          onClick={() => setShowSetsModal(true)}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Eye className="eye-icon" />
+          Check Sets ({gameState.sets[username].length})
+        </motion.button>
+      )}
+
+      <AnimatePresence>
+        {showSetsModal && <SetsModal />}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {gameState.showSetAnimation && gameState.lastCompletedSet && (
+          <motion.div
+            className="set-completion"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            key={gameState.lastCompletedSet.timestamp}
+            style={{ 
+              position: 'fixed',
+              top: '40%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)'
+            }}
+          >
+            <div className="set-text">
+              {gameState.lastCompletedSet.player} completed a set!
+            </div>
+            <div className="set-cards">
+              {gameState.lastCompletedSet.cards.map((card, index) => {
+                const CardIcon = cardComponents[card.display];
+                return CardIcon && (
+                  <motion.div
+                    key={index}
+                    initial={{ rotate: 0, scale: 0 }}
+                    animate={{ rotate: 360, scale: 1 }}
+                    transition={{ 
+                      duration: 1,
+                      delay: index * 0.2,
+                      type: "spring",
+                      stiffness: 200
+                    }}
+                  >
+                    <CardIcon size={80} />
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showGameEndAnimation && (
+          <motion.div
+            className="game-end-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: isWinner ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              zIndex: 1000,
+              backdropFilter: 'blur(4px)'
+            }}
+          >
+            <motion.div
+              className="game-end-content" // THIS IS HIP TOO!!! AFTER A LONG BATTLE, THE
+              // GAME FINALLY RUNS! Can't wait to present!!!
+              initial={{ scale: 0, y: -100 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0, y: 100 }}
+              style={{
+                background: 'rgba(255, 255, 255, 0.95)',
+                padding: '2rem',
+                borderRadius: '1rem',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                textAlign: 'center',
+                border: `4px solid ${isWinner ? '#2ecc71' : '#e74c3c'}`
               }}
             >
-              <option value="">Select Player</option>
-              {gameState.players
-                .filter(player => player.username !== username)
-                .map(player => (
-                  <option key={player.username} value={player.username}>
-                    {player.username}
-                  </option>
-                ))}
-            </select>
-
-            <motion.button
-              className="ask-button"
-              onClick={askForCard}
-              disabled={!gameState.selectedCard || !gameState.selectedPlayer}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Ask for Card
-            </motion.button>
-          </div>
-        )}
-
-        <AnimatePresence>
-          {showSetAnimation && lastCompletedSet && (
-            <motion.div
-              className="set-completion"
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              exit={{ scale: 0, rotate: 180 }}
-            >
-              <div className="set-text">
-                {lastCompletedSet.player} completed a set!
-              </div>
-              <div className="set-cards">
-                {lastCompletedSet.cards.map((card, index) => {
-                  const CardIcon = cardComponents[card.display];
-                  return CardIcon && (
-                    <motion.div
-                      key={index}
-                      initial={{ rotate: 0 }}
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, delay: index * 0.2 }}
-                    >
-                      <CardIcon size={60} />
-                    </motion.div>
-                  );
-                })}
-              </div>
+              {isWinner ? (
+                <>
+                  <motion.div 
+                    initial={{ rotate: 0 }}
+                    animate={{ rotate: [0, -10, 10, -10, 10, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity }}
+                    style={{ fontSize: '4rem', marginBottom: '1rem' }}
+                  >
+                    🎉
+                  </motion.div>
+                  <motion.h2
+                    initial={{ y: 20 }}
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity }}
+                    style={{ 
+                      color: '#2ecc71',
+                      fontSize: '2.5rem',
+                      fontWeight: 'bold',
+                      repeat:4,
+                      marginBottom: '1rem'
+                    }}
+                  >
+                    You Win!
+                  </motion.h2>
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 0.5, repeat: Infinity }}
+                    style={{ fontSize: '4rem' }}
+                  >
+                    🏆
+                  </motion.div>
+                </>
+              ) : (
+                <>
+                  <motion.div
+                    initial={{ y: 0 }}
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                    style={{ fontSize: '4rem', marginBottom: '1rem' }}
+                  >
+                    😢
+                  </motion.div>
+                  <motion.h2
+                    style={{ 
+                      color: '#e74c3c',
+                      fontSize: '2.5rem',
+                      fontWeight: 'bold',
+                      marginBottom: '1rem',
+                      repeat:4
+                    }}
+                  >
+                    You Lose...
+                  </motion.h2>
+                  <motion.div
+                    initial={{ rotate: 0 }}
+                    animate={{ rotate: [-5, 5, -5, 5, 0] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                    style={{ fontSize: '4rem' }}
+                  >
+                    💔
+                  </motion.div>
+                </>
+              )}
             </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
-    </div>
-  );
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  </div>
+);
 };
 
 export default Game;

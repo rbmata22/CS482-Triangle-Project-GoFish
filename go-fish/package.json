@@ -17,6 +17,7 @@
     "@react-three/fiber": "^8.17.10",
     "@react-three/postprocessing": "^2.16.3",
     "@use-gesture/react": "^10.3.1",
+    "canvas-confetti": "^1.9.3",
     "firebase": "^10.14.1",
     "framer-motion": "^11.11.11",
     "lucide": "^0.453.0",
