@@ -101,23 +101,6 @@ const CreatePrivate = () => {
               ))}
             </select>
           </div>
-          <div className="setting-group">
-            <label className="setting-label">
-              <Clock className="setting-icon" />
-              Deck Size (Game Length)
-            </label>
-            <select 
-              value={deckSize} 
-              onChange={(e) => setDeckSize(Number(e.target.value))}
-              className="setting-select"
-            >
-              {deckOptions[playerLimit].map(size => (
-                <option key={size} value={size}>
-                  {size} Cards ({size === 52 ? 'Full Game' : size === deckOptions[playerLimit][0] ? 'Short' : 'Medium'})
-                </option>
-              ))}
-            </select>
-          </div>
 
           <div className="setting-group">
             <label className="setting-label">Login Code</label>
