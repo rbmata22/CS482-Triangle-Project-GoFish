@@ -57,8 +57,10 @@ const PlayerCard = ({ player, isCurrentPlayer, isCurrentTurn, onCardSelect, game
         </div>
         <div className="player-stats">
           <span>Cards: {gameState.playerHands[player.username]?.length || 0}</span>
+          <br />
           <span>Sets: {gameState.sets[player.username]?.length || 0}</span>
-        </div>
+          </div>
+
         <div className="sets-display">
           <AnimatePresence mode="popLayout">
             {gameState.sets[player.username]?.map((set, setIndex) => (

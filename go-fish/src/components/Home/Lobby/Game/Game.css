@@ -39,7 +39,7 @@
 /* Turn Order Container */
 .turn-status {
   position: absolute;
-  top: 2rem;
+  top: 7rem;
   right: 2rem;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
@@ -57,6 +57,7 @@
   align-items: center;
   gap: 0.5rem;
   bottom: 100%;
+  
 }
 
 .turn-indicator {
@@ -93,9 +94,9 @@
 }
 
 .player-card.current-turn {
-  background: rgba(79, 209, 197, 0.2);
-  border-color: #4fd1c5;
-  box-shadow: 0 0 20px rgba(79, 209, 197, 0.3);
+  background: rgba(0, 136, 255, 0.2);
+  border-color: #00b7ff;
+  box-shadow: 0 0 20px #4894e54d;
 }
 
 /* Enhanced Card Styling */
@@ -174,6 +175,7 @@
 
 .player-hand .card {
   --card-fan-radius: 400px;
+  top: -3rem;
   --card-fan-angle: 60deg;
   position: absolute;
   transform-origin: bottom center;
@@ -224,7 +226,7 @@
 .ask-button {
   padding: 0.75rem 2rem;
   border-radius: 8px;
-  background: linear-gradient(135deg, #4fd1c5, #319795);
+  background: linear-gradient(135deg, #0057fa, #0066fe);
   color: white;
   font-weight: 600;
   border: none;
@@ -421,30 +423,30 @@
 /* Game Mode Indicator */
 .game-mode-indicator {
   position: absolute;
-  top: 2rem;
+  top: 10rem;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: rgba(255, 215, 0, 0.15);
+  background: rgba(0, 140, 255, 0.15);
   backdrop-filter: blur(8px);
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  border: 1px solid rgba(0, 110, 255, 0.3);
   box-shadow: 
     0 4px 6px rgba(0, 0, 0, 0.1),
-    0 0 20px rgba(255, 215, 0, 0.2);
+    0 0 20px rgba(0, 149, 255, 0.2);
   z-index: 10;
 }
 
 .game-mode-indicator .mode-icon {
-  color: gold;
+  color: rgb(255, 255, 255);
   animation: trophyGlow 2s infinite ease-in-out;
 }
 
 .game-mode-indicator span {
-  color: gold;
+  color: rgb(255, 255, 255);
   font-weight: 600;
   font-size: 1rem;
   letter-spacing: 0.5px;
@@ -676,8 +678,6 @@
 .set-cards > div:hover {
   transform: scale(1.1) rotate(5deg) !important;
 }
-
-/* ... (keep all existing CSS) ... */
 
 /* Game End Animation Styles */
 .game-end-overlay {
