@@ -2,6 +2,7 @@
 \usepackage{graphicx} % Required for inserting images
 \usepackage{tocloft}
 \usepackage{enumitem}
+\usepackage[dvipsnames]{xcolor}
 \usepackage{tabularx}
 \usepackage{float}
 \usepackage{xcolor}
@@ -60,7 +61,7 @@ Client: Dr. Hoang Bui}
 
 \maketitle
 \pagebreak
-\setcounter{tocdepth}{5}
+\setcounter{subsection}{0}
 \tableofcontents
 \newpage
 
@@ -70,9 +71,13 @@ Client: Dr. Hoang Bui}
 \input{retrospective}
 \pagebreak
 
+\input{testing}
+\pagebreak
+
 \input{modeling}
 \pagebreak
 
-\input{testing}
+\appendix
+\input{appendix}
 
 \end{document}

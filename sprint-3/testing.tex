@@ -1,356 +1,62 @@
-\section{Testing}
-We utilized Jest in conjunction with the React Testing Library in order to produce comprehensive testcases for our application. Our focus was on testing the main functionality of each component including form inputs, logo selection, page navigation, and many more.
-\noindent
-\textbf{Account Registration/Signing up}
-\begin{itemize}
-    \item Testcase 1: User doesn't input a username
-    \begin{itemize}
-        \item Input: Email and password filled out properly, but username field is left empty
-        \item Expected Output: "Please enter your username"
-    \end{itemize}
-
-    \item Testcase 2: User inputs a username, but not a logo
-    \begin{itemize}
-        \item Input:
-            \begin{itemize}
-                \item Email: "kobe24"
-                \item Password: ""
-            \end{itemize}
-        \item Expected Output: "Please choose an icon and enter a username"
-    \end{itemize}
-
-    \item Testcase 3: No Email and password
-    \begin{itemize}
-        \item Input: Email and password fields left empty
-        \item Expected Output: "Please enter your email and password"
-    \end{itemize}
-
-    \item Testcase 4: Email with no '@' symbol
-    \begin{itemize}
-        \item Input:
-            \begin{itemize}
-                \item Email: "Spongebob"
-                \item Password: "Squarepants"
-            \end{itemize}
-        \item Expected Output: "Invalid Email"
-    \end{itemize}
-
-    \item Testcase 5: Allows for selection of logo
-    \begin{itemize}
-        \item Input: User selects Dog icon for logo
-        \item Expected Output: "logo: 'Dog'"
-    \end{itemize}
-
-    \item Testcase 6: Signing up using email and password
-    \begin{itemize}
-        \item Input: 
-            \begin{itemize}
-                \item Email: "spongebob@krustykrab.com"
-                \item Password: "hello123"
-                \item Username: "pattyflipper"
-                \item Logo: "Bot"
-            \end{itemize}
-        \item Expected Output: "Account created"
-    \end{itemize}
-
-    \item Testcase 7: Signing up using Google
-    \begin{itemize}
-        \item Input: Gmail user information
-        \item Expected Output: "Enter your username and select a logo"
-    \end{itemize}
-
-    \item Testcase 8: Returning to home during account registration process
-    \begin{itemize}
-        \item Input: Clicking the sign up button, then clicking the home button
-        \item Expected Output: User is returned to opening page and no account is created
-    \end{itemize}
-
-    \item Testcase 9: Returns to previous page during process of signing up with an email and password
-    \begin{itemize}
-        \item Input: 
-            \begin{itemize}
-                \item Email: "test@testing.com"
-                \item Password: "testtest"
-                \item User then selects "Back" button
-            \end{itemize}
-        \item Expected Output: User is returned to sign-up page where they can choose to create an account with Google or using an email and password
-    \end{itemize}
-\end{itemize}
-
-\noindent
-\textbf{Logging into an Existing Account}
-\begin{itemize}
-    \item Testcase 1: No email or password is inputted
-    \begin{itemize}
-        \item Input: Leave email and password fields empty
-        \item Expected Output: "Please enter email and password"
-    \end{itemize}
-
-    \item Testcase 2: Invalid email format
-    \begin{itemize}
-        \item Input: 
-            \begin{itemize}
-                \item Email: "InvalidEmail"
-                \item Password: "password123"
-            \end{itemize}
-        \item Expected Output: "Please enter a valid email address"
-    \end{itemize}
-
-    \item Testcase 3: Password too short
-    \begin{itemize}
-        \item Input: 
-            \begin{itemize}
-                \item Email: "test@example.com"
-                \item Password: "123"
-            \end{itemize}
-        \item Expected Output: "Password must be at least 6 characters"
-    \end{itemize}
-
-    \item Testcase 4: Successful login with valid credentials
-    \begin{itemize}
-        \item Input: 
-            \begin{itemize}
-                \item Email: "test@example.com"
-                \item Password: "password123"
-                \item Logo: "dog"
-            \end{itemize}
-        \item Expected Output: Logs user into their account and directs user to the home page where their information is displayed
-    \end{itemize}
-
-    \item Testcase 5: Invalid login credentials
-    \begin{itemize}
-        \item Input:
-            \begin{itemize}
-                \item Email: "test@example.com"
-                \item Password: "wrongpassword"
-            \end{itemize}
-        \item Expected Output: "Invalid login credentials"
-    \end{itemize}
-\end{itemize}
-
-\noindent
-\textbf{Home Page/Main Menu}
-\begin{itemize}
-    \item Testcase 1: Loading guest user data
-    \begin{itemize}
-        \item Input: 
-            \begin{itemize}
-                \item Username = "testGuest"
-                \item Logo = "dog"
-            \end{itemize}
-        \item Expected Output: 
-            \begin{itemize}
-                \item The username 'testGuest' is displayed and the dog icon is displayed as well
-            \end{itemize}
-    \end{itemize}
-    
-    \item Testcase 2: Load registered user data
-    \begin{itemize}
-        \item Input:
-            \begin{itemize}
-                \item item Username: "ExampleUser"
-                \item Logo: "Cat"
-                \item Virtual Currency: 1000
-            \end{itemize}
-        \item Expected Output: The username 'ExampleUser' is displayed, virtual currency is 1000, and the user logo of a cat is displayed
-    \end{itemize}
-
-    \item Testcase 3: Guest logout
-    \begin{itemize}
-        \item Input: Guest user logs out of home page
-        \item Expected Output: The 'deleteDoc' function is called and the user is navigated to the '/' route.
-    \end{itemize}
-    
-    \item Testcase 4: Navigation to different pages
-    \begin{itemize}
-        \item Input: Render the Home component
-        \item Expected Output:
-            \begin{itemize}
-                \item Clicking the 'Friends' button navigates to the '/Friends' route
-                \item Clicking the 'Messages' button navigates to the '/Messages' route
-                \item Clicking the 'Shop' button navigates to the '/shop' route
-            \end{itemize}
-    \end{itemize}
-
-    \item Testcase 5: Create Lobby dropdown
-    \begin{itemize}
-        \item Input: Render the Home component
-        \item Expected Output: Clicking the 'Create Lobby' button displays the 'Public Lobby' and 'Private Lobby' options
-    \end{itemize}
-    
-    \item Testcase 6: Join Lobby dropdown
-    \begin{itemize}
-        \item Input: Render the Home component
-        \item Expected Output: Clicking the 'Join Lobby' button displays the 'Join Public' and 'Join Private' options
-    \end{itemize}
-    
-    \item Testcase 7: Lobby owner left message display
-    \begin{itemize}
-        \item Input: Set 'ownerLeftMessage' in localStorage to 'The lobby owner has left'
-        \item Expected Output: The message 'The lobby owner has left' is displayed and the 'ownerLeftMessage' key is removed from localStorage
-    \end{itemize}
-    
-    \item Testcase 8: Admin support screen display toggled visible/invisible
-    \begin{itemize}
-        \item Input: Clicking on the "Admin Support" Button
-        \item Expected Output: Initially, the admin support screen is not visible. Then, clicking the 'Admin Support' button opens the support modal. Clicking the 'Close' button in the support modal closes it
-    \end{itemize}
-    
-    \item Testcase 9: Lobby dropdown closing on outside click
-    \begin{itemize}
-        \item Input: Clicking on "Create Lobby" button
-        \item Expected Output: Clicking outside the dropdown (on the document body) closes the dropdown
-    \end{itemize}
-\end{itemize}
-
-\noindent
-\textbf{Joining a Public Lobby}
-\begin{itemize}
-    \item Testcase 1: Fetches and displays available lobbies
-    \begin{itemize}
-        \item Input:
-            \begin{itemize}
-                \item Lobby 1: Player username "Player1", logo "Cat", player limit 4, lobby type "public", use AI: true
-                \item Lobby 2: Player username "Player2", logo "Dog", player limit 4, lobby type "public", use AI: false
-            \end{itemize}
-        \item Expected Output: The UI displays "Open Lobbies" and the player usernames "Player1" and "Player2".
-    \end{itemize}
-
-    \item Testcase 2: Navigates to the lobby page when Join Lobby is clicked
-    \begin{itemize}
-        \item Input:
-            \begin{itemize}
-                \item Lobby 1: Player username "Player1", logo "Cat", player limit 4, lobby type "public", use AI: true
-            \end{itemize}
-        \item Expected Output: The page navigates to the route "/lobby/1".
-    \end{itemize}
-
-    \item Testcase 3: Shows 'No lobbies available' message when no lobbies are available
-    \begin{itemize}
-        \item Input: Empty lobby list
-        \item Expected Output: The UI displays "No lobbies available at the moment."
-    \end{itemize}
-
-    \item Testcase 4: Navigates back to the previous page when Back button is clicked
-    \begin{itemize}
-        \item Input: User clicks on the "Back" button
-        \item Expected Output: The page navigates back to the previous route.
-    \end{itemize}
-\end{itemize}
-
-\noindent
-\textbf{Joining a Private Lobby}
-\begin{itemize}
-    \item Testcase 1: Renders the join private lobby form
-    \begin{itemize}
-        \item Input: Load the `JoinPrivate` component.
-        \item Expected Output: The UI displays a form with the placeholder "Enter Lobby Code" and a button labeled "Join Lobby".
-    \end{itemize}
-
-    \item Testcase 2: Displays error if no lobby code is entered
-    \begin{itemize}
-        \item Input: User clicks on the "Join Lobby" button without entering any code.
-        \item Expected Output: The UI displays "Please enter a lobby code."
-    \end{itemize}
-
-    \item Testcase 3: Displays error for invalid lobby code
-    \begin{itemize}
-        \item Input: User enters "INVALIDCODE" in the input field and clicks "Join Lobby".
-        \item Expected Output: The UI displays "Invalid or inactive lobby code."
-    \end{itemize}
-
-    \item Testcase 4: Displays lobby details on valid lobby code
-    \begin{itemize}
-        \item Input:
-            \begin{itemize}
-                \item User enters "VALIDCODE" in the input field and clicks "Join Lobby".
-                \item Mock lobby data with id "lobby123", player limit 10, use AI: true, and players "Player1" (logo: "Cat") and "Player2" (logo: "Dog").
-            \end{itemize}
-        \item Expected Output: The UI displays "Lobby Details" along with the player names "Player1" and "Player2".
-    \end{itemize}
-
-    \item Testcase 5: Resets to join form when Back button is clicked from lobby details view
-    \begin{itemize}
-        \item Input: User enters "VALIDCODE", clicks "Join Lobby", and then clicks the "Back" button from the lobby details view.
-        \item Expected Output: The UI returns to the initial form with the placeholder "Enter Lobby Code".
-    \end{itemize}
-
-    \item Testcase 6: Navigates to lobby on Join Lobby button click
-    \begin{itemize}
-        \item Input:
-            \begin{itemize}
-                \item User enters "VALIDCODE", clicks "Join Lobby", and then clicks the "Join Lobby" button within the lobby details view.
-                \item Mock lobby data with id "lobby123".
-            \end{itemize}
-        \item Expected Output: The page navigates to the route "/lobby/lobby123".
-    \end{itemize}
-\end{itemize}
-
-\noindent
-\textbf{Admin Support}
-\begin{itemize}
-    \item Testcase 1: Renders the support popup with form elements
-    \begin{itemize}
-        \item Input: Load the `Support` component.
-        \item Expected Output: The UI displays a text area with the placeholder "What do you need help with?", and buttons labeled "Send" and "Close".
-    \end{itemize}
-
-    \item Testcase 2: Does not submit if message is empty
-    \begin{itemize}
-        \item Input: User clicks the "Send" button without entering any message.
-        \item Expected Output: The `addDoc` function is not called.
-    \end{itemize}
-
-    \item Testcase 3: Submits a message and calls `onClose`
-    \begin{itemize}
-        \item Input: User enters "I need help!" in the input field and clicks the "Send" button and mock collection returns "mockCollection".
-        \item Expected Output: 
-            \begin{itemize}
-                \item The `addDoc` function is called with the parameters: "mockCollection", a message object containing `userId: "test-user"`, `message: "I need help!"`, and a `timestamp`.
-                \item The `onClose` function is called.
-            \end{itemize}
-    \end{itemize}
-
-    \item Testcase 4: Logs an error if `addDoc` fails
-    \begin{itemize}
-        \item Input: User enters "Test error" in the input field and clicks the "Send" button.
-        \item Expected Output: The console logs an error message "Error sending message: " followed by the error object.
-    \end{itemize}
-
-    \item Testcase 5: Calls `onClose` when Close button is clicked
-    \begin{itemize}
-        \item Input: User clicks the "Close" button. 
-        \item Expected Output: The `onClose` function is called.
-    \end{itemize}
-\end{itemize}
-
 \subsection{Test Coverage Report}
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|c|c|c|l|}
+\begin{tabular}{|l|c|c|c|c|l|}
 \hline
-\textbf{File} & \textbf{\% Stmts} & \textbf{\% Branch} & \textbf{\% Funcs} & \textbf{\% Lines} \\ \hline
-All files                & 72.38  & 70.90  & 69.34  & 72.97 \\ \hline
-components               & 40.00  & 100.00 & 25.00  & 40.00 \\ \hline
-\hspace{1em}App.jsx      & 40.00  & 100.00 & 25.00  & 40.00 \\ \hline
-components/Home          & 76.47  & 82.05  & 62.50  & 76.00 \\ \hline
-\hspace{1em}Home.jsx     & 76.47  & 82.05  & 62.50  & 76.00 \\ \hline
-components/Home/Join     & 90.53  & 80.55  & 91.66  & 91.78  \\ \hline
-\hspace{1em}JoinPrivate.jsx & 94.73  & 87.5  & 100.00  & 94.73 \\ \hline
-\hspace{1em}JoinPublic.jsx  & 86.11  & 75.00  & 87.50  & 88.57 \\ \hline
-components/Home/Lobby  & 64.28 & 62.65  & 74.19 & 66.08 \\ \hline
-\hspace{1em}Lobby.jsx  & 64.28 & 62.65  & 74.19 & 66.08 \\ \hline
-components/Home/Support  & 88.88 & 83.33  & 75.00 & 88.23 \\ \hline
-\hspace{1em}Support.jsx  & 88.88 & 83.33  & 75.00 & 88.23 \\ \hline
-components/Login         & 73.86  & 47.36  & 50.00  & 74.41 \\ \hline
-\hspace{1em}Login.jsx    & 73.86  & 47.36  & 50.00  & 74.41 \\ \hline
-components/SignUp        & 71.01  & 80.55  & 80.00  & 70.58 \\ \hline
-\hspace{1em}SignUp.jsx   & 71.01  & 80.55  & 80.00  & 70.58 \\ \hline
+\textbf{File} & \textbf{\% Stmts} & \textbf{\% Branch} & \textbf{\% Funcs} & \textbf{\% Lines} & \textbf{Tester} \\ \hline
+All files                & 72.38  & 70.90  & 69.34  & 72.97  & N/A \\ \hline
+components               & 40.00  & 100.00 & 25.00  & 40.00  & Chase \\ \hline
+\hspace{1em}App.jsx      & 40.00  & 100.00 & 25.00  & 40.00  & Chase \\ \hline
+components/Home          & 76.47  & 82.05  & 62.50  & 76.00  & Ryland \\ \hline
+\hspace{1em}Home.jsx     & 76.47  & 82.05  & 62.50  & 76.00  & Ryland \\ \hline
+components/Home/Join     & 90.53  & 80.55  & 91.66  & 91.78  & Silas \\ \hline
+\hspace{1em}JoinPrivate.jsx & 94.73  & 87.50  & 100.00  & 94.73 & Silas \\ \hline
+\hspace{1em}JoinPublic.jsx  & 86.11  & 75.00  & 87.50  & 88.57 & Silas \\ \hline
+components/Home/Lobby    & 64.28  & 62.65  & 74.19  & 66.08  & Chase \\ \hline
+\hspace{1em}Lobby.jsx    & 64.28  & 62.65  & 74.19  & 66.08  & Chase \\ \hline
+components/Home/Support  & 88.88  & 83.33  & 75.00  & 88.23  & Chase \\ \hline
+\hspace{1em}Support.jsx  & 88.88  & 83.33  & 75.00  & 88.23  & Chase \\ \hline
+components/Login         & 73.86  & 47.36  & 50.00  & 74.41  & Ryland \\ \hline
+\hspace{1em}Login.jsx    & 73.86  & 47.36  & 50.00  & 74.41  & Ryland \\ \hline
+components/SignUp        & 71.01  & 80.55  & 80.00  & 70.58  & Ryland \\ \hline
+\hspace{1em}SignUp.jsx   & 71.01  & 80.55  & 80.00  & 70.58  & Ryland \\ \hline
 \end{tabular}
-\caption{Test coverage summary for our components}
-\label{table:test-coverage}
+\caption{Test coverage summary for our components, showing responsibility}
+\label{table:test-coverage-responsibility}
 \end{table}
+
+\section*{Test Responsibility by Tester}
+
+\subsection*{Chase}
+\begin{itemize}
+    \item \texttt{App.jsx}
+    \item \texttt{Lobby.jsx} (under \texttt{components/Home/Lobby})
+    \item \texttt{Support.jsx} (under \texttt{components/Home/Support})
+    \item \texttt{Home/Lobby}
+    \item \texttt{Home/Support}
+\end{itemize}
+
+\noindent Chase was responsible for foundational components like App.jsx and user assistance features like Support.jsx. His work on App.jsx focused on setting up the routing and navigation structure, which went smoothly due to his familiarity with React's routing system. For Lobby.jsx and Home/Lobby, Chase ensured real time updates for player interactions, a task that presented challenges but was resolved through debugging and collaboration. The Support.jsx component allowed users to send queries efficiently, reflecting Chase's ability to integrate user-facing features with backend systems.
+
+\subsection*{Ryland}
+\begin{itemize}
+    \item \texttt{Home.jsx} (under \texttt{components/Home})
+    \item \texttt{Login.jsx} (under \texttt{components/Login})
+    \item \texttt{SignUp.jsx} (under \texttt{components/SignUp})
+\end{itemize}
+
+\noindent Ryland worked on user-facing components like Home.jsx, Login.jsx, and `SignUp.jsx`. His development of Home.jsx emphasized intuitive navigation and seamless transitions, which he executed effectively by leveraging modular design principles. In Login.jsx, Ryland ensured robust authentication by focusing on input validation and error handling. Similarly, the SignUp.jsx component provided a user friendly registration process, demonstrating his ability to implement secure and interactive interfaces. Ryland’s work was crucial for ensuring a smooth user experience.
+
+\subsection*{Silas}
+\begin{itemize}
+    \item \texttt{JoinPrivate.jsx} (under \texttt{components/Home/Join})
+    \item \texttt{JoinPublic.jsx} (under \texttt{components/Home/Join})
+\end{itemize}
+
+\noindent Silas handled the dynamic and data-driven components JoinPrivate.jsx and JoinPublic.jsx. In JoinPrivate.jsx, he implemented secure lobby code validation, ensuring only authorized users could join private games. This task required a deep understanding of error handling and server communication. The JoinPublic.jsx component focused on fetching and displaying available lobbies, requiring real time updates and a user friendly interface. Despite the complexities, Silas’s systematic approach resulted in reliable and efficient components.
+
+\noindent Marley couldn’t contribute to the testing because he ran into ongoing technical issues with his system, which made it impossible to run the test suite. He tried troubleshooting and asked for help, but unfortunately, the problem couldn’t be resolved in time. As a result, he wasn’t able to complete or verify any tests during this phase.
 
 \begin{figure}[H]
     \centering
@@ -374,178 +80,4 @@ components/SignUp        & 71.01  & 80.55  & 80.00  & 70.58 \\ \hline
 \end{itemize}
 
 \noindent We were able to run a substantial portion of our test suite, covering many features of the application. However, the results indicate areas that need further attention. With 13 out of 14 test suites failing and a significant number of test cases not passing, it is clear that some critical features require debugging and refinement. Tests related to core functionalities, such as gameplay mechanics and user interactions, seem to have lower success rates and need to be revisited. Despite these challenges, we managed to pass 45 tests, achieving partial validation of the application’s functionality. Moving forward, we will focus on analyzing the failed test cases and improving coverage for key features, ensuring a more robust and reliable system.
-
-
-\subsection{Working Testcases}
-For the following testcases they are all test-able and working.
-
-\textbf{Sending Messages}
-\begin{itemize}
-    \item Testcase 1: User sends an empty message
-    \begin{itemize}
-        \item Input: Message = ""
-        \item Expected Output: "Message cannot be empty"
-    \end{itemize}
-
-    \item Testcase 2: User sends a message to a valid conversation
-    \begin{itemize}
-        \item Input: Message = "Hello!" and existing conversation is selected
-        \item Expected Output: Message successfully sent and appears in chat history
-    \end{itemize}
-
-    \item Testcase 3: User attempts to send a message without a selected conversation
-    \begin{itemize}
-        \item Input: Message = "Hello!" but no selected conversation
-        \item Expected Output: "No conversation selected"
-    \end{itemize}
-\end{itemize}
-
-\noindent
-\textbf{Game Mechanics of Go Fish}
-\begin{itemize}
-    \item Testcase 1: Game setup with correct card distribution
-    \begin{itemize}
-        \item Input: Start a game with 4 players
-        \item Expected Output: Each player is dealt 5 cards, and the remaining cards are placed in the middle of the table as the deck.
-    \end{itemize}
-
-    \item Testcase 2: Player asks another player for a card they have
-    \begin{itemize}
-        \item Input: Player A has 2 Aces and asks Player B for Aces (Player B has 1 Ace)
-        \item Expected Output: Player B gives 1 Ace to Player A, resulting in Player A holding 3 Aces.
-    \end{itemize}
-
-    \item Testcase 3: Player asks another player for a card they don’t have
-    \begin{itemize}
-        \item Input: Player A asks Player C for Kings (Player C has no Kings)
-        \item Expected Output: Player A draws a card from the deck. If it’s a King, Player A goes again. Otherwise, Player A's turn ends.
-    \end{itemize}
-
-    \item Testcase 4: Player completes a set
-    \begin{itemize}
-        \item Input: Player B collects all 4 Queens
-        \item Expected Output: Player B places the set of 4 Queens face-up on the table.
-    \end{itemize}
-
-    \item Testcase 5: Player runs out of cards during their turn
-    \begin{itemize}
-        \item Input: Player A has 1 card, gives it away, leaving them with 0 cards
-        \item Expected Output: Player A draws 5 new cards from the deck.
-    \end{itemize}
-
-    \item Testcase 6: Player draws the last card from the deck
-    \begin{itemize}
-        \item Input: Deck contains 1 remaining card, Player A goes fishing
-        \item Expected Output: Player A draws the final card, deck is now empty.
-    \end{itemize}
-
-    \item Testcase 7: Game ends and calculates winner
-    \begin{itemize}
-        \item Input: All cards from the deck are used and players run out of cards
-        \item Expected Output: Game ends, and the player with the most sets wins.
-    \end{itemize}
-\end{itemize}
-
-\noindent
-\textbf{Searching for Users to Message}
-\begin{itemize}
-    \item Testcase 1: User searches for a nonexistent username
-    \begin{itemize}
-        \item Input: Username = "NonexistentUser"
-        \item Expected Output: "User not found"
-    \end{itemize}
-
-    \item Testcase 2: User searches for themselves (currently logged-in user)
-    \begin{itemize}
-        \item Input: Username = Current user’s username
-        \item Expected Output: "You cannot search for yourself"
-    \end{itemize}
-
-    \item Testcase 3: User searches with an empty search field
-    \begin{itemize}
-        \item Input: Username = ""
-        \item Expected Output: "Please enter a username to search"
-    \end{itemize}
-
-    \item Testcase 4: User searches for an existing username
-    \begin{itemize}
-        \item Input: Username = "existingUser"
-        \item Expected Output: Display the user’s username and button to start a new conversation
-    \end{itemize}
-\end{itemize}
-
-\noindent
-\textbf{Shop Functionality Test Cases}
-\begin{itemize}
-    \item Testcase 1: User tries to purchase an item they cannot afford
-    \begin{itemize}
-        \item Input: User currency = 100, Item price = 200
-        \item Expected Output: "You need more money" error message, purchase unsuccessful
-    \end{itemize}
-
-    \item Testcase 2: User tries to purchase an item they already own
-    \begin{itemize}
-        \item Input: User inventory includes Item ID = 1 (Apple), User attempts to buy Item ID = 1 again
-        \item Expected Output: "You already own this item" error message, purchase unsuccessful
-    \end{itemize}
-
-    \item Testcase 3: Guest user makes a valid purchase
-    \begin{itemize}
-        \item Input: User type = Guest, User currency = 500, Item price = 200, Item ID = 2 (Banana)
-        \item Expected Output:
-        \begin{itemize}
-            \item User currency updated to 300
-            \item Item added to inventory
-            \item Success message: "You bought Banana!"
-        \end{itemize}
-    \end{itemize}
-
-    \item Testcase 4: Logged-in user makes a valid purchase
-    \begin{itemize}
-        \item Input: User type = Logged-in user, User currency = 1000, Item price = 300, Item ID = 4 (Grape)
-        \item Expected Output:
-        \begin{itemize}
-            \item User currency updated to 700
-            \item Item added to inventory in Firestore
-            \item Success message: "You bought Grape!"
-        \end{itemize}
-    \end{itemize}
-
-    \item Testcase 5: User tries to purchase with no authentication (no user or guest)
-    \begin{itemize}
-        \item Input: No valid authentication, attempt to purchase Item ID = 5 (Candy)
-        \item Expected Output: "Transaction failed: User does not exist" error message, purchase unsuccessful
-    \end{itemize}
-
-    \item Testcase 6: Background music toggles correctly
-    \begin{itemize}
-        \item Input: Toggle music button clicked when music is playing
-        \item Expected Output: Music pauses, button text changes to "Music"
-    \end{itemize}
-
-    \item Testcase 7: User navigates back to home
-    \begin{itemize}
-        \item Input: Click "Home" button in the shop
-        \item Expected Output: Music stops, user navigated to `/home`
-    \end{itemize}
-
-    \item Testcase 8: Shop items display correctly
-    \begin{itemize}
-        \item Input: Inventory includes Item ID = 3 (Cherry), User currency = 500
-        \item Expected Output:
-        \begin{itemize}
-            \item All shop items displayed with correct name, price, and icon
-            \item "Purchased" label visible for Item ID = 3, purchase button disabled for it
-        \end{itemize}
-    \end{itemize}
-
-    \item Testcase 9: User data is correctly fetched on component mount
-    \begin{itemize}
-        \item Input: Logged-in user with 700 coins and inventory including Item ID = 6 (Pizza)
-        \item Expected Output:
-        \begin{itemize}
-            \item User currency displayed as 700
-            \item Inventory reflects ownership of Pizza, purchase button disabled for it
-        \end{itemize}
-    \end{itemize}
-\end{itemize}
+\pagebreak
