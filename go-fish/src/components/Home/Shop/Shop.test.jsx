@@ -74,7 +74,7 @@ describe('Shop Component', () => {
 
     
 
-    // Testcase 4: Music toggling works correctly
+    // Testcase 3: Music toggling works correctly
     it('toggles background music play/pause', async () => {
         renderShop();
 
@@ -88,7 +88,7 @@ describe('Shop Component', () => {
 
     
 
-    // Testcase 6: Navigates back to home when "Home" button is clicked
+    // Testcase 4: Navigates back to home when "Home" button is clicked
     it('navigates back to home page when Home button is clicked', () => {
         renderShop();
 
