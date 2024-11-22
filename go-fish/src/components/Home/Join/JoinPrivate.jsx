@@ -1,27 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { Check, X, Cat, Ghost, Dog, Bot, Bird, Clock } from 'lucide-react';
 import './JoinPrivate.css';
-
-const renderUserLogo = (logo) => {
-  switch (logo) {
-    case 'Cat': return <Cat className="user-icon" />;
-    case 'Ghost': return <Ghost className="user-icon" />;
-    case 'Dog': return <Dog className="user-icon" />;
-    case 'Bot': return <Bot className="user-icon" />;
-    case 'Bird': return <Bird className="user-icon" />;
-    default: return <Bird className="user-icon" />;
-  }
-};
+import oldgameMusic from "../../../assets/oldgame-music.mp3";
 
 const JoinPrivate = () => {
   const [lobbyCode, setLobbyCode] = useState('');
   const [lobbyDetails, setLobbyDetails] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isPlaying, setIsPlaying] = useState(false); // Added isPlaying state
   const navigate = useNavigate();
 
+  const audio = new Audio(oldgameMusic);
+
+  // Render User Logo Helper
+  const renderUserLogo = (logo) => {
+    switch (logo) {
+      case 'Cat': return <Cat className="user-icon" />;
+      case 'Ghost': return <Ghost className="user-icon" />;
+      case 'Dog': return <Dog className="user-icon" />;
+      case 'Bot': return <Bot className="user-icon" />;
+      case 'Bird': return <Bird className="user-icon" />;
+      default: return <Bird className="user-icon" />;
+    }
+  };
+
+  // Join Lobby Handler
   const handleJoinLobby = async () => {
     setErrorMessage(''); // Clear previous error message
 
@@ -52,14 +58,40 @@ const JoinPrivate = () => {
     }
   };
 
+  // Navigate to Lobby
   const joinLobby = () => {
     navigate(`/lobby/${lobbyDetails.id}`);
   };
 
+  // Reset Form and Details
   const handleBack = () => {
-    setLobbyDetails(null); // Reset lobby details view
-    setLobbyCode(''); // Clear lobby code input
-    setErrorMessage(''); // Clear any previous error message
+    setLobbyDetails(null);
+    setLobbyCode('');
+    setErrorMessage('');
+  };
+
+  // Audio Effect for Background Music
+  useEffect(() => {
+    audio.loop = true;
+    audio.play().then(() => {
+      setIsPlaying(true);
+    }).catch((err) => {
+      console.log('Autoplay blocked:', err);
+    });
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, []); 
+
+  // Toggle Music Playback
+  const toggleMusic = () => {
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch((err) => console.log('Music error:', err));
+    }
+    setIsPlaying(!isPlaying);
   };
 
   return (

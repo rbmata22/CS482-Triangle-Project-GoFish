@@ -7,7 +7,8 @@ import { Trophy, Eye } from 'lucide-react';
 import './Game.css';
 import PlayerCard, { cardComponents } from './PlayerCard';
 import EditableText from './EditableText';
-import gameMusic from '../../../../../assets/game-music.mp3';
+import gameMusic from "../../../../assets/game-music.mp3";
+
 
 const Game = () => {
   // URL and navigation

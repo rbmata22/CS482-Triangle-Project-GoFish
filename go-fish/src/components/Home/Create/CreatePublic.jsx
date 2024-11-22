@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, Bot, ArrowLeft, Clock, Trophy } from 'lucide-react';
 import { db } from '../../config/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import './CreatePublic.css';
+import oldgameMusic from "../../../assets/oldgame-music.mp3";
 
 const deckOptions = {
   2: [15, 30, 52],
@@ -15,16 +16,20 @@ const deckOptions = {
 
 const gameModes = {
   classic: "Classic (Most Sets Wins)",
-  firstToSet: "First to Set Wins"
+  firstToSet: "First to Set Wins",
 };
 
 const CreatePublic = () => {
   const [playerLimit, setPlayerLimit] = useState(4);
   const [useAI, setUseAI] = useState(true);
   const [deckSize, setDeckSize] = useState(deckOptions[4][0]); // Default to first option for 4 players
-  const [gameMode, setGameMode] = useState('classic'); // Add game mode state
+  const [gameMode, setGameMode] = useState('classic');
+  const [isPlaying, setIsPlaying] = useState(false); // State for managing audio playback
   const navigate = useNavigate();
 
+  const audio = new Audio(oldgameMusic);
+
+  // Create a new public lobby
   const handleCreateLobby = async () => {
     try {
       const ownerUsername = localStorage.getItem('username'); // Retrieve the owner's username
@@ -34,7 +39,7 @@ const CreatePublic = () => {
         playerLimit,
         useAI,
         deckSize,
-        gameMode, // Add game mode to lobby data
+        gameMode,
         players: [],
         status: 'setting up', // Initial status
         createdAt: new Date(),
@@ -48,10 +53,36 @@ const CreatePublic = () => {
     }
   };
 
+  // Handle changes in player limit
   const handlePlayerLimitChange = (e) => {
     const limit = Number(e.target.value);
     setPlayerLimit(limit);
     setDeckSize(deckOptions[limit][0]); // Set deck size to the first option for the selected player limit
+  };
+
+  // Audio effect for background music
+  useEffect(() => {
+    audio.loop = true;
+    audio.play().then(() => {
+      setIsPlaying(true);
+    }).catch((err) => {
+      console.log('Autoplay blocked:', err);
+    });
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, []); 
+
+  // Toggle music playback
+  const toggleMusic = () => {
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch((err) => console.log('Music error:', err));
+    }
+    setIsPlaying(!isPlaying);
   };
 
   return (
@@ -60,9 +91,9 @@ const CreatePublic = () => {
         <button className="back-button" onClick={() => navigate('/home')}>
           <ArrowLeft /> Back
         </button>
-        
+
         <h2 className="lobby-title">Create Public Lobby</h2>
-        
+
         <div className="lobby-settings">
           <div className="setting-group">
             <label className="setting-label">
@@ -92,7 +123,7 @@ const CreatePublic = () => {
               onChange={handlePlayerLimitChange}
               className="setting-select"
             >
-              {[2, 3, 4, 5, 6].map(limit => (
+              {[2, 3, 4, 5, 6].map((limit) => (
                 <option key={limit} value={limit}>{limit} Players</option>
               ))}
             </select>
