@@ -84,7 +84,7 @@ const JoinPrivate = () => {
     };
   }, []); 
 
-  // Toggle Music Playback
+  // Music Playback
   const toggleMusic = () => {
     if (isPlaying) {
       audio.pause();
