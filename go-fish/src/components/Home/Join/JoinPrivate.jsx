@@ -102,8 +102,6 @@ const JoinPrivate = () => {
           <div className="lobby-info">
             <p><strong>Lobby Code:</strong> {lobbyCode}</p>
             <p><strong>Player Limit:</strong> {lobbyDetails.playerLimit}</p>
-            <p><strong>AI Fill:</strong> {lobbyDetails.useAI ? 'Enabled' : 'Disabled'}</p>
-            <p><strong>Deck Size:</strong> {lobbyDetails.deckSize} Cards <Clock className="deck-size-icon" /></p>
             <p><strong>Players:</strong></p>
             <ul>
               {lobbyDetails.players.map((player, index) => (
