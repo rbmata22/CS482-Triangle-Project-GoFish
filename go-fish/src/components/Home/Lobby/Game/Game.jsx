@@ -8,6 +8,7 @@ import './Game.css';
 import PlayerCard, { cardComponents } from './PlayerCard';
 import EditableText from './EditableText';
 import gameMusic from "../../../../assets/game-music.mp3";
+import { useRef } from 'react';
 
 
 const Game = () => {
@@ -26,8 +27,8 @@ const Game = () => {
   const [gameCompleted, setGameCompleted] = useState(false);
   const [showGameEndAnimation, setShowGameEndAnimation] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
-
-  const audio = new Audio(gameMusic);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(new Audio(gameMusic));
 
   // Fetch and initialize game data
   useEffect(() => {
@@ -53,26 +54,23 @@ const Game = () => {
   }, [lobbyId, navigate]);
 
 
-useEffect(() => {
-  audio.loop = true;
-  audio.play().then(() => {
-    setIsPlaying(true);
-  }).catch((err) => {
-    console.log('Autoplay blocked:', err);
-  });
-  return () => {
-    audio.pause();
-    audio.currentTime = 0;
-  };
-}, [audio]);
-const toggleMusic = () => {
-  if (isPlaying) {
-    audio.pause();
-  } else {
-    audio.play().catch((err) => console.log('Music error:', err));
-  }
-  setIsPlaying(!isPlaying);
-};
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.loop = true;
+    audio.play()
+      .then(() => {
+        setIsPlaying(true);
+      })
+      .catch((err) => {
+        console.log('Autoplay blocked:', err);
+      });
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, []);
+  
 
   useEffect(() => {
     if (gameState?.status === 'completed' && !gameCompleted) {
@@ -174,13 +172,13 @@ const toggleMusic = () => {
   // Card selection handling
   const handleCardSelect = async (card) => {
     if (!isCurrentPlayersTurn) return;
-    
     const lobbyRef = doc(db, "Lobbies", lobbyId);
     await updateDoc(lobbyRef, {
       'gameState.selectedCard': card,
       'gameState.message': `${username} selected ${card.rank} of ${card.suit}`
     });
   };
+  
 
   // Game End Handling
   const handleGameEnd = async (winner = null) => {
