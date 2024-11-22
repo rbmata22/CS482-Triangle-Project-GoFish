@@ -7,6 +7,7 @@ import { Trophy, Eye } from 'lucide-react';
 import './Game.css';
 import PlayerCard, { cardComponents } from './PlayerCard';
 import EditableText from './EditableText';
+import gameMusic from '../../../../../assets/game-music.mp3';
 
 const Game = () => {
   // URL and navigation
@@ -24,6 +25,8 @@ const Game = () => {
   const [gameCompleted, setGameCompleted] = useState(false);
   const [showGameEndAnimation, setShowGameEndAnimation] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
+
+  const audio = new Audio(gameMusic);
 
   // Fetch and initialize game data
   useEffect(() => {
@@ -47,6 +50,28 @@ const Game = () => {
 
     return () => unsubscribe();
   }, [lobbyId, navigate]);
+
+
+useEffect(() => {
+  audio.loop = true;
+  audio.play().then(() => {
+    setIsPlaying(true);
+  }).catch((err) => {
+    console.log('Autoplay blocked:', err);
+  });
+  return () => {
+    audio.pause();
+    audio.currentTime = 0;
+  };
+}, [audio]);
+const toggleMusic = () => {
+  if (isPlaying) {
+    audio.pause();
+  } else {
+    audio.play().catch((err) => console.log('Music playback error:', err));
+  }
+  setIsPlaying(!isPlaying);
+};
 
   useEffect(() => {
     if (gameState?.status === 'completed' && !gameCompleted) {
