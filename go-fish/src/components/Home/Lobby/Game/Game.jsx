@@ -68,7 +68,7 @@ const toggleMusic = () => {
   if (isPlaying) {
     audio.pause();
   } else {
-    audio.play().catch((err) => console.log('Music playback error:', err));
+    audio.play().catch((err) => console.log('Music error:', err));
   }
   setIsPlaying(!isPlaying);
 };
