@@ -1,0 +1,249 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{float} 
+\usepackage{placeins} 
+
+\title{Final Project Documentation}
+\author{Go Fish}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+Intro text blah blah.
+
+\section{Requirements}
+
+\subsection{Functional Requirements: User Stories}
+\begin{table}[H] 
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|p{2.5cm}|c|c|c|p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{2.5cm}|c|p{2.5cm}|c|}
+\hline
+\textbf{ID} & \textbf{Story Title} & \textbf{Depends On} & \textbf{Points} & \textbf{Priority} & \textbf{As a/an [user type]} & \textbf{I want [functionality]} & \textbf{So that [value]} & \textbf{NFR} & \textbf{Definition of Done} & \textbf{Epic ID} & \textbf{Notes} & \textbf{Status} \\ \hline
+S1 & Create Account & - & 2 & Medium & Player & to create an account & I can save my data/stats from playing Go Fish & Security & Account created & 1 & - & Closed \\ \hline
+S2 & Join One Session & - & 2 & Medium & Player & to be able to join for ONE session & I can still play with my friends until I log out & Temporary Access & Join session works & 1 & - & Closed \\ \hline
+S3 & Account Prompt & - & 1 & High & Player & to be prompted to create a new account or log into a pre-existing account & I can have security and save my prior progress & Usability & Prompt appears & 2 & - & Closed \\ \hline
+S4 & Secure Logout & - & 2 & Medium & Player & to be able to securely log out of my account & I can leave the program and return later & Security & Logout implemented & 2 & - & Closed \\ \hline
+S5 & Main Menu Access & - & 3 & High & Player & to have a main menu & I can easily access my key features & Usability & Menu accessible & 3 & - & Closed \\ \hline
+S6 & Earn Currency & - & 2 & Medium & Player & to be able to obtain currency from Go Fish games & I can make wagers or purchase other things & Gameplay Value & Currency added & 3 & - & Closed \\ \hline
+S7 & Add Friend & - & 2 & Medium & Player & to enter the username of a friend I want to add & I can have easier access to messaging/inviting them & Usability & Friend added & 4 & - & Closed \\ \hline
+S8 & Friend Requests & - & 3 & Medium & Player & to see who has requested to be my friend & I can accept/decline new requests & User Control & Requests visible & 4 & - & Closed \\ \hline
+S9 & Remove Friend & - & 2 & Low & Player & to remove unwanted friends & I can properly manage my "friends" & User Control & Friend removed & 4 & - & Closed \\ \hline
+S10 & Lobby Invite & - & 3 & Medium & Player & to invite my friend to my lobby & I can streamline the process of typing out the code & Usability & Invite works & 5 & - & Closed \\ \hline
+S11 & Send Currency & - & 3 & Medium & Player & to send my friends currency & They can use it in the shop or in-game & Gameplay Value & Currency sent & 5 & - & Closed \\ \hline
+S12 & Access Shop & - & 3 & High & Player & access to the shop in my main menu & I can purchase new icons or other cosmetics & Usability & Shop works & 6 & - & Closed \\ \hline
+S13 & Change Player Icon & - & 1 & Low & Player & to change my player icon & I can express myself through cool icons & Personalization & Icon change works & 6 & - & Closed \\ \hline
+S14 & Private Messaging & - & 2 & Medium & Player & to message my friends in private & I can send specific information like lobby codes & Communication & Messaging works & 7 & - & Closed \\ \hline
+S15 & Lobby Chat & - & 2 & Medium & Player & to message the whole lobby & I can interact with others/ask questions & Communication & Chat visible & 7 & - & Closed \\ \hline
+S16 & Tutorial Bot & - & 3 & High & Player & to be trained by a tutorial bot & I can learn how to play Go Fish & Usability & Tutorial functional & 8 & - & Closed \\ \hline
+S17 & Create Private Lobby & - & 5 & High & Player & to be able to create a private lobby & Only invited players can join & Privacy & Lobby works & 9 & - & Closed \\ \hline
+S18 & Create Public Lobby & - & 5 & High & Player & to be able to create a public lobby & Any player can join and play & Accessibility & Lobby created & 9 & - & Closed \\ \hline
+S19 & Join Lobby with Code & - & 5 & High & Player & to join a lobby using a login code & I can play with my friends online & Security & Code login functional & 9 & - & Closed \\ \hline
+S20 & Join Closed Lobby & - & 5 & High & Player & to join an open lobby & I can play with other players online & Accessibility & Lobby joined & 9 & - & Open \\ \hline
+S21 & Manage Players & - & 5 & High & Admin & to manage other players & Games are run smoothly & Administration & Tools implemented & 10 & - & Closed \\ \hline
+S22 & Monitor Chat Logs & - & 2 & Medium & Admin & to check on players' chat logs & I can ensure no profanity or harassment & Moderation & Logs accessible & 10 & - & Closed \\ \hline
+S23 & Ban Players & - & 5 & High & Admin & to ban misbehaving players & I can ensure the safety of others & Moderation & Ban functional & 10 & - & Closed \\ \hline
+S24 & Ready Up for Game & - & 1 & Medium & Player & to queue up when ready to start the game & Games start when everyone is ready & Gameplay Flow & Ready queue functional & 11 & - & Closed \\ \hline
+S25 & Bet Credits & - & 3 & Medium & Player & to bet hotel credits during Go Fish & I can use these credits at the hotel & Gameplay Value & Betting functional & 11 & - & Closed \\ \hline
+S26 & View Deck & - & 2 & Medium & Player & to check all cards in my deck & I can plan my moves better & Gameplay Value & Deck visible & 11 & - & Closed \\ \hline
+S27 & Ask Card Rank & - & 8 & High & Player & to ask other players for a specific rank & I can add cards to my deck or Go Fish & Gameplay Flow & Rank query works & 12 & - & Closed \\ \hline
+S28 & View Record & - & 1 & Low & Player & to see my overall wins and losses & I can compare my record with others & User Control & Record visible & 12 & - & Closed \\ \hline
+TT29 & Background Music & - & 3 & Low & Player & to hear music in different parts of the game & I can have a more enjoyable experience & Aesthetics & Music works & 13 & - & Closed \\ \hline
+TT30 & Maintain Documentation & - & 3 & High & Admin & to create and maintain clear documentation for the project & Contributors can easily work with the code & Project Management & Documentation complete & 13 & - & Closed \\ \hline
+\end{tabular}
+}
+\caption{Functional Requirements: User Stories}
+\label{tab:functional_user_stories}
+\end{table}
+
+\subsection{Non-Functional Requirements}
+Non-functional requirements:
+\begin{itemize}
+    \item Placeholder: blah blah
+    \item Placeholder: blah blah
+\end{itemize}
+
+\subsection{UI Description}
+\begin{figure}[H] 
+    \centering
+    \includegraphics[width=\textwidth]{ui_screenshot.png}
+    \caption{Here is blah blah}
+    \label{fig:ui_screenshot}
+\end{figure}
+
+\newpage
+\section{Sprints}
+\FloatBarrier
+
+\subsection{Overview}
+Table summarizing sprint data. Including placeholder numbers!
+\begin{longtable}{|p{1.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|}
+\hline
+\textbf{Sprint} & \textbf{Total Points} & \textbf{Points Attempted} & \textbf{Points Completed} & \textbf{Team Speed} & \textbf{Team Cycle Time} \\ \hline
+1 & 50 & 40 & 35 & 7 & 5 hours/point \\ \hline
+2 & 40 & 35 & 30 & 6 & 6 hours/point \\ \hline
+1 & 50 & 40 & 35 & 7 & 5 hours/point \\ \hline
+\end{longtable}
+
+
+\subsection{Sprint 1}
+Describe changes, data, and retrospective insights for Sprint 1. Include tables of story details and member statistics.
+
+\subsection{Sprint 2}
+Similar to Sprint 1, include a description, data, and retrospective for Sprint 2.
+
+\subsection{Sprint 3}
+Similar to Sprint 1, include a description, data, and retrospective for Sprint 3.
+
+\subsection{Future Iterations}
+List unfinished user stories and explain how future sprints will address them.
+
+\newpage
+\section{Architecture and Design}
+\FloatBarrier 
+
+\subsection{Technologies Used}
+Describe programming languages, frameworks, databases, and architecture.
+
+\subsection{Diagrams}
+\begin{figure}[H] 
+    \centering
+    \includegraphics[width=\textwidth]{architecture_diagram.png}
+    \caption{System Architecture}
+    \label{fig:architecture_diagram}
+\end{figure}
+
+\newpage
+\section{Testing and Internal Quality}
+
+\subsection{Test Coverage Report}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|l|}
+\hline
+\textbf{File} & \textbf{\% Stmts} & \textbf{\% Branch} & \textbf{\% Funcs} & \textbf{\% Lines} & \textbf{Tester} \\ \hline
+All files                & 72.38  & 70.90  & 69.34  & 72.97  & N/A \\ \hline
+components               & 40.00  & 100.00 & 25.00  & 40.00  & Chase \\ \hline
+\hspace{1em}App.jsx      & 40.00  & 100.00 & 25.00  & 40.00  & Chase \\ \hline
+components/Home          & 76.47  & 82.05  & 62.50  & 76.00  & Ryland \\ \hline
+\hspace{1em}Home.jsx     & 76.47  & 82.05  & 62.50  & 76.00  & Ryland \\ \hline
+components/Home/Join     & 90.53  & 80.55  & 91.66  & 91.78  & Silas \\ \hline
+\hspace{1em}JoinPrivate.jsx & 94.73  & 87.50  & 100.00  & 94.73 & Silas \\ \hline
+\hspace{1em}JoinPublic.jsx  & 86.11  & 75.00  & 87.50  & 88.57 & Silas \\ \hline
+components/Home/Lobby    & 64.28  & 62.65  & 74.19  & 66.08  & Chase \\ \hline
+\hspace{1em}Lobby.jsx    & 64.28  & 62.65  & 74.19  & 66.08  & Chase \\ \hline
+components/Home/Support  & 88.88  & 83.33  & 75.00  & 88.23  & Chase \\ \hline
+\hspace{1em}Support.jsx  & 88.88  & 83.33  & 75.00  & 88.23  & Chase \\ \hline
+components/Login         & 73.86  & 47.36  & 50.00  & 74.41  & Ryland \\ \hline
+\hspace{1em}Login.jsx    & 73.86  & 47.36  & 50.00  & 74.41  & Ryland \\ \hline
+components/SignUp        & 71.01  & 80.55  & 80.00  & 70.58  & Ryland \\ \hline
+\hspace{1em}SignUp.jsx   & 71.01  & 80.55  & 80.00  & 70.58  & Ryland \\ \hline
+\end{tabular}
+\caption{Test coverage summary for our components, showing responsibility}
+\label{table:test-coverage-responsibility}
+\end{table}
+
+\section*{Test Responsibility by Tester}
+
+\subsection*{Chase}
+\begin{itemize}
+    \item \texttt{App.jsx}
+    \item \texttt{Lobby.jsx} (under \texttt{components/Home/Lobby})
+    \item \texttt{Support.jsx} (under \texttt{components/Home/Support})
+    \item \texttt{Home/Lobby}
+    \item \texttt{Home/Support}
+\end{itemize}
+
+\noindent Chase was responsible for foundational components like App.jsx and user assistance features like Support.jsx. His work on App.jsx focused on setting up the routing and navigation structure, which went smoothly due to his familiarity with React's routing system. For Lobby.jsx and Home/Lobby, Chase ensured real time updates for player interactions, a task that presented challenges but was resolved through debugging and collaboration. The Support.jsx component allowed users to send queries efficiently, reflecting Chase's ability to integrate user-facing features with backend systems.
+
+\subsection*{Ryland}
+\begin{itemize}
+    \item \texttt{Home.jsx} (under \texttt{components/Home})
+    \item \texttt{Login.jsx} (under \texttt{components/Login})
+    \item \texttt{SignUp.jsx} (under \texttt{components/SignUp})
+\end{itemize}
+
+\noindent Ryland worked on user-facing components like Home.jsx, Login.jsx, and `SignUp.jsx`. His development of Home.jsx emphasized intuitive navigation and seamless transitions, which he executed effectively by leveraging modular design principles. In Login.jsx, Ryland ensured robust authentication by focusing on input validation and error handling. Similarly, the SignUp.jsx component provided a user friendly registration process, demonstrating his ability to implement secure and interactive interfaces. Ryland’s work was crucial for ensuring a smooth user experience.
+
+\subsection*{Silas}
+\begin{itemize}
+    \item \texttt{JoinPrivate.jsx} (under \texttt{components/Home/Join})
+    \item \texttt{JoinPublic.jsx} (under \texttt{components/Home/Join})
+\end{itemize}
+
+\noindent Silas handled the dynamic and data-driven components JoinPrivate.jsx and JoinPublic.jsx. In JoinPrivate.jsx, he implemented secure lobby code validation, ensuring only authorized users could join private games. This task required a deep understanding of error handling and server communication. The JoinPublic.jsx component focused on fetching and displaying available lobbies, requiring real time updates and a user friendly interface. Despite the complexities, Silas’s systematic approach resulted in reliable and efficient components.
+
+\noindent Marley couldn’t contribute to the testing because he ran into ongoing technical issues with his system, which made it impossible to run the test suite. He tried troubleshooting and asked for help, but unfortunately, the problem couldn’t be resolved in time. As a result, he wasn’t able to complete or verify any tests during this phase.
+
+
+\begin{itemize}
+    \item \textbf{Test Suites}: 13 failed, 1 passed, 14 total
+    \item \textbf{Tests}: 33 failed, 45 passed, 78 total
+    \item \textbf{Snapshots}: 0 total
+    \item \textbf{Time}: 6.12 s
+\end{itemize}
+
+\noindent We were able to run a substantial portion of our test suite, covering many features of the application. However, the results indicate areas that need further attention. With 13 out of 14 test suites failing and a significant number of test cases not passing, it is clear that some critical features require debugging and refinement. Tests related to core functionalities, such as gameplay mechanics and user interactions, seem to have lower success rates and need to be revisited. Despite these challenges, we managed to pass 45 tests, achieving partial validation of the application’s functionality. Moving forward, we will focus on analyzing the failed test cases and improving coverage for key features, ensuring a more robust and reliable system.
+
+
+\subsection{Quality Discussion}
+Explain why the code quality is sufficient and highlight best practices followed.
+
+\newpage
+\section{Persistence}
+\FloatBarrier
+
+\subsection{Database Overview}
+Explain how data is stored.
+\begin{figure}[H] 
+    \centering
+    \includegraphics[width=\textwidth]{erd.png}
+    \caption{Entity Relationship Diagram}
+    \label{fig:erd}
+\end{figure}
+
+\newpage
+\section{Reflection}
+
+\subsection{Team Reflection}
+Discuss lessons learned, barriers, and facilitators.
+
+\subsection{Individual Reflection}
+\subsection{Marley's Reflection}
+Marley's perspective.
+
+\subsection{Silas's Reflection}
+Silas's perspective.
+
+\subsection{Ryland's Reflection}
+Ryland's perspective.
+
+\subsection{Chase's Reflection}
+Chase's perspective.
+
+\newpage
+\section{AI Impact}
+
+\subsection{Marley's Experience}
+Marley's experience with LLMs/AIs.
+
+\subsection{Silas's Experience}
+Silas's experience with LLMs/AIs.
+
+\subsection{Ryland's Experience}
+Ryland's experience with LLMs/AIs.
+
+\subsection{Chase's Experience}
+Chase's experience with LLMs/AIs.
+
+\end{document}
