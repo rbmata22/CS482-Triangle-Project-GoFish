@@ -60,13 +60,16 @@
 .sidebar-button {
   background-color: #1E90FF;
   color: white;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border: none;
+  padding: 2rem;
+  margin-bottom: 2rem;
   border-radius: 25px;
   font-size: 1.2rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-align: center; /* Ensures text is centered */
+  display: flex; /* Enables centering when combined with align-items and justify-content */
+  justify-content: center; /* Horizontally centers the text */
+  align-items: center; /* Vertically centers the text */
 }
 
 .sidebar-button:hover {
