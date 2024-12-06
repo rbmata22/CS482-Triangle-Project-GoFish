@@ -82,7 +82,7 @@ A web-based multiplayer Go Fish card game with social features, virtual currency
 
 ## Development Team
 - **Silas**: Main Game Functionality, Create/Join components
-- **Marley**: Stylization, Documentation, User Customization
+- **Marley**: Shop, Stylization, Documentation, User Customization
 - **Ryland**: User/Admin features, friend system
 - **Chase**: Testing
 
