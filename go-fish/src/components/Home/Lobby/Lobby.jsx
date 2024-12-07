@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { doc, onSnapshot, updateDoc, deleteDoc, arrayUnion, getDoc } from 'firebase/firestore';
 import { db, auth } from '../../config/firebase';
-import { Cat, Ghost, Dog, Bot, Bird, Dices, BadgeDollarSign, Trophy, SquareCheck } from 'lucide-react';
+import { Cat, Ghost, Dog, Bot, Bird, Dices, Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem, BadgeDollarSign, Trophy, SquareCheck } from 'lucide-react';
 import './Lobby.css';
 import lobbyMusic from '../../../assets/lobby-music.mp3';
 
@@ -48,14 +48,31 @@ const Lobby = () => {
     const fetchUserData = async () => {
       const authType = localStorage.getItem('authType');
       if (authType === 'Guest') {
-        const guestData = {
-          username: localStorage.getItem('username'),
-          logo: localStorage.getItem('logo'),
-          guestId: localStorage.getItem('guestId'),
-          virtualCurrency: 500,
-          isReady: false,
-        };
-        setUserData(guestData);
+        const guestId = localStorage.getItem('guestId');
+        try {
+          const guestDoc = await getDoc(doc(db, 'Guests', guestId));
+          if (guestDoc.exists()) {
+            const guestData = guestDoc.data();
+            setUserData({
+              username: guestData.username || localStorage.getItem('username'),
+              logo: guestData.logo || localStorage.getItem('logo'),
+              guestId: guestId,
+              virtualCurrency: guestData.virtualCurrency || parseInt(localStorage.getItem('guestCurrency')) || 500,
+              isReady: false,
+            });
+          } else {
+            // Fallback to localStorage if guest document doesn't exist
+            setUserData({
+              username: localStorage.getItem('username'),
+              logo: localStorage.getItem('logo'),
+              guestId: guestId,
+              virtualCurrency: parseInt(localStorage.getItem('guestCurrency')) || 500,
+              isReady: false,
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching guest data: ", error);
+        }
       } else {
         const userId = auth.currentUser?.uid;
         if (userId) {
@@ -66,7 +83,7 @@ const Lobby = () => {
               setUserData({
                 username: data.username,
                 logo: data.logo,
-                virtualCurrency: data.virtualCurrency || 500,
+                virtualCurrency: data.virtualCurrency, // Remove the || 500 default
                 isReady: false,
               });
             }
@@ -101,28 +118,6 @@ const Lobby = () => {
     setIsPlaying(!isPlaying);
   };
 
-  const allRealUsersReady = (players) => players.every(player => player.isReady || player.logo === "Bot");
-
-  const addAIPlayers = async () => {
-    const emptySlots = lobbyData.playerLimit - lobbyData.players.length;
-    if (emptySlots <= 0) return;
-
-    const bots = Array.from({ length: emptySlots }, (_, i) => ({
-      username: botNames[i % botNames.length],
-      logo: "Bot",
-      isReady: true,
-    }));
-
-    try {
-      const lobbyRef = doc(db, 'Lobbies', lobbyId);
-      await updateDoc(lobbyRef, {
-        players: arrayUnion(...bots),
-      });
-    } catch (error) {
-      console.error('Error adding bots:', error);
-    }
-  };
-
   const renderUserLogo = (logo) => {
     const logoComponents = {
       'Cat': Cat,
@@ -130,6 +125,14 @@ const Lobby = () => {
       'Dog': Dog,
       'Bot': Bot,
       'Bird': Bird,
+      'Apple': Apple,
+      'Banana': Banana,
+      'Cherry': Cherry,
+      'Grape': Grape,
+      'Candy': Candy,
+      'Croissant': Croissant,
+      'Pizza': Pizza,
+      'Gem': Gem,
       default: Dices,
     };
     const LogoComponent = logoComponents[logo] || logoComponents.default;
@@ -163,6 +166,7 @@ const Lobby = () => {
           username: userData.username,
           logo: userData.logo,
           isReady: userData.isReady,
+          virtualCurrency: userData.virtualCurrency
         })
       });
     }

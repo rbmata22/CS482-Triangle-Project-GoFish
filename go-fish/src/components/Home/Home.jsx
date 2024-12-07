@@ -147,23 +147,86 @@ const Home = () => {
   };
 
   const handleIconChange = async (newIcon) => {
-    if (authType === 'Guest') {
-      localStorage.setItem('logo', newIcon);
-      setUserData({ ...userData, logo: newIcon });
-    } else {
-      const userId = auth.currentUser?.uid;
-      if (userId) {
-        try {
+    try {
+      if (authType === 'Guest') {
+        // Update local storage
+        localStorage.setItem('logo', newIcon);
+        
+        // Update guest document in Firestore
+        const guestId = localStorage.getItem('guestId');
+        if (guestId) {
+          const guestRef = doc(db, 'Guests', guestId);
+          await updateDoc(guestRef, { 
+            logo: newIcon 
+          });
+        }
+        
+        // Update local state
+        setUserData(prev => ({
+          ...prev,
+          logo: newIcon
+        }));
+      } else {
+        // For registered users
+        const userId = auth.currentUser?.uid;
+        if (userId) {
+          // Update user document in Firestore
           const userRef = doc(db, 'Users', userId);
-          await updateDoc(userRef, { logo: newIcon });
-          setUserData({ ...userData, logo: newIcon });
-        } catch (error) {
-          console.error("Error updating icon for user: ", error);
+          await updateDoc(userRef, { 
+            logo: newIcon 
+          });
+          
+          // Update local state
+          setUserData(prev => ({
+            ...prev,
+            logo: newIcon
+          }));
         }
       }
+      setShowIconChangeMenu(false);
+    } catch (error) {
+      console.error("Error updating icon:", error);
+      // Revert local changes if update fails
+      setUserData(prev => ({
+        ...prev,
+        logo: prev.logo
+      }));
     }
-    setShowIconChangeMenu(false);
   };
+  
+  // Add this useEffect to sync icon changes
+  useEffect(() => {
+    const syncUserData = async () => {
+      if (authType === 'Guest') {
+        const guestId = localStorage.getItem('guestId');
+        if (guestId) {
+          const guestDoc = await getDoc(doc(db, 'Guests', guestId));
+          if (guestDoc.exists()) {
+            const data = guestDoc.data();
+            localStorage.setItem('logo', data.logo);
+            setUserData(prev => ({
+              ...prev,
+              logo: data.logo
+            }));
+          }
+        }
+      } else {
+        const userId = auth.currentUser?.uid;
+        if (userId) {
+          const userDoc = await getDoc(doc(db, 'Users', userId));
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            setUserData(prev => ({
+              ...prev,
+              logo: data.logo
+            }));
+          }
+        }
+      }
+    };
+  
+    syncUserData();
+  }, []);
 
   const renderIconChangeMenu = () => (
     <div className={`icon-change-menu ${showIconChangeMenu ? 'slide-in' : ''}`}>

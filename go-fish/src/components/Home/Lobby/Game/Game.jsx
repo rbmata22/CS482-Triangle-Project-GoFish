@@ -184,16 +184,14 @@ const Game = () => {
   const handleGameEnd = async (winner = null) => {
     const lobbyRef = doc(db, "Lobbies", lobbyId);
     const totalPlayers = gameState.players.length;
-    const totalPot = lobbyData.betAmount * totalPlayers; // Calculate total pot from all players
-
+    const totalPot = lobbyData.bettingTotal || 0; // Use bettingTotal from lobbyData
+  
     // Function to update winner's currency
     const updateWinnerCurrency = async (winnerUsername) => {
       try {
-        // First determine if winner is a guest or registered user
         const authType = localStorage.getItem('authType');
         
         if (authType === 'Guest') {
-          // For guest winners
           const guestId = localStorage.getItem('guestId');
           if (guestId) {
             const guestRef = doc(db, 'Guests', guestId);
@@ -204,7 +202,6 @@ const Game = () => {
               await updateDoc(guestRef, {
                 virtualCurrency: currentCurrency + totalPot
               });
-              // Update local storage for guest
               localStorage.setItem('guestCurrency', (currentCurrency + totalPot).toString());
             }
           }
@@ -231,7 +228,7 @@ const Game = () => {
         console.error("Error updating winner's currency:", error);
       }
     };
-
+  
     if (lobbyData.gameMode === 'firstToSet') {
       await updateWinnerCurrency(winner);
       await updateDoc(lobbyRef, {
