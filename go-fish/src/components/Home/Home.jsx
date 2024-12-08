@@ -155,7 +155,6 @@ const Home = () => {
           username: userDocData.username || 'User',
           logo: userDocData.logo || 'Dices',
           virtualCurrency: userDocData.virtualCurrency,
-          gamesPlayed: userDocData.gamesPlayed || 0,
           gamesWon: userDocData.gamesWon || 0,
           unlockedIcons: userDocData.unlockedIcons || ['Cat', 'Ghost', 'Dog', 'Bot', 'Bird'],
           createdAt: userDocData.createdAt || new Date().toLocaleDateString(),
@@ -324,7 +323,6 @@ const Home = () => {
     <div className="player-menu">
       <h3>Player Stats</h3>
       <p><strong>Username:</strong> {userData.username || 'User'}</p>
-      <p><strong>Games Played:</strong> {userData.gamesPlayed || 0}</p>
       <p><strong>Games Won:</strong> {userData.gamesWon || 0}</p>
       <p><strong>Virtual Currency:</strong> {currencyState.currentAmount || userData.virtualCurrency}</p>
       <p><strong>Last Bet Placed:</strong> {currencyState.pendingBets || 0}</p>

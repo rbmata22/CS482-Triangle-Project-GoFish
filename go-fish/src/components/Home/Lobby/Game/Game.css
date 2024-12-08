@@ -41,7 +41,7 @@
   position: absolute;
   top: 7rem;
   right: 2rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.95); /* Much darker blue */
   backdrop-filter: blur(8px);
   border-radius: 12px;
   padding: 1.5rem;
@@ -71,7 +71,7 @@
 /* Players List Container */
 .players-container {
   position: absolute;
-  left: 2rem;
+  left: 2rem;  /* Keep this */
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -81,7 +81,7 @@
 }
 
 .player-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(30, 41, 59, 0.8);
   backdrop-filter: blur(8px);
   border-radius: 12px;
   padding: 1.5rem;
@@ -90,12 +90,12 @@
   gap: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
-  margin-left: 8rem; /* Moves the cards to the right */
+  width: 200px;  /* Add fixed width */
 }
 
 .player-card.current-turn {
-  background: rgba(0, 136, 255, 0.2);
-  border-color: #00b7ff;
+  background: rgba(0, 76, 255, 0.866);
+  border-color: #006eff;
   box-shadow: 0 0 20px #4894e54d;
 }
 
@@ -203,7 +203,7 @@
   transform: translateX(-50%);
   display: flex;
   gap: 1rem;
-  background: rgba(17, 24, 39, 0.95);
+  background: rgba(15, 23, 42, 0.95);
   padding: 1rem 2rem;
   border-radius: 12px;
   backdrop-filter: blur(10px);
@@ -244,10 +244,10 @@
 /* Deck Counter */
 .deck-counter {
   position: absolute;
-  top: 50%;
+  top: 13%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.95); /* Much darker blue */
   backdrop-filter: blur(8px);
   padding: 1.5rem;
   border-radius: 12px;
@@ -309,7 +309,7 @@
   font-weight: 600;
   text-align: center;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.95);
   backdrop-filter: blur(8px);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -429,7 +429,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: rgba(0, 140, 255, 0.15);
+  background: rgba(0, 76, 255, 0.866); /* Much darker blue */
   backdrop-filter: blur(8px);
   padding: 0.75rem 1.5rem;
   border-radius: 12px;

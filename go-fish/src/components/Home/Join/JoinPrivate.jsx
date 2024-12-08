@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../config/firebase';
-import { Check, X, Cat, Ghost, Dog, Bot, Bird, Clock } from 'lucide-react';
+import { Check, X, Cat, Ghost, Dog, Bot, Bird, Apple, Banana, Cherry, Gem, Croissant, Pizza, Candy, Grape, Clock } from 'lucide-react';
 import './JoinPrivate.css';
 import oldgameMusic from "../../../assets/oldgame-music.mp3";
 
@@ -18,12 +18,38 @@ const JoinPrivate = () => {
   // Render User Logo Helper
   const renderUserLogo = (logo) => {
     switch (logo) {
-      case 'Cat': return <Cat className="user-icon" />;
-      case 'Ghost': return <Ghost className="user-icon" />;
-      case 'Dog': return <Dog className="user-icon" />;
-      case 'Bot': return <Bot className="user-icon" />;
-      case 'Bird': return <Bird className="user-icon" />;
-      default: return <Bird className="user-icon" />;
+      case 'Cat':
+        return <Cat className="user-icon" />;
+      case 'Ghost':
+        return <Ghost className="user-icon" />;
+      case 'Dog':
+        return <Dog className="user-icon" />;
+      case 'Bot':
+        return <Bot className="user-icon" />;
+      case 'Bird':
+        return <Bird className="user-icon" />;
+
+        // New ones
+      case 'Apple':
+        return <Apple className='user-icon' />
+
+      case 'Banana':
+        return <Banana className="user-icon" />;
+      case 'Cherry':
+        return <Cherry className="user-icon" />;
+      case 'Grape':
+        return <Grape className="user-icon" />;
+      case 'Candy':
+        return <Candy className='user-icon' />
+
+      case 'Pizza':
+        return <Pizza className="user-icon" />;
+      case 'Croissant':
+        return <Croissant className="user-icon" />;
+      case 'Gem':
+        return <Gem className="user-icon" />;
+      default:
+        return <Dices className="user-icon" />;
     }
   };
 
