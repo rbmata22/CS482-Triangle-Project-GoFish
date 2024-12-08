@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
-import { Cat, Ghost, Dog, Bot, Bird, Check, X } from 'lucide-react';
+import { Cat, Ghost, Dog, Bot, Bird, Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem, Dices, Check, X } from 'lucide-react';
 import './JoinPublic.css';
 import oldgameMusic from "../../../assets/oldgame-music.mp3";
 
@@ -82,8 +82,28 @@ const JoinPublic = () => {
         return <Bot className="user-icon" />;
       case 'Bird':
         return <Bird className="user-icon" />;
+
+        // New ones
+      case 'Apple':
+        return <Apple className='user-icon' />
+
+      case 'Banana':
+        return <Banana className="user-icon" />;
+      case 'Cherry':
+        return <Cherry className="user-icon" />;
+      case 'Grape':
+        return <Grape className="user-icon" />;
+      case 'Candy':
+        return <Candy className='user-icon' />
+
+      case 'Pizza':
+        return <Pizza className="user-icon" />;
+      case 'Croissant':
+        return <Croissant className="user-icon" />;
+      case 'Gem':
+        return <Gem className="user-icon" />;
       default:
-        return <Bird className="user-icon" />;
+        return <Dices className="user-icon" />;
     }
   };
 

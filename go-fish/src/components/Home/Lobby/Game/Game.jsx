@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { doc, onSnapshot, updateDoc, collection, getDoc, query, where, getDocs } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, collection, increment, getDoc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../../config/firebase';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Eye } from 'lucide-react';
@@ -52,6 +52,29 @@ const Game = () => {
 
     return () => unsubscribe();
   }, [lobbyId, navigate]);
+
+  useEffect(() => {
+    const authType = localStorage.getItem('authType');
+    if (!username) {
+      if (authType === 'Guest') {
+        const storedUsername = localStorage.getItem('username');
+        if (storedUsername) {
+          setUsername(storedUsername);
+        }
+      } else {
+        const userId = auth.currentUser?.uid;
+        if (userId) {
+          const fetchUsername = async () => {
+            const userDoc = await getDoc(doc(db, 'Users', userId));
+            if (userDoc.exists()) {
+              setUsername(userDoc.data().username);
+            }
+          };
+          fetchUsername();
+        }
+      }
+    }
+  }, [username]);
 
 
   useEffect(() => {
@@ -129,12 +152,15 @@ const Game = () => {
     const playerHands = {};
     const sets = {};
     
+    // Ensure we're handling both user types correctly
     players.forEach(player => {
-      const initialCards = deck.splice(0, 5);
-      playerHands[player.username] = initialCards;
-      sets[player.username] = [];
+      if (player) {  // Add null check
+        const initialCards = deck.splice(0, 5);
+        playerHands[player.username] = initialCards;
+        sets[player.username] = [];
+      }
     });
-
+  
     const initialGameState = {
       deck,
       deckSize: deck.length,
@@ -151,7 +177,7 @@ const Game = () => {
       totalSets: 0,
       status: 'in-progress'
     };
-
+  
     const lobbyRef = doc(db, "Lobbies", lobbyId);
     await updateDoc(lobbyRef, {
       gameState: initialGameState
@@ -182,72 +208,113 @@ const Game = () => {
 
   // Game End Handling
   const handleGameEnd = async (winner = null) => {
-    const lobbyRef = doc(db, "Lobbies", lobbyId);
-    const totalPlayers = gameState.players.length;
-    const totalPot = lobbyData.bettingTotal || 0; // Use bettingTotal from lobbyData
+    try {
+      const lobbyRef = doc(db, "Lobbies", lobbyId);
+      const lobbySnapshot = await getDoc(lobbyRef);
+      const totalPot = lobbySnapshot.data()?.bettingTotal || 0;
+
+      // Function to update a player's stats
+    const updatePlayerStats = async (playerUsername, isWinner) => {
+      const authType = localStorage.getItem('authType');
+      let playerRef;
+
+      if (authType === 'Guest') {
+        const guestsRef = collection(db, 'Guests');
+        const q = query(guestsRef, where('username', '==', playerUsername));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          playerRef = doc(db, 'Guests', querySnapshot.docs[0].id);
+        }
+      } else {
+        const usersRef = collection(db, 'Users');
+        const q = query(usersRef, where('username', '==', playerUsername));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          playerRef = doc(db, 'Users', querySnapshot.docs[0].id);
+        }
+      }
+
+      if (playerRef) {
+        await updateDoc(playerRef, {
+          gamesPlayed: increment(1),
+          gamesWon: isWinner ? increment(1) : increment(0)
+        });
+      }
+    };
+
+    // Update all players' stats
+    const updatePromises = gameState.players.map(player => 
+      updatePlayerStats(
+        player.username, 
+        winner ? player.username === winner : player.username === gameState.winners?.[0]?.[0]
+      )
+    );
+    await Promise.all(updatePromises);
   
-    // Function to update winner's currency
-    const updateWinnerCurrency = async (winnerUsername) => {
-      try {
-        const authType = localStorage.getItem('authType');
+      const updateWinnerCurrency = async (winnerUsername) => {
+        // First find the winner's data
+        let winnerRef;
+        let currentCurrency;
         
+        const authType = localStorage.getItem('authType');
         if (authType === 'Guest') {
           const guestId = localStorage.getItem('guestId');
-          if (guestId) {
-            const guestRef = doc(db, 'Guests', guestId);
-            const guestDoc = await getDoc(guestRef);
-            
-            if (guestDoc.exists()) {
-              const currentCurrency = guestDoc.data().virtualCurrency || 0;
-              await updateDoc(guestRef, {
-                virtualCurrency: currentCurrency + totalPot
-              });
-              localStorage.setItem('guestCurrency', (currentCurrency + totalPot).toString());
-            }
-          }
+          winnerRef = doc(db, 'Guests', guestId);
+          const guestDoc = await getDoc(winnerRef);
+          currentCurrency = guestDoc.data()?.virtualCurrency || 0;
         } else {
-          // For registered users
           const usersRef = collection(db, 'Users');
           const q = query(usersRef, where('username', '==', winnerUsername));
           const querySnapshot = await getDocs(q);
           
           if (!querySnapshot.empty) {
-            const winnerDoc = querySnapshot.docs[0];
-            const currentCurrency = winnerDoc.data().virtualCurrency || 0;
-            await updateDoc(doc(db, 'Users', winnerDoc.id), {
-              virtualCurrency: currentCurrency + totalPot,
-              lastWin: {
-                amount: totalPot,
-                timestamp: new Date().toISOString(),
-                gameId: lobbyId
-              }
-            });
+            winnerRef = doc(db, 'Users', querySnapshot.docs[0].id);
+            currentCurrency = querySnapshot.docs[0].data().virtualCurrency || 0;
           }
         }
-      } catch (error) {
-        console.error("Error updating winner's currency:", error);
-      }
-    };
   
-    if (lobbyData.gameMode === 'firstToSet') {
-      await updateWinnerCurrency(winner);
-      await updateDoc(lobbyRef, {
-        'gameState.status': 'completed',
-        'gameState.winner': winner,
-        'gameState.message': `Game Over! ${winner} wins by completing the first set and receives ${totalPot} coins!`,
-        'gameState.finalPot': totalPot
-      });
-    } else {
-      const winners = Object.entries(gameState.sets)
-        .sort(([,a], [,b]) => b.length - a.length);
-      
-      await updateWinnerCurrency(winners[0][0]);
-      await updateDoc(lobbyRef, {
-        'gameState.status': 'completed',
-        'gameState.winners': winners,
-        'gameState.message': `Game Over! ${winners[0][0]} wins with ${winners[0][1].length} sets and receives ${totalPot} coins!`,
-        'gameState.finalPot': totalPot
-      });
+        if (winnerRef) {
+          // Update the winner's currency
+          await updateDoc(winnerRef, {
+            virtualCurrency: currentCurrency + totalPot
+          });
+  
+          // If it's a guest, also update localStorage
+          if (authType === 'Guest') {
+            localStorage.setItem('guestCurrency', (currentCurrency + totalPot).toString());
+          }
+        }
+      };
+  
+      if (lobbyData.gameMode === 'firstToSet') {
+        // Wait for currency update before proceeding
+        await updateWinnerCurrency(winner);
+        await updateDoc(lobbyRef, {
+          'gameState.status': 'completed',
+          'gameState.winner': winner,
+          'gameState.message': `Game Over! ${winner} wins by completing the first set and receives ${totalPot} coins!`,
+          'gameState.finalPot': totalPot
+        });
+      } else {
+        const winners = Object.entries(gameState.sets)
+          .sort(([,a], [,b]) => b.length - a.length);
+        
+        // Wait for currency update before proceeding
+        await updateWinnerCurrency(winners[0][0]);
+        await updateDoc(lobbyRef, {
+          'gameState.status': 'completed',
+          'gameState.winners': winners,
+          'gameState.message': `Game Over! ${winners[0][0]} wins with ${winners[0][1].length} sets and receives ${totalPot} coins!`,
+          'gameState.finalPot': totalPot
+        });
+      }
+  
+      // Add a delay before navigation to ensure updates are processed
+      setTimeout(() => {
+        navigate('/home');
+      }, 3000);
+    } catch (error) {
+      console.error("Error in handleGameEnd:", error);
     }
   };
 
@@ -497,6 +564,7 @@ return (
             onCardSelect={handleCardSelect}
             gameState={gameState}
             username={username}
+            hand={gameState.playerHands[player.username] || []}
           />
         ))}
       </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { getDoc, doc, deleteDoc, updateDoc, onSnapshot, increment, collection, query, where, getDocs } from 'firebase/firestore';
 import { db, auth } from '../config/firebase';
 import { Cat, Ghost, Dog, Bot, Bird, Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem, Dices, BadgeDollarSign, ChevronDown } from 'lucide-react';
 import { signOut } from 'firebase/auth';
@@ -9,6 +9,7 @@ import homeMusic from '../../assets/home-music.mp3';
 import './Home.css';
 
 const Home = () => {
+  // State declarations
   const [showSupport, setShowSupport] = useState(false);
   const [userData, setUserData] = useState({});
   const [showDropdown, setShowDropdown] = useState(false);
@@ -16,8 +17,14 @@ const Home = () => {
   const [showPlayerMenu, setShowPlayerMenu] = useState(false);
   const [showIconChangeMenu, setShowIconChangeMenu] = useState(false);
   const [ownerLeftMessage, setOwnerLeftMessage] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false); 
-  const audio = new Audio(homeMusic); 
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currencyState, setCurrencyState] = useState({
+    currentAmount: 0,
+    pendingBets: 0,
+    pendingWinnings: 0
+  });
+  
+  const audio = new Audio(homeMusic);
   const navigate = useNavigate();
   const authType = localStorage.getItem('authType');
 
@@ -26,6 +33,67 @@ const Home = () => {
     Cat, Ghost, Dog, Bot, Bird, Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem,
     default: Dices,
   };
+
+  // Real-time currency state management
+  useEffect(() => {
+    const authType = localStorage.getItem('authType');
+    let unsubscribe;
+
+    const setupCurrencyListener = async () => {
+      try {
+        if (authType === 'Guest') {
+          const guestId = localStorage.getItem('guestId');
+          if (guestId) {
+            const guestRef = doc(db, 'Guests', guestId);
+            unsubscribe = onSnapshot(guestRef, (doc) => {
+              if (doc.exists()) {
+                const data = doc.data();
+                setCurrencyState(prev => ({
+                  ...prev,
+                  currentAmount: data.virtualCurrency || 0,
+                  pendingBets: data.pendingBets || 0,
+                  pendingWinnings: data.pendingWinnings || 0
+                }));
+                setUserData(prev => ({
+                  ...prev,
+                  virtualCurrency: data.virtualCurrency || 0
+                }));
+              }
+            });
+          }
+        } else {
+          const userId = auth.currentUser?.uid;
+          if (userId) {
+            const userRef = doc(db, 'Users', userId);
+            unsubscribe = onSnapshot(userRef, (doc) => {
+              if (doc.exists()) {
+                const data = doc.data();
+                setCurrencyState(prev => ({
+                  ...prev,
+                  currentAmount: data.virtualCurrency || 0,
+                  pendingBets: data.pendingBets || 0,
+                  pendingWinnings: data.pendingWinnings || 0
+                }));
+                setUserData(prev => ({
+                  ...prev,
+                  virtualCurrency: data.virtualCurrency || 0
+                }));
+              }
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error setting up currency listener:", error);
+      }
+    };
+
+    setupCurrencyListener();
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, []);
 
   // Play music on component mount and stop it on unmount
   useEffect(() => {
@@ -40,16 +108,6 @@ const Home = () => {
       audio.currentTime = 0;
     };
   }, [audio]);
-
-  // Toggle music playback
-  const toggleMusic = () => {
-    if (isPlaying) {
-      audio.pause();
-    } else {
-      audio.play().catch(err => console.log('Music playback error:', err));
-    }
-    setIsPlaying(!isPlaying);
-  };
 
   // Fetch user data on component mount
   useEffect(() => {
@@ -96,7 +154,7 @@ const Home = () => {
         setUserData({
           username: userDocData.username || 'User',
           logo: userDocData.logo || 'Dices',
-          virtualCurrency: userDocData.virtualCurrency || 500,
+          virtualCurrency: userDocData.virtualCurrency,
           gamesPlayed: userDocData.gamesPlayed || 0,
           gamesWon: userDocData.gamesWon || 0,
           unlockedIcons: userDocData.unlockedIcons || ['Cat', 'Ghost', 'Dog', 'Bot', 'Bird'],
@@ -107,6 +165,62 @@ const Home = () => {
 
     fetchUserData();
   }, [authType]);
+
+  // Add this useEffect to sync icon changes
+  useEffect(() => {
+    const syncUserData = async () => {
+      if (authType === 'Guest') {
+        const guestId = localStorage.getItem('guestId');
+        if (guestId) {
+          const guestDoc = await getDoc(doc(db, 'Guests', guestId));
+          if (guestDoc.exists()) {
+            const data = guestDoc.data();
+            localStorage.setItem('logo', data.logo);
+            setUserData(prev => ({
+              ...prev,
+              logo: data.logo
+            }));
+          }
+        }
+      } else {
+        const userId = auth.currentUser?.uid;
+        if (userId) {
+          const userDoc = await getDoc(doc(db, 'Users', userId));
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            setUserData(prev => ({
+              ...prev,
+              logo: data.logo
+            }));
+          }
+        }
+      }
+    };
+
+    syncUserData();
+  }, [authType]);
+
+  // Click outside handler for dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.dropdown') && !event.target.closest('.join-dropdown')) {
+        setShowDropdown(false);
+        setShowJoinDropdown(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
+  // Toggle music playback
+  const toggleMusic = () => {
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch(err => console.log('Music playback error:', err));
+    }
+    setIsPlaying(!isPlaying);
+  };
 
   // Handle navigation to different paths
   const handleNavigate = (path) => {
@@ -146,37 +260,25 @@ const Home = () => {
     );
   };
 
+  // Icon change handler
   const handleIconChange = async (newIcon) => {
     try {
       if (authType === 'Guest') {
-        // Update local storage
         localStorage.setItem('logo', newIcon);
-        
-        // Update guest document in Firestore
         const guestId = localStorage.getItem('guestId');
         if (guestId) {
           const guestRef = doc(db, 'Guests', guestId);
-          await updateDoc(guestRef, { 
-            logo: newIcon 
-          });
+          await updateDoc(guestRef, { logo: newIcon });
         }
-        
-        // Update local state
         setUserData(prev => ({
           ...prev,
           logo: newIcon
         }));
       } else {
-        // For registered users
         const userId = auth.currentUser?.uid;
         if (userId) {
-          // Update user document in Firestore
           const userRef = doc(db, 'Users', userId);
-          await updateDoc(userRef, { 
-            logo: newIcon 
-          });
-          
-          // Update local state
+          await updateDoc(userRef, { logo: newIcon });
           setUserData(prev => ({
             ...prev,
             logo: newIcon
@@ -186,48 +288,14 @@ const Home = () => {
       setShowIconChangeMenu(false);
     } catch (error) {
       console.error("Error updating icon:", error);
-      // Revert local changes if update fails
       setUserData(prev => ({
         ...prev,
         logo: prev.logo
       }));
     }
   };
-  
-  // Add this useEffect to sync icon changes
-  useEffect(() => {
-    const syncUserData = async () => {
-      if (authType === 'Guest') {
-        const guestId = localStorage.getItem('guestId');
-        if (guestId) {
-          const guestDoc = await getDoc(doc(db, 'Guests', guestId));
-          if (guestDoc.exists()) {
-            const data = guestDoc.data();
-            localStorage.setItem('logo', data.logo);
-            setUserData(prev => ({
-              ...prev,
-              logo: data.logo
-            }));
-          }
-        }
-      } else {
-        const userId = auth.currentUser?.uid;
-        if (userId) {
-          const userDoc = await getDoc(doc(db, 'Users', userId));
-          if (userDoc.exists()) {
-            const data = userDoc.data();
-            setUserData(prev => ({
-              ...prev,
-              logo: data.logo
-            }));
-          }
-        }
-      }
-    };
-  
-    syncUserData();
-  }, []);
 
+  // Render icon change menu
   const renderIconChangeMenu = () => (
     <div className={`icon-change-menu ${showIconChangeMenu ? 'slide-in' : ''}`}>
       <h3>Choose Your Icon</h3>
@@ -251,19 +319,62 @@ const Home = () => {
     </div>
   );
 
+  // Render player menu
   const renderPlayerMenu = () => (
     <div className="player-menu">
       <h3>Player Stats</h3>
       <p><strong>Username:</strong> {userData.username || 'User'}</p>
       <p><strong>Games Played:</strong> {userData.gamesPlayed || 0}</p>
       <p><strong>Games Won:</strong> {userData.gamesWon || 0}</p>
-      <p><strong>Virtual Currency:</strong> {userData.virtualCurrency || 500}</p>
-      <p><strong>Account Created:</strong> {userData.createdAt || new Date().toLocaleDateString()}</p>
+      <p><strong>Virtual Currency:</strong> {currencyState.currentAmount || userData.virtualCurrency}</p>
+      <p><strong>Last Bet Placed:</strong> {currencyState.pendingBets || 0}</p>
+      {currencyState.pendingWinnings > 0 && (
+        <button 
+          className="cash-out-button"
+          onClick={handleCashOut}
+          style={{
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            padding: '10px 20px',
+            margin: '10px 0',
+            borderRadius: '5px',
+            border: 'none',
+            cursor: 'pointer'
+          }}
+        >
+          Cash Out ${currencyState.pendingWinnings}
+        </button>
+      )}
       <button onClick={() => setShowIconChangeMenu(true)}>Change Icon</button>
       <button onClick={() => setShowPlayerMenu(false)}>Close</button>
     </div>
   );
+  
+  // Add handleCashOut function to Home.jsx:
+  const handleCashOut = async () => {
+    try {
+      const authType = localStorage.getItem('authType');
+      let userRef;
+  
+      if (authType === 'Guest') {
+        const guestId = localStorage.getItem('guestId');
+        userRef = doc(db, 'Guests', guestId);
+      } else {
+        userRef = doc(db, 'Users', auth.currentUser?.uid);
+      }
+  
+      await updateDoc(userRef, {
+        virtualCurrency: increment(currencyState.pendingWinnings),
+        pendingWinnings: 0
+      });
+  
+    } catch (error) {
+      console.error("Error cashing out:", error);
+      alert("Error processing cash out. Please try again.");
+    }
+  };
 
+  // Render sidebar options based on auth type
   const renderSidebarOptions = () => {
     if (authType === 'Guest') {
       return (
@@ -284,17 +395,6 @@ const Home = () => {
     );
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.target.closest('.dropdown') && !event.target.closest('.join-dropdown')) {
-        setShowDropdown(false);
-        setShowJoinDropdown(false);
-      }
-    };
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
-
   return (
     <div className="home-container">
       {ownerLeftMessage && (
@@ -309,7 +409,7 @@ const Home = () => {
           <p className="username">{userData.username || 'User'}</p>
           <p className="currency">
             <BadgeDollarSign className="currency-icon" style={{ stroke: 'black', fill: 'green' }} />
-            <span className="currency-value">{userData.virtualCurrency || 500}</span>
+            <span className="currency-value">{currencyState.currentAmount || userData.virtualCurrency}</span>
           </p>
         </div>
         <div className="sidebar-options">
