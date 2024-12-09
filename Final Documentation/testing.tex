@@ -1,0 +1,69 @@
+\clearpage
+\section{Testing}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|c|c|l|}
+\hline
+\textbf{File} & \textbf{\% Stmts} & \textbf{\% Branch} & \textbf{\% Funcs} & \textbf{\% Lines} & \textbf{Tester} \\ \hline
+All files                & 72.38  & 70.90  & 69.34  & 72.97  & N/A \\ \hline
+components               & 40.00  & 100.00 & 25.00  & 40.00  & Chase \\ \hline
+\hspace{1em}App.jsx      & 40.00  & 100.00 & 25.00  & 40.00  & Chase \\ \hline
+components/Home          & 76.47  & 82.05  & 62.50  & 76.00  & Ryland \\ \hline
+\hspace{1em}Home.jsx     & 76.47  & 82.05  & 62.50  & 76.00  & Ryland \\ \hline
+components/Home/Join     & 90.53  & 80.55  & 91.66  & 91.78  & Silas \\ \hline
+\hspace{1em}JoinPrivate.jsx & 94.73  & 87.50  & 100.00  & 94.73 & Silas \\ \hline
+\hspace{1em}JoinPublic.jsx  & 86.11  & 75.00  & 87.50  & 88.57 & Silas \\ \hline
+components/Home/Lobby    & 64.28  & 62.65  & 74.19  & 66.08  & Chase \\ \hline
+\hspace{1em}Lobby.jsx    & 64.28  & 62.65  & 74.19  & 66.08  & Chase \\ \hline
+components/Home/Support  & 88.88  & 83.33  & 75.00  & 88.23  & Chase \\ \hline
+\hspace{1em}Support.jsx  & 88.88  & 83.33  & 75.00  & 88.23  & Chase \\ \hline
+components/Login         & 73.86  & 47.36  & 50.00  & 74.41  & Ryland \\ \hline
+\hspace{1em}Login.jsx    & 73.86  & 47.36  & 50.00  & 74.41  & Ryland \\ \hline
+components/SignUp        & 71.01  & 80.55  & 80.00  & 70.58  & Ryland \\ \hline
+\hspace{1em}SignUp.jsx   & 71.01  & 80.55  & 80.00  & 70.58  & Ryland \\ \hline
+\end{tabular}
+\caption{Test coverage summary for our components, showing responsibility}
+\label{table:test-coverage-responsibility}
+\end{table}
+
+\section*{Test Responsibility by Tester}
+
+\subsection*{Chase}
+\begin{itemize}
+    \item \texttt{App.jsx}
+    \item \texttt{Lobby.jsx} (under \texttt{components/Home/Lobby})
+    \item \texttt{Support.jsx} (under \texttt{components/Home/Support})
+    \item \texttt{Home/Lobby}
+    \item \texttt{Home/Support}
+\end{itemize}
+
+\noindent Chase was responsible for foundational components like App.jsx and user assistance features like Support.jsx. His work on App.jsx focused on setting up the routing and navigation structure, which went smoothly due to his familiarity with React's routing system. For Lobby.jsx and Home/Lobby, Chase ensured real time updates for player interactions, a task that presented challenges that was resolved through debugging and collaboration. The Support.jsx component allowed users to send queries efficiently, reflecting Chase's ability to integrate user-facing features with backend systems.
+
+\subsection*{Ryland}
+\begin{itemize}
+    \item \texttt{Home.jsx} (under \texttt{components/Home})
+    \item \texttt{Login.jsx} (under \texttt{components/Login})
+    \item \texttt{SignUp.jsx} (under \texttt{components/SignUp})
+\end{itemize}
+
+\noindent Ryland worked on user-facing components such as Home.jsx, Login.jsx, and `SignUp.jsx`. His development of Home.jsx emphasized intuitive navigation and seamless transitions, which he executed effectively by leveraging modular design principles. In Login.jsx, Ryland ensured robust authentication by focusing on input validation and error handling. Similarly, the SignUp.jsx component provided a user friendly registration process, demonstrating his ability to implement secure and interactive interfaces. Ryland’s work was crucial for ensuring a smooth user experience.
+
+\subsection*{Silas}
+\begin{itemize}
+    \item \texttt{JoinPrivate.jsx} (under \texttt{components/Home/Join})
+    \item \texttt{JoinPublic.jsx} (under \texttt{components/Home/Join})
+\end{itemize}
+
+\noindent Silas handled the dynamic and data-driven components JoinPrivate.jsx and JoinPublic.jsx. In JoinPrivate.jsx, he implemented secure lobby code validation, ensuring only authorized users could join private games. This task required a deep understanding of error handling and server communication. The JoinPublic.jsx component focused on fetching and displaying available lobbies, requiring real time updates and a user friendly interface. Despite the complexities, Silas’s systematic approach resulted in reliable and efficient components.
+
+\noindent Marley didn’t contribute to the testing because he ran into ongoing technical issues with his system, which made it impossible to run the test suite. He tried troubleshooting and asked for help, but unfortunately, the problem couldn’t be resolved in time. As a result, he wasn’t able to complete or verify any tests during this phase.
+
+
+\begin{itemize}
+    \item \textbf{Test Suites}: 13 failed, 1 passed, 14 total
+    \item \textbf{Tests}: 33 failed, 45 passed, 78 total
+    \item \textbf{Snapshots}: 0 total
+    \item \textbf{Time}: 6.12 s
+\end{itemize}
+
+\noindent We were able to run a substantial portion of our test suite, covering many features of the application. However, the results indicate areas that need further attention. With 13 out of 14 test suites failing and a significant number of test cases not passing, it is clear that some critical features require debugging and refinement. Tests related to core functionalities, such as gameplay mechanics and user interactions, seem to have lower success rates and need to be revisited. Despite these challenges, we managed to pass 45 tests, achieving partial validation of the application’s functionality. Moving forward, we will focus on analyzing the failed test cases and improving coverage for key features, ensuring a more robust and reliable system.

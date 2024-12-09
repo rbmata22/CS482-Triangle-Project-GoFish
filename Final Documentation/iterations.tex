@@ -1,0 +1,114 @@
+\clearpage
+\section{Iterations}
+
+\subsection{Sprint Summary}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    \textbf{Sprint} & \textbf{Total Points} & \textbf{Total Hours} & \textbf{Team Speed} & \textbf{Cycle Time}  \\ \hline
+    Sprint 1 & 37 & 36 & 0.97 & 1.03 \\ \hline
+    Sprint 2 & 36 & 40 & 1.11 & 0.90 \\ \hline
+    Sprint 3 & 40 & 38 & 0.95 & 1.05 \\ \hline
+    \end{tabular}
+    \caption{Team Statistics Across Sprints}
+    \label{tab:team_stats}
+\end{table}
+
+\subsection{Individual Statistics Per Sprint}
+
+\subsubsection{Sprint 1}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    \textbf{Team Member} & \textbf{Points Attempted} & \textbf{Hours Worked} & \textbf{Team Speed} & \textbf{Cycle Time}  \\ \hline
+    Silas & 12 & 10 & 0.83 & 1.20 \\ \hline
+    Marley & 6 & 10 & 1.67 & 0.60 \\ \hline
+    Ryland & 12 & 12 & 1.00 & 1.00 \\ \hline
+    Chase & 7 & 4 & 0.57 & 1.75 \\ \hline
+    \end{tabular}
+    \caption{Individual Statistics for Sprint 1}
+    \label{tab:individual_sprint1}
+\end{table}
+
+\subsubsection{Sprint 2}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    \textbf{Team Member} & \textbf{Points Attempted} & \textbf{Hours Worked} & \textbf{Team Speed} & \textbf{Cycle Time}  \\ \hline
+    Silas & 13 & 10 & 0.77 & 1.30 \\ \hline
+    Marley & 6 & 12 & 2.00 & 0.50 \\ \hline
+    Ryland & 8 & 10 & 1.25 & 0.80 \\ \hline
+    Chase & 9 & 8 & 0.89 & 1.12 \\ \hline
+    \end{tabular}
+    \caption{Individual Statistics for Sprint 2}
+    \label{tab:individual_sprint2}
+\end{table}
+
+\subsubsection{Sprint 3}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    \textbf{Team Member} & \textbf{Points Attempted} & \textbf{Hours Worked} & \textbf{Team Speed} & \textbf{Cycle Time}  \\ \hline
+    Silas & 12 & 8 & 0.667 & 1.50 \\ \hline
+    Marley & 10 & 10 & 1.000 & 1.00 \\ \hline
+    Ryland & 27 & 10 & 0.370 & 2.70 \\ \hline
+    Chase & 7 & 10 & 1.429 & 0.70 \\ \hline
+    \end{tabular}
+    \caption{Individual Statistics for Sprint 3}
+    \label{tab:individual_sprint3}
+\end{table}
+
+\subsection{Sprint Statistics}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|}
+    \hline
+    \textbf{Metric} & \textbf{Value} \\ \hline
+    Total Number Of Stories & 30 \\ \hline
+    Stories Done & 30 \\ \hline
+    Stories Attempted & 30 \\ \hline
+    Stories on Backlog & 0 \\ \hline
+    Total Stories Remaining & 0 \\ \hline
+    \end{tabular}
+    \caption{Sprint Statistics at the End of Sprint}
+    \label{tab:sprint_statistics}
+\end{table}
+
+\subsection{Iterations 1}
+
+\subsubsection{Plan}
+For the first iteration, the goal was to establish the foundational features required for a functional platform. This included setting up user authentication, the main menu navigation, and basic game mechanics. Specific user stories to address were S1-S6, focusing on account creation, secure login/logout functionality, and the ability to obtain virtual currency through gameplay.
+
+\subsubsection{Activities}
+During this sprint we implemented secure user authentication using Firebase, allowing players to create accounts (S1) and log in (S3). Developed functionality for guest access to enable one-time sessions (S2). Built the framework for a main menu (S5), providing a central hub for accessing features such as gameplay and settings. Integrated virtual currency that players earn by winning games (S6). Key design decisions included using Firebase Firestore as the database for user account data and leveraging React components for a modular and scalable UI.
+
+\subsubsection{Retrospective}
+This iteration successfully established the foundational features of the platform. However, challenges included ensuring secure data storage for user credentials and integrating currency logic into the game mechanics. The team resolved these by implementing Firebase's authentication system and developing a modular currency management function. Lessons learned emphasized the importance of clear delegation and better communication about feature dependencies.
+
+\subsection{Iterations 2}
+
+\subsubsection{Plan}
+The focus of the second iteration was to expand social features and introduce lobby functionality. Key user stories included adding and managing friends (S7-S11), allowing private and public messaging (S14-S15), and providing access to private lobbies (S17-S18).
+
+\subsubsection{Activities}
+We worked on a friend system where users can add friends by username (S7), view friend requests (S8), and remove unwanted friends (S9).
+Messaging features, including private messaging between friends (S14) and public lobby chat (S15). Lobby functionality, enabling players to create private lobbies (S17) or join public games (S18). To support these features, the database structure was updated to store friend lists and chat logs securely. React components were also developed to handle the dynamic nature of chats and lobbies.
+
+\subsubsection{Retrospective}
+The addition of social features greatly enhanced user engagement. The team faced challenges in synchronizing friend data and ensuring real-time chat functionality. These were mitigated using Firebase’s real-time database features. Moving forward, the team aimed to streamline the UI for better user experience and focus on integrating gameplay with the new social features.
+
+\subsection{Iterations 3}
+
+\subsubsection{Plan}
+The third iteration aimed to finalize administrative features and improve game-specific functionality. This included implementing admin tools (S21-S23), and refining gameplay elements like card deck management (S26-S27).
+
+\subsubsection{Activities}
+We developed admin capabilities, allowing moderators to manage players (S21), monitor chat logs for inappropriate behavior (S22), and ban users as needed (S23). Enhanced gameplay mechanics, including a feature for players to view their card decks (S26) and interact with other players through rank-specific requests (S27). 
+\subsubsection{Retrospective}
+This iteration completed the platform’s core functionalities. Admin tools provided better control over player interactions, while the tutorial bot addressed user accessibility. The team encountered difficulties in implementing real-time moderation tools but resolved them by leveraging Firebase’s event listeners. Future work involves refining the UI for admin features and addressing scalability for larger player bases.
+
+
