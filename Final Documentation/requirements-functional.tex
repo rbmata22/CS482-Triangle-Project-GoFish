@@ -15,42 +15,44 @@ The following describes the types of users for the Bui’s Bayside Inn game, the
 Players are the primary users of the game. They are individuals who play Go Fish, interact with friends, and participate in the in game currency. Players are assumed to have familiarity with standard web applications. Players have access to features like account creation, gameplay, social interactions , and virtual currency transactions. They should not have access to administrative or moderation tools. Players should have secure login and logout capabilities. Data such as game statistics, friends list, and virtual currency balances must be tied to their accounts and protected from unauthorized access. Admins are moderators tasked with ensuring the platform remains safe and functional. They are expected to have a moderate level of technical expertise and familiarity with user management and moderation tools. Admins have access to both player level features and additional administrative capabilities, such as monitoring chat logs, banning users, and managing lobbies. Admin accounts must have enhanced security and the ability to view chat logs and ban users, should be restricted to verified admin accounts.
 
 \subsection{Functional Requirements: User Stories}
-\begin{table}[h] 
+\begin{table}[h]
 \centering
+\renewcommand{\arraystretch}{1.3} 
+\setlength{\tabcolsep}{4pt} 
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{|c|p{2.5cm}|c|c|c|p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{2.5cm}|c|p{2.5cm}|c|}
+\begin{tabular}{|c|p{3cm}|c|c|c|p{4cm}|p{4cm}|p{4cm}|p{4cm}|p{3cm}|c|p{3cm}|c|}
 \hline
 \textbf{ID} & \textbf{Story Title} & \textbf{Depends On} & \textbf{Points} & \textbf{Priority} & \textbf{As a/an [user type]} & \textbf{I want [functionality]} & \textbf{So that [value]} & \textbf{NFR} & \textbf{Definition of Done} & \textbf{Epic ID} & \textbf{Notes} & \textbf{Status} \\ \hline
-S1 & Create Account & - & 2 & Medium & Player & to create an account & I can save my data/stats from playing Go Fish & Security & Account created & 1 & - & Closed \\ \hline
-S2 & Join One Session & - & 2 & Medium & Player & to be able to join for ONE session & I can still play with my friends until I log out & Temporary Access & Join session works & 1 & - & Closed \\ \hline
-S3 & Account Prompt & - & 1 & High & Player & to be prompted to create a new account or log into a pre-existing account & I can have security and save my prior progress & Usability & Prompt appears & 2 & - & Closed \\ \hline
-S4 & Secure Logout & - & 2 & Medium & Player & to be able to securely log out of my account & I can leave the program and return later & Security & Logout implemented & 2 & - & Closed \\ \hline
-S5 & Main Menu Access & - & 3 & High & Player & to have a main menu & I can easily access my key features & Usability & Menu accessible & 3 & - & Closed \\ \hline
-S6 & Earn Currency & - & 2 & Medium & Player & to be able to obtain currency from Go Fish games & I can make wagers or purchase other things & Gameplay Value & Currency added & 3 & - & Closed \\ \hline
-S7 & Add Friend & - & 2 & Medium & Player & to enter the username of a friend I want to add & I can have easier access to messaging/inviting them & Usability & Friend added & 4 & - & Closed \\ \hline
-S8 & Friend Requests & - & 3 & Medium & Player & to see who has requested to be my friend & I can accept/decline new requests & User Control & Requests visible & 4 & - & Closed \\ \hline
-S9 & Remove Friend & - & 2 & Low & Player & to remove unwanted friends & I can properly manage my "friends" & User Control & Friend removed & 4 & - & Closed \\ \hline
-S10 & Lobby Invite & - & 3 & Medium & Player & to invite my friend to my lobby & I can streamline the process of typing out the code & Usability & Invite works & 5 & - & Closed \\ \hline
-S11 & Send Currency & - & 3 & Medium & Player & to send my friends currency & They can use it in the shop or in-game & Gameplay Value & Currency sent & 5 & - & Closed \\ \hline
-S12 & Access Shop & - & 3 & High & Player & access to the shop in my main menu & I can purchase new icons or other cosmetics & Usability & Shop works & 6 & - & Closed \\ \hline
-S13 & Change Player Icon & - & 1 & Low & Player & to change my player icon & I can express myself through cool icons & Personalization & Icon change works & 6 & - & Closed \\ \hline
-S14 & Private Messaging & - & 2 & Medium & Player & to message my friends in private & I can send specific information like lobby codes & Communication & Messaging works & 7 & - & Closed \\ \hline
-S15 & Lobby Chat & - & 2 & Medium & Player & to message the whole lobby & I can interact with others/ask questions & Communication & Chat visible & 7 & - & Closed \\ \hline
-S16 & Tutorial Bot & - & 3 & High & Player & to be trained by a tutorial bot & I can learn how to play Go Fish & Usability & Tutorial functional & 8 & - & Closed \\ \hline
-S17 & Create Private Lobby & - & 5 & High & Player & to be able to create a private lobby & Only invited players can join & Privacy & Lobby works & 9 & - & Closed \\ \hline
-S18 & Create Public Lobby & - & 5 & High & Player & to be able to create a public lobby & Any player can join and play & Accessibility & Lobby created & 9 & - & Closed \\ \hline
-S19 & Join Lobby with Code & - & 5 & High & Player & to join a lobby using a login code & I can play with my friends online & Security & Code login functional & 9 & - & Closed \\ \hline
-S20 & Join Closed Lobby & - & 5 & High & Player & to join an open lobby & I can play with other players online & Accessibility & Lobby joined & 9 & - & Open \\ \hline
-S21 & Manage Players & - & 5 & High & Admin & to manage other players & Games are run smoothly & Administration & Tools implemented & 10 & - & Closed \\ \hline
-S22 & Monitor Chat Logs & - & 2 & Medium & Admin & to check on players' chat logs & I can ensure no profanity or harassment & Moderation & Logs accessible & 10 & - & Closed \\ \hline
-S23 & Ban Players & - & 5 & High & Admin & to ban misbehaving players & I can ensure the safety of others & Moderation & Ban functional & 10 & - & Closed \\ \hline
-S24 & Ready Up for Game & - & 1 & Medium & Player & to queue up when ready to start the game & Games start when everyone is ready & Gameplay Flow & Ready queue functional & 11 & - & Closed \\ \hline
-S25 & Bet Credits & - & 3 & Medium & Player & to bet hotel credits during Go Fish & I can use these credits at the hotel & Gameplay Value & Betting functional & 11 & - & Closed \\ \hline
-S26 & View Deck & - & 2 & Medium & Player & to check all cards in my deck & I can plan my moves better & Gameplay Value & Deck visible & 11 & - & Closed \\ \hline
-S27 & Ask Card Rank & - & 8 & High & Player & to ask other players for a specific rank & I can add cards to my deck or Go Fish & Gameplay Flow & Rank query works & 12 & - & Closed \\ \hline
-S28 & View Record & - & 1 & Low & Player & to see my overall wins and losses & I can compare my record with others & User Control & Record visible & 12 & - & Closed \\ \hline
-TT29 & Background Music & - & 3 & Low & Player & to hear music in different parts of the game & I can have a more enjoyable experience & Aesthetics & Music works & 13 & - & Closed \\ \hline
-TT30 & Maintain Documentation & - & 3 & High & Admin & to create and maintain clear documentation for the project & Contributors can easily work with the code & Project Management & Documentation complete & 13 & - & Closed \\ \hline
+S1 & Create Account & N/A & 2 & Medium & Player & to create an account & I can save my data/stats from playing Go Fish & Security & Account created & 1 & - & Closed \\ \hline
+S2 & Join One Session & S1 & 2 & Medium & Player & to be able to join for ONE session & I can still play with my friends until I log out & Temporary Access & Join session works & 1 & - & Closed \\ \hline
+S3 & Account Prompt & S1 & 1 & High & Player & to be prompted to create a new account or log into a pre-existing account & I can have security and save my prior progress & Usability & Prompt appears & 2 & - & Closed \\ \hline
+S4 & Secure Logout & S1 & 2 & Medium & Player & to be able to securely log out of my account & I can leave the program and return later & Security & Logout implemented & 2 & - & Closed \\ \hline
+S5 & Main Menu Access & S1 & 3 & High & Player & to have a main menu & I can easily access my key features & Usability & Menu accessible & 3 & - & Closed \\ \hline
+S6 & Earn Currency & S5 & 2 & Medium & Player & to be able to obtain currency from Go Fish games & I can make wagers or purchase other things & Gameplay Value & Currency added & 3 & - & Closed \\ \hline
+S7 & Add Friend & S1, S5 & 2 & Medium & Player & to enter the username of a friend I want to add & I can have easier access to messaging/inviting them & Usability & Friend added & 4 & - & Closed \\ \hline
+S8 & Friend Requests & S7 & 3 & Medium & Player & to see who has requested to be my friend & I can accept/decline new requests & User Control & Requests visible & 4 & - & Closed \\ \hline
+S9 & Remove Friend & S7 & 2 & Low & Player & to remove unwanted friends & I can properly manage my "friends" & User Control & Friend removed & 4 & - & Closed \\ \hline
+S10 & Lobby Invite & S1, S5 & 3 & Medium & Player & to invite my friend to my lobby & I can streamline the process of typing out the code & Usability & Invite works & 5 & - & Closed \\ \hline
+S11 & Send Currency & S5, S6 & 3 & Medium & Player & to send my friends currency & They can use it in the shop or in-game & Gameplay Value & Currency sent & 5 & - & Closed \\ \hline
+S12 & Access Shop & S5, S6 & 3 & High & Player & access to the shop in my main menu & I can purchase new icons or other cosmetics & Usability & Shop works & 6 & - & Closed \\ \hline
+S13 & Change Player Icon & S12 & 1 & Low & Player & to change my player icon & I can express myself through cool icons & Personalization & Icon change works & 6 & - & Closed \\ \hline
+S14 & Private Messaging & S7 & 2 & Medium & Player & to message my friends in private & I can send specific information like lobby codes & Communication & Messaging works & 7 & - & Closed \\ \hline
+S15 & Lobby Chat & S10 & 2 & Medium & Player & to message the whole lobby & I can interact with others/ask questions & Communication & Chat visible & 7 & - & Closed \\ \hline
+S16 & Tutorial Bot & S5 & 3 & High & Player & to be trained by a tutorial bot & I can learn how to play Go Fish & Usability & Tutorial functional & 8 & - & Closed \\ \hline
+S17 & Create Private Lobby & S5 & 5 & High & Player & to be able to create a private lobby & Only invited players can join & Privacy & Lobby works & 9 & - & Closed \\ \hline
+S18 & Create Public Lobby & S5 & 5 & High & Player & to be able to create a public lobby & Any player can join and play & Accessibility & Lobby created & 9 & - & Closed \\ \hline
+S19 & Join Lobby with Code & S17, S18 & 5 & High & Player & to join a lobby using a login code & I can play with my friends online & Security & Code login functional & 9 & - & Closed \\ \hline
+S20 & Join Closed Lobby & S17, S18 & 5 & High & Player & to join an open lobby & I can play with other players online & Accessibility & Lobby joined & 9 & - & Open \\ \hline
+S21 & Manage Players & S17, S18 & 5 & High & Admin & to manage other players & Games are run smoothly & Administration & Tools implemented & 10 & - & Closed \\ \hline
+S22 & Monitor Chat Logs & S15 & 2 & Medium & Admin & to check on players' chat logs & I can ensure no profanity or harassment & Moderation & Logs accessible & 10 & - & Closed \\ \hline
+S23 & Ban Players & S21 & 5 & High & Admin & to ban misbehaving players & I can ensure the safety of others & Moderation & Ban functional & 10 & - & Closed \\ \hline
+S24 & Ready Up for Game & S19, S20 & 1 & Medium & Player & to queue up when ready to start the game & Games start when everyone is ready & Gameplay Flow & Ready queue functional & 11 & - & Closed \\ \hline
+S25 & Bet Credits & S6 & 3 & Medium & Player & to bet hotel credits during Go Fish & I can use these credits at the hotel & Gameplay Value & Betting functional & 11 & - & Closed \\ \hline
+S26 & View Deck & S5, S24 & 2 & Medium & Player & to check all cards in my deck & I can plan my moves better & Gameplay Value & Deck visible & 11 & - & Closed \\ \hline
+S27 & Ask Card Rank & S24, S26 & 8 & High & Player & to ask other players for a specific rank & I can add cards to my deck or Go Fish & Gameplay Flow & Rank query works & 12 & - & Closed \\ \hline
+S28 & View Record & S1 & 1 & Low & Player & to see my overall wins and losses & I can compare my record with others & User Control & Record visible & 12 & - & Closed \\ \hline
+TT29 & Background Music & N/A & 3 & Low & Player & to hear music in different parts of the game & I can have a more enjoyable experience & Aesthetics & Music works & 13 & - & Closed \\ \hline
+TT30 & Maintain Documentation & N/A & 3 & High & Admin & to create and maintain clear documentation for the project & Contributors can easily work with the code & Project Management & Documentation complete & 13 & - & Closed \\ \hline
 \end{tabular}
 }
 \caption{Functional Requirements: User Stories}
