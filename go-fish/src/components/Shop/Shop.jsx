@@ -10,164 +10,207 @@ import { db } from '../config/firebase';
 import { useNavigate } from 'react-router-dom';
 // Import CSS styles for Shop component
 import './shop.css';
+// Import music for the shop
+import backgroundMusic from '../../assets/background-music.mp3';
+// Import shop icons from Lucide
+import { Apple, Banana, Cherry, Grape, Candy, Pizza, Croissant, Gem } from 'lucide-react';
+// Import sound effects for purchase errors
+import purchaseErrorSound from '../../assets/purchase-error.mp3';
+// Import sound effects for purchase success
+import purchaseSuccessSound from '../../assets/purchase-succesful.mp3';
 // An array of shop items with details
 const shopItems = [
-  {
-    id: 1,
-    name: "NBA Cards",
-    image: "https://external-preview.redd.it/4XfJcJFWh7usKB-htKE7QdoiW2GupdFiIhqNU0X7dns.jpg?width=640&crop=smart&auto=webp&s=42be24e79f0e031252dc83454987f7f78ed2a44e",
-    price: 200,
-    featured: false
-  },
-  {
-    id: 2,
-    name: "Women cards",
-    image: "https://www.the-outrage.com/cdn/shop/products/wc25_preview.jpeg?v=1511887627",
-    price: 200,
-    featured: true
-  },
-  {
-    id: 3,
-    name: "Christmas cards",
-    image: "https://cdn.shopify.com/s/files/1/0041/7579/0209/files/Christmas_Playing_Cards_-_A_-_3d.webp?v=1699989088",
-    price: 250,
-    featured: true
-  },
-  {
-    id: 4,
-    name: "Star Wars cards",
-    image: "https://cdn.shopify.com/s/files/1/0013/7332/files/resized-005_cba8f816-6559-4b89-88bf-85cf31a8b5bb.jpg?v=1650568718",
-    price: 300,
-    featured: true
-  },
-  {
-    id: 5,
-    name: "Marvel cards",
-    image: "https://store.theory11.com/cdn/shop/files/product.avengers.court-cards_97d23a31-e43f-473d-8cb7-1eabeff01acf.png?v=1650372539&width=4000",
-    price: 300,
-    featured: true
-  },
-  {
-    id: 6,
-    name: "Dragon Ball Z cards",
-    image: "https://tccplayingcard.com/cdn/shop/files/Dragon_Ball_Z_3.jpg?v=1723003025&width=1780",
-    price: 400,
-    featured: true
-  },
-  {
-    id: 7,
-    name: "Vietnamese cards",
-    image: "https://cdn.myportfolio.com/e6cfaaf0-38d5-4c18-9230-8a03d0f616cb/9ce60e68-a75a-4619-8867-547dfd97d7d3_rw_1920.jpg?h=bc323e23758059e0ee248037a72c80aa",
-    price: 500,
-    featured: true
-  },
-  {
-    id: 8,
-    name: "SpongeBob cards",
-    image: "https://ae01.alicdn.com/kf/S92677255435745c0bc3fe8fba1a127e5Z.jpg_960x960.jpg",
-    price: 1000,
-    featured: true
-  }
+  { id: 1, name: "Apple Icon", price: 200, icon: Apple },
+  { id: 2, name: "Banana Icon", price: 200, icon: Banana },
+  { id: 3, name: "Cherry Icon", price: 250, icon: Cherry },
+  { id: 4, name: "Grape Icon", price: 300, icon: Grape },
+  { id: 5, name: "Candy Icon", price: 300, icon: Candy },
+  { id: 6, name: "Pizza Icon", price: 400, icon: Pizza },
+  { id: 7, name: "Croissant Icon", price: 500, icon: Croissant },
+  { id: 8, name: "Gem Icon", price: 1000, icon: Gem }
 ];
-// Define the Shop component function
+// Shop component
 const Shop = () => {
-  // Hooks for currency, error messages, and success messages
+  // Define state for user currency
   const [userCurrency, setUserCurrency] = useState(0);
+  // Define state for displaying error messages
   const [error, setError] = useState('');
+  // Define state for displaying success messages
   const [successMessage, setSuccessMessage] = useState('');
-  // Initialize Firebase Authentication
+  // Define state to store the inventory (items that have been purchased)
+  const [inventory, setInventory] = useState({});
+  // Create an Audio instance for background music and store it in state
+  const [audio] = useState(new Audio(backgroundMusic));
+  // Define state for tracking if music is playing
+  const [isPlaying, setIsPlaying] = useState(true);
+  // Initialize Firebase authentication instance
   const auth = getAuth();
-  // Hook to navigate
+  // Initialize navigation hook to allow redirecting users to different pages
   const navigate = useNavigate();
-  // Navigate to the home route
+  // Retrieve the authentication type (e.g., guest or signed-in user) from localStorage
+  const authType = localStorage.getItem('authType');
+  // Define audio instances for success and error sounds
+  const successAudio = new Audio(purchaseSuccessSound);
+  const errorAudio = new Audio(purchaseErrorSound);
+  //CHECK THIS OUT <Marley>, here's why I am pleased with this addition of code. It was something that really brought the whole shop component together for me. Once I got the functionality working it allowed for me to be innovative and creative. Something that I think would set our project apart from others and I enjoyed doing a lot.
+  // Function to navigate back to the home page and stop the music
   const goHome = () => {
-    navigate('/home'); 
+    // Pause the background music
+    audio.pause();
+    // Reset the audio play time to the beginning
+    audio.currentTime = 0;
+    // Navigate to the home route
+    navigate('/home');
   };
-  // Effect hook fetches user data from Firebase 
+  // useEffect to handle playing and looping background music on component mount
+  useEffect(() => {
+    // Set the audio to loop
+    audio.loop = true;
+    // Play the audio on component mount
+    audio.play();
+    // Set the isPlaying state to true
+    setIsPlaying(true);
+    // Cleanup function to pause the audio when the component unmounts
+    return () => {
+      // Pause the audio
+      audio.pause();
+      // Reset the audio play time to the beginning
+      audio.currentTime = 0;
+    };
+  }, [audio]);
+  // Function to toggle the music play/pause state
+  const toggleMusic = () => {
+    // Check if music is currently playing
+    if (isPlaying) {
+      // Pause the audio if it is playing
+      audio.pause();
+    } else {
+      // Play the audio if it is paused
+      audio.play();
+    }
+    // Toggle the isPlaying state to reflect the new audio state
+    setIsPlaying(!isPlaying);
+  };
+  // useEffect to fetch user currency and inventory data based on authentication type
   useEffect(() => {
     const fetchUserData = async () => {
-      if (auth.currentUser) {
-        try {
-          // Get user document from Firestore
-          const userDoc = await getDoc(doc(db, 'Users', auth.currentUser.uid));
-          // If user document exists update state with user's virtual currency
+      if (authType === 'Guest') {
+        // Fetch guest data from localStorage
+        let guestCurrency = parseInt(localStorage.getItem('guestCurrency'));
+        if (isNaN(guestCurrency)) {
+          guestCurrency = 500;  // Default balance for a new guest
+          localStorage.setItem('guestCurrency', guestCurrency);
+        }
+        setUserCurrency(guestCurrency);
+        setInventory(JSON.parse(localStorage.getItem('guestInventory')) || {});
+      } else {
+        const userId = auth.currentUser?.uid;
+        if (userId) {
+          const userDoc = await getDoc(doc(db, 'Users', userId));
           if (userDoc.exists()) {
             setUserCurrency(userDoc.data().virtualCurrency || 0);
+            setInventory(userDoc.data().inventory || {});
           }
-        } catch (error) {
-          // Set error state and log the error if fetching user data fails
-          setError('Error fetching user data');
-          console.error('Error:', error);
         }
       }
     };
     fetchUserData();
-  }, [auth.currentUser]);
-  // Function to handle item purchase
-  const handlePurchase = async (item) => {
-    // Check if user is logged in
-    if (!auth.currentUser) {
-      setError("To buy something you have to be logged in");
-      return;
-    }
-    // Check if user has enough currency to buy the item
-    if (userCurrency < item.price) {
-      setError("You need more money");
-      return;
-    }
+  }, [authType, auth]);
+  // Function to handle purchasing items
+const handlePurchase = async (item) => {
+  // Check if the user has enough currency to purchase the item
+  if (userCurrency < item.price) {
+    setError("You need more money");
+    errorAudio.play();
+    return;
+  }
+  // Check if the item has already been purchased
+  if (inventory[item.id]) {
+    setError("You already own this item");
+    errorAudio.play();
+    return;
+  }
+  // Calculate the new balance after the purchase
+  const newBalance = userCurrency - item.price;
+  const updatedInventory = { ...inventory, [item.id]: true };
+  // Update user currency in state
+  setUserCurrency(newBalance);
+  // Update inventory in state
+  setInventory(updatedInventory);
+  if (authType === 'Guest') {
+    // Update guest data in localStorage
+    localStorage.setItem('guestCurrency', newBalance);
+    localStorage.setItem('guestInventory', JSON.stringify(updatedInventory));
+  } else {
+    // For signed-in users, update Firestore
     try {
-      // Reference to user's Firestore document
       const userRef = doc(db, 'Users', auth.currentUser.uid);
-      // Get user document
-      const userDoc = await getDoc(userRef);
-      // Check if user document is there
-      if (!userDoc.exists()) {
-        setError("Account not found");
-        return;
-      }
-      // Get new balance after purchase
-      const userData = userDoc.data();
-      const newBalance = userData.virtualCurrency - item.price;
-      // Update user's virtual currency in Firestore
       await updateDoc(userRef, {
         virtualCurrency: newBalance,
-        [`inventory.${item.id}`]: true
+        inventory: updatedInventory
       });
-      // Update user currency state and set success message
-      setUserCurrency(newBalance);
-      setSuccessMessage(`You bought it! ${item.name}!`);
-      setTimeout(() => setSuccessMessage(''), 3000);
-      // Navigate to a different route
-      navigate('/shape', { state: { selectedItem: item } });
     } catch (error) {
-      // Set error state and log the error if purchase fails
-      setError("Something went wrong");
-      console.error("Here's what went wrong", error);
+      setError("Something went wrong while updating your balance");
+      console.error("Error during purchase:", error);
+      errorAudio.play();
+      return;
     }
+  }
+  setSuccessMessage(`You bought ${item.name}!`);
+  successAudio.play(); 
+  setTimeout(() => setSuccessMessage(''), 3000);
+};
+  // Render each item’s icon, conditionally applying spin if not purchased
+  const renderItemIcon = (itemId, IconComponent) => {
+    const isPurchased = inventory[itemId];
+    return <IconComponent className={`item-icon ${!isPurchased ? "spin" : ""}`} />;
   };
+  // Render the Shop component UI
   return (
     <div className="shop-container">
+      {/* Header section of the shop */}
       <div className="shop-header">
-      <button className="home-button" onClick={goHome}>Home</button>
-        <h1 className="shop-title">Shop</h1>
+        {/* Container for navigation buttons */}
+        <div className="button-container">
+          {/* Home button to navigate back to home */}
+          <button className="home-button" onClick={goHome}>Home</button>
+          {/* Button to toggle background music */}
+          <button className="music-button" onClick={toggleMusic}>
+            {isPlaying ? 'Pause Music' : 'Music'}
+          </button>
+        </div>
+        {/* Display for user currency balance */}
         <div className="currency-display">
           Your Balance: {userCurrency} coins
         </div>
       </div>
+      {/* Title section of the shop */}
+      <div className="shop-title-container">
+        <h1 className="shop-title">Shop</h1>
+      </div>
+      {/* Display error messages if any */}
       {error && <div className="error-message">{error}</div>}
+      {/* Display success messages if any */}
       {successMessage && <div className="success-message">{successMessage}</div>}
+      {/* Grid layout for displaying shop items */}
       <div className="items-grid">
+        {/* Map over each item in shopItems array */}
         {shopItems.map(item => (
+          // Container for individual shop item
           <div key={item.id} className="shop-item">
+            {/* Display item name */}
             <h2>{item.name}</h2>
-            <img src={item.image} alt={item.name} className="item-image"/>
+            {/* Display item icon based on item id */}
+            {renderItemIcon(item.id, item.icon)}
+            {/* Display item price */}
             <p className="item-price">{item.price} Coins</p>
+            {/* Purchase button, disabled if the item is already owned */}
             <button
               onClick={() => handlePurchase(item)}
               className="purchase-button"
-              disabled={userCurrency < item.price}
+              disabled={inventory[item.id]}
             >
-              {userCurrency < item.price ? 'Out of money' : 'Purchase'}
+              {inventory[item.id] ? 'Purchased' : 'Purchase'}
             </button>
           </div>
         ))}
@@ -175,5 +218,5 @@ const Shop = () => {
     </div>
   );
 };
-// Export Shop default export
+// Export the Shop component as default
 export default Shop;
