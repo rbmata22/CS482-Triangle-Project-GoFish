@@ -1,0 +1,2256 @@
+commit 0070a30bcbf2bdf4a65cace54c6b11e04e4272dc
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Dec 9 10:32:23 2024 -0500
+
+    Cheeky final Documentation Changed User Stories https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/46
+
+commit ea4eb221be5595a6d5098060822caa99b9bb1b20
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Dec 9 02:01:30 2024 -0500
+
+    Cheeky final Documentation Screenshots https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/46
+
+commit c4dbafda4c888e892db0eea130c09f69d5f6385b
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Dec 9 01:39:46 2024 -0500
+
+    Cheeky final Documentation Push https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/46
+
+commit 9dd17e054c819de11faca644ee0f2b74355d9733
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sat Dec 7 19:48:00 2024 -0500
+
+    Fixed JoinPrivate Icon Rendering, Fixed Positioning of the cards left container in Game.css, we're good to go
+
+commit 086d6fcbc60e53c8a6ba24ae760c492b854bbd30
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sat Dec 7 19:03:51 2024 -0500
+
+    Fixed Change Icon for users, fixed new logo rendering for options like Lobby, Game and Joining, Fixed Win and Currency transfer for winner
+
+commit b1ec08b04d7e9578c2d552510c84f35a61072dfc
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sat Dec 7 17:53:13 2024 -0500
+
+    Fixed unlockable item handling
+
+commit ebcd3f19874509f6cc40e693db2c5bff1829f39f
+Merge: 7a18144 0530223
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Dec 5 20:55:10 2024 -0500
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 7a181445619bccf687276a7d57749db1893a5407
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Dec 5 20:55:02 2024 -0500
+
+    -_-
+
+commit 053022318d72df7a927a91efa26cb56771388233
+Merge: e3b4a70 9660d75
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Dec 5 18:05:31 2024 -0500
+
+    Merge pull request #48 from rbmata22/dependabot/npm_and_yarn/go-fish/cross-spawn-7.0.6
+    
+    Bump cross-spawn from 7.0.3 to 7.0.6 in /go-fish
+
+commit 9660d750a251f5016bf2683dfde288b2eb63d7b0
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Thu Dec 5 23:03:48 2024 +0000
+
+    Bump cross-spawn from 7.0.3 to 7.0.6 in /go-fish
+    
+    Bumps [cross-spawn](https://github.com/moxystudio/node-cross-spawn) from 7.0.3 to 7.0.6.
+    - [Changelog](https://github.com/moxystudio/node-cross-spawn/blob/master/CHANGELOG.md)
+    - [Commits](https://github.com/moxystudio/node-cross-spawn/compare/v7.0.3...v7.0.6)
+    
+    ---
+    updated-dependencies:
+    - dependency-name: cross-spawn
+      dependency-type: indirect
+    ...
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+commit e3b4a70dcf104d8e6eede361e88b5ea5d2604bd3
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Dec 5 18:01:57 2024 -0500
+
+    Removed go fish README
+
+commit 6853b12ed9cf54c15ad9045789b137d62401dfc2
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Dec 5 17:59:57 2024 -0500
+
+    Made Shop Full Screen
+
+commit c1fd6c1c95e4670f283b5c8f423457a6b27f9c43
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Dec 5 17:40:48 2024 -0500
+
+    Moving gitignore (very small change)
+
+commit f55511437ec6a8aff058046b28095a7a6eb45863
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Dec 5 17:39:00 2024 -0500
+
+    Working on the go fish organization
+
+commit e6a72c5f79f954c4e213ceda2a437afe08d7aba0
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Dec 5 17:29:55 2024 -0500
+
+    Removed the thousands of HTML files
+
+commit 403090ebfc2313af47bb1a995b1116e18a44a732
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Dec 5 17:18:12 2024 -0500
+
+    Removed old storysheet
+
+commit 2c9b0f63b4c13c6f116145eaba44731989a798cf
+Merge: a88676b a839a52
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Dec 5 17:17:37 2024 -0500
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit a88676b1d17ab1140e995465e15af10bea8df378
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Dec 5 17:17:21 2024 -0500
+
+    Cleaned up project layout
+
+commit a839a526b58076909c643dfadbff1807f071ef4e
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Dec 5 17:04:49 2024 -0500
+
+    Add files via upload
+    
+    User Stories as of Sprint 3
+
+commit 2d4d91f10b34b9ad933a6c3d10e2c30e7a532eec
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Dec 5 16:42:51 2024 -0500
+
+    README Description
+
+commit 66ab60b62e8af60ba55a25ed4b55f9344fd7aa3e
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Dec 3 23:18:49 2024 -0500
+
+    Cheeky final Documentation test https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/46
+
+commit bb0fd4924980d07c0f56fdf2d3ffd23369e4e42f
+Merge: 364c66f 24f0127
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Fri Nov 22 13:45:50 2024 -0500
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 364c66f20a988e610679fba699e44404ba2d9277
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Fri Nov 22 13:45:42 2024 -0500
+
+    Fixed Small UI error and the change icon UI fixed
+
+commit 24f01275cf33185cd7b8fb5cf5d7bbc178c323e3
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 22 13:17:13 2024 -0500
+
+    Buzzer Beater Game Music Fixed Looping https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit a28127e51928e79c893df518fdb1aa48adc4774b
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 22 01:41:03 2024 -0500
+
+    No look windmill dunk https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 668d7e373dd9e2b51e444023d9486a77b01a78f8
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 22 01:27:35 2024 -0500
+
+    No look 3 with no shame https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 0706896ff6b08460960c2b36ce522fc8f8d4d3e3
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 22 00:44:25 2024 -0500
+
+    Unfathomable shot clock cheese https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit d356e15ecb52a20f9cc6a1ee9c9d57fa94b52e1c
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 22 00:42:58 2024 -0500
+
+    Unfathomable shot clock cheese https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 202763be25926c8da1a395f3e4cabef49ed4835b
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 20 23:09:22 2024 -0500
+
+    Tweaked Documentation https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/46
+
+commit eb9c74cd5a3f8e286b060e25a90cfe4a5280c0b8
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Wed Nov 20 21:55:17 2024 -0500
+
+    Update Shop.test.jsx
+
+commit 1f218e96d7d1fc76aa104666e21f905cee2020e0
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Wed Nov 20 21:54:42 2024 -0500
+
+    Update Support.test.jsx
+
+commit 45e0ce22455849e052be2c24acb49980c9e0671b
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Wed Nov 20 21:52:24 2024 -0500
+
+    Update Shop.test.jsx
+
+commit 2920a9f60c351fac1a25d93b46e921c230b4fe48
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Wed Nov 20 21:40:42 2024 -0500
+
+    Update Support.test.jsx
+
+commit 4b0f0922c18a4312b1f1330ab0b2e08f20f7ef03
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Wed Nov 20 20:16:36 2024 -0500
+
+    Update Lobby.test.jsx
+
+commit b825429f618c3e1b6ff8cc914311be6f96e4792f
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Nov 20 13:46:34 2024 -0500
+
+    #30 Final Comments and Push... Game 7 2016 NBA Finals
+
+commit 5373774c0a1a7dde120d17b04352e238fe1cf06d
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Nov 20 13:28:57 2024 -0500
+
+    Push Test
+
+commit 708170060257ef08a989a981da9023ee50763d2f
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Nov 20 12:22:45 2024 -0500
+
+    Added Game AI Doc
+
+commit 778dfa2f1bb8255229146fa18146c0608764e8f5
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 20 10:10:56 2024 -0500
+
+    Fixed documentation spacing using \usepackage{enumitem} and fixed format https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/46
+
+commit dc69884f4a24bd413d87a7c00a34bf4c3178b71d
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Nov 20 00:52:26 2024 -0500
+
+    Done for td
+
+commit 445deaa4810b247031091f60af5a53624564b265
+Merge: 3add172 b16adbb
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Nov 20 00:13:40 2024 -0500
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 3add172a903ad5280c500b5d75ca8fa0a3223bf2
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Nov 20 00:13:31 2024 -0500
+
+    Final Push for tn
+
+commit b16adbb971a42a7593382cc64c08d78a7d2447ba
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Tue Nov 19 23:48:55 2024 -0500
+
+    Updated the documention https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/46
+
+commit aaf923194f3ad105cff9f4665283e502803d3de2
+Merge: 0ced73a 794d88c
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Nov 19 23:32:44 2024 -0500
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 0ced73ad9a47646f992f4cf62bf2554f37a84262
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Nov 19 23:32:38 2024 -0500
+
+    Fixed UI of Game some more
+
+commit 794d88c59e0b3936398d9ebec6aa7c785433fd9d
+Merge: 92ac894 ab67f1d
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Nov 19 22:36:31 2024 -0500
+
+    Merge pull request #47 from rbmata22/game
+    
+    #26 #26 #27 Complete Version of Go Fish Game (As of Tuesday Night... might work tmmw morning)
+
+commit bbb09f0c7e4b3054d5b4303ea752ca0cdb389858
+Merge: 92ac894 ab67f1d
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Nov 19 22:31:03 2024 -0500
+
+    Merge branch 'game'
+
+commit ab67f1d7ad52a899585008f68804664f2776a4bf
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Nov 19 22:30:30 2024 -0500
+
+    THIS IS HIP TOO
+
+commit 92ac8942b7ab310c6820407c52b52e55ff281ed4
+Merge: 529015e c229218
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Tue Nov 19 20:01:26 2024 -0500
+
+    Merge branch 'main' of https://github.com/rbmata22/CS482-Triangle-Project-GoFish
+
+commit 529015e757f36814de9d8ceafacc14eba9f50346
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Tue Nov 19 20:01:21 2024 -0500
+
+    Finished Admin capabilities #23
+
+commit c229218acc14e534ecbdc13330dfdd97ab548108
+Merge: 864677c 1ca2e66
+Author: chase.morrone <cwmorrone@loyola.edu>
+Date:   Tue Nov 19 19:24:10 2024 -0500
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 864677cb65c1ac3c023dddcd2e18f51e964d5abc
+Author: chase.morrone <cwmorrone@loyola.edu>
+Date:   Tue Nov 19 19:24:02 2024 -0500
+
+    testing
+
+commit 1ca2e663ace0ae85aeac7b984bd0dd12927351e8
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Tue Nov 19 19:18:06 2024 -0500
+
+    Update Login.test.jsx
+
+commit b413c235f4b13e9f32da3183d25f4318eb1cbeb8
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 18:56:14 2024 -0500
+
+    Removed placeholder https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/46
+
+commit b2ea0ab5d0380bba00bb30730804fb0d03a41966
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Tue Nov 19 18:55:04 2024 -0500
+
+    Presentation order https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/46
+
+commit eedc54b66c2f73e7670731986d8c7ee2641de8cd
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Tue Nov 19 18:54:00 2024 -0500
+
+    Update Home.test.jsx
+
+commit bc0853e66c7c87d242a9f15a08e02f194a473a72
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Nov 19 18:53:51 2024 -0500
+
+    Tried my best man
+
+commit 06fc56ab3314bafca161125528e1d26d47f0592a
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Tue Nov 19 18:53:13 2024 -0500
+
+    Update Support.test.jsx
+
+commit 1ef2412ae032c2e41e8d841ed2f9a9c30a5d5404
+Merge: 5c4e548 5c900bf
+Author: chase.morrone <cwmorrone@loyola.edu>
+Date:   Tue Nov 19 18:44:58 2024 -0500
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 5c4e548949f7da4825b504b29ea7b5f41cf897b2
+Author: chase.morrone <cwmorrone@loyola.edu>
+Date:   Tue Nov 19 18:41:50 2024 -0500
+
+    tests added
+
+commit 5c900bf82696b81129a9a865c924445c30f94106
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Tue Nov 19 18:39:13 2024 -0500
+
+    Update JoinPublic.test.jsx
+
+commit 37308d650e9e141d5809485e31bb59c20c4db791
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Tue Nov 19 18:37:40 2024 -0500
+
+    Update CreatePrivate.test.jsx
+
+commit e08e6dbd7579f296679c3023de82d22eb26c9aae
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Tue Nov 19 18:36:43 2024 -0500
+
+    Update CreatePrivate.test.jsx
+
+commit 57716ddc870d9aedc031155e304f026a05ffb9a6
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Tue Nov 19 18:36:08 2024 -0500
+
+    Update Guest.test.jsx
+
+commit d35324ee5664b93d701354faf81f56cab6f7fe4c
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Nov 19 18:35:48 2024 -0500
+
+    #30 buggy on my end, but i think it's just a machine issue for some reason
+
+commit 645f173c767246fbedbca4a4c89adc4dfb4472df
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 18:11:18 2024 -0500
+
+    Placeholder https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/46
+
+commit 40565a5f84790a9cb90414ab4da23c1d8ee69e6b
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 18:09:46 2024 -0500
+
+    Started sprint 3 doc folder https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/46
+
+commit f655c8908908fc70b825a35b0bb421330214c7bd
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 17:48:36 2024 -0500
+
+    Improved shop functionality to work with changing icons(No look three of doom) https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit cade81655900e681ba967334170ddd96b656e0b5
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 17:30:08 2024 -0500
+
+    THIS IS HIP TOO comment-Marley Holt-Williams
+
+commit 20dbff9add3de117a1b82842ddad90937529f72e
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Nov 19 16:59:06 2024 -0500
+
+    Added Game Mode option to get faster games
+
+commit 8bfca40e7c585f685380831c23053898866b0000
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Tue Nov 19 16:46:03 2024 -0500
+
+    THIS IS HIP TOO comment
+
+commit 534cfaedf3097e38b6237f307a30b06296d9c26d
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 13:48:22 2024 -0500
+
+    Added music button https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 4275d26d8754e3f99369262d6d340d2c4ae63d3e
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 13:46:37 2024 -0500
+
+    Fixed next button restarting music https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit b6fd481f2cbff91dce29ea0364d5170957e3fbe0
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 13:42:12 2024 -0500
+
+    FIxed the Tutorial https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit b44830054545efcbe11a9558fb54ca683ceb90e8
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 13:40:28 2024 -0500
+
+    Fixed music error https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 1903c483d0a8fecb71ce402519e7d798e22cc862
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 13:37:12 2024 -0500
+
+    Fixed error https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 8642446759651197b3edda0c8d9c8eacd603a5b4
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 13:35:37 2024 -0500
+
+    Tutorial music added to code https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 0738dd090f0c05988ce0f11b0916857e812593b3
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Tue Nov 19 13:32:55 2024 -0500
+
+    Added tutorial music https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 30ba2478400b9731cc6f6aad508b96a933217d69
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 13:29:12 2024 -0500
+
+    Saved the whole home shot clock cheese https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 519f364c42c4c051b1f9dd82fbe25607f0d868e8
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 13:23:47 2024 -0500
+
+    Changed import statement https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 6bac88c2b4567d749e670a2ec34b5985eef766cc
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 13:22:24 2024 -0500
+
+    Fixed import https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 3f33c2457ea356d288840ad4cefea79efbd71164
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 13:20:29 2024 -0500
+
+    Might've cooked home https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit ad974f84d4ee4457476ca8fd65b93f200a67a3db
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 13:18:07 2024 -0500
+
+    Added home music https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 70d99401c0e2323053cdc7d2eec248f2d80b29f6
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 13:13:13 2024 -0500
+
+    THE RIGHT PATH https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 6aa289a16f2be10b8e2296326305d2398224d90e
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 13:11:45 2024 -0500
+
+    Fixed lobby path https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 176725371d4969050cfc1267038830a63ffbd428
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 12:49:40 2024 -0500
+
+    Hopefully this helps https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit d9c71532a41e492a7892c8877e0ad177213e80df
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 12:48:13 2024 -0500
+
+    Fixed blank screen due to app https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit cdc869533f5bd143a3169ed3c8e9a6248cbbb325
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 12:46:59 2024 -0500
+
+    Had wrong name https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 1052710a182079f298b9bab7dd3006cc35dce67b
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 12:44:23 2024 -0500
+
+    title screen music cheese https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 80c57990fdeaec88a5834581881a618002be0eee
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 12:37:23 2024 -0500
+
+    Added signup music https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit a4f3dcf901862ff77d220f3189c85970f9da9e1b
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 12:29:55 2024 -0500
+
+    Fixed silly mistake https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit e691f2fcda90bbdf832e4f6dbad483b7a73e25da
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 12:27:59 2024 -0500
+
+    Guest Music first draft no shot clock https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 583aea88ac74568a39febe226dcac3527a79a72a
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Tue Nov 19 12:23:58 2024 -0500
+
+    Added title screen music https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit e3bd3e76807d9d27d9c3b5fb75d5cf9209654b5c
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Tue Nov 19 12:22:42 2024 -0500
+
+    Added signup music https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit f4306ea25f52b9bdd4879f1d253baad530640b33
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Tue Nov 19 12:22:13 2024 -0500
+
+    Added guest music https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 5fac82a27b6d9261be566ef362dab6f99793ea28
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 12:17:53 2024 -0500
+
+    Correct path ! https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 8ae59a67c558bbc0f70ee8823420fbe3fccf4083
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 12:16:20 2024 -0500
+
+    Fixed import path https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 5d051a4e41333dce327cff6ee76c47708e0b3677
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 12:10:57 2024 -0500
+
+    Fixed duplicate decleration https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 47d32c91c74d49451fe73a33761ac7c44332f0fc
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 19 12:07:47 2024 -0500
+
+    Login music of doom first draft https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit b42078f3f19e76595ca1243c7c99eaa8c2510d22
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Tue Nov 19 12:00:38 2024 -0500
+
+    Added placing card sound effect https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 6241f68d9082339c2b9c9a9abf0be104ecaa011f
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Tue Nov 19 11:56:01 2024 -0500
+
+    Added lobby music https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit a776a7267f30ef353b31d4a2722b0c658ac4944e
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Tue Nov 19 11:52:46 2024 -0500
+
+    Added login music https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 9703a49d86b0ea6a392d7677aac33242ec8a7303
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Tue Nov 19 11:50:47 2024 -0500
+
+    Added home music https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit 35e81a906105a31da574e308ac2b40656091afa9
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Tue Nov 19 11:48:54 2024 -0500
+
+    Added game music https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/45
+
+commit d2760e2ff9f03c54c5074b195a40dfe8689a9051
+Author: chase.morrone <cwmorrone@loyola.edu>
+Date:   Mon Nov 18 14:09:02 2024 -0500
+
+    added tests for creating lobbies
+
+commit 405d0c30045ab4fe33950e8d66e3bfd9eb8fee34
+Merge: 5618f3a 09ff08a
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sun Nov 17 19:16:10 2024 -0500
+
+    Merge pull request #44 from rbmata22/game
+    
+    #27, #28, #29 Gameplay working updates
+
+commit 09ff08ad9d5767ded48714f94553b1d25664aaaa
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sun Nov 17 18:25:33 2024 -0500
+
+    Random Lobby Tests
+
+commit c5ff3659563cb6b76786f56739a28d0b7e9efc8f
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sun Nov 17 18:15:11 2024 -0500
+
+    #27 fixed Betting functionality... It was using the Bet component from before, but now it's just built in the Lobby file
+
+commit 6f87687ee1c4f67866c8039e774baadf5c283629
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sun Nov 17 17:40:40 2024 -0500
+
+    #29 Ask functionality works between players, Viewing Cards is a WIP for now
+
+commit 2e97a2030df8b4754be6e235107d3312677eb883
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sun Nov 17 16:18:32 2024 -0500
+
+    Fixed UI and Card layout, WIP
+
+commit 516813c9d7a6b3536dc971ee3c05cd0321ba7afd
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sat Nov 16 17:44:29 2024 -0500
+
+    #27 'Why not let it fly' adding a bunch to Game Logic, will update tmmw
+
+commit 5ea451d9fbf1df666b598fab44c6e90547ecf740
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sat Nov 16 16:19:19 2024 -0500
+
+    Working on getting games to appear on separate UI
+
+commit 347e8c04c7f0b504639b313356723374e00e0fa4
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sat Nov 16 15:01:31 2024 -0500
+
+    #27 working on moving everyone to the game file, updated lobby icon rendering to support shop items
+
+commit 5618f3a2c2dd1d3aa851d9865d819343521a74b0
+Merge: dd9116c 9b7ca47
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Sat Nov 16 13:21:07 2024 -0500
+
+    Merge pull request #43 from rbmata22/betting
+    
+    Betting feature integrated into game lobby
+
+commit 9b7ca47bb8cea9f404649ff7bbbe3a9347e7f1d5
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Fri Nov 15 14:30:02 2024 -0500
+
+    Removed unnecessary file
+
+commit 1e046a0e089d583dee9673cacd6723c802dc9db6
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Thu Nov 14 23:27:06 2024 -0500
+
+    Added handling of bet amounts for each player from within lobby. Only updates once game starts
+
+commit c5be459711b6368eaaf0e244c93041e50f8e285c
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Thu Nov 14 22:37:03 2024 -0500
+
+    Built a mock display for the betting pool to be made within the lobby #29
+
+commit dd9116c34a056ca8432ee28e29e81f1d886801b5
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Tue Nov 12 22:26:04 2024 -0500
+
+    Finished up friend requests and editing friends list
+
+commit 9b29a4333eb67d974b6b6654741889b7d1cfaf01
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Tue Nov 12 19:15:30 2024 -0500
+
+    Rename The Lore behind the creation of "LeBot James"! and joinpublic.png to TheLorebehindthecreationofLeBotJamesandjoinpublic
+
+commit fbe442016b5765ff2e64ee8c1b8289d2a012eedb
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sun Nov 10 10:49:00 2024 -0500
+
+    Stories Spreadsheet Updated
+
+commit f531d9f8ab8281f215d5c36d2e76df66a904dbf0
+Merge: f162ac3 91357ef
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sun Nov 10 01:17:03 2024 -0500
+
+    Merge pull request #42 from rbmata22/gameplay
+    
+    Gameplay - Working on the Betting functionality right now, still a WIP #27
+
+commit 91357ef488e854620fae3f32b9eb01d8310e8017
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sun Nov 10 00:33:04 2024 -0500
+
+    My bad on the UI i fixed it
+
+commit f162ac3e0e07ded346472d36e674dc8073f6e019
+Merge: 6dd1681 4a7a067
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sat Nov 9 22:57:58 2024 -0500
+
+    Merge pull request #41 from rbmata22/player-ui
+    
+    Testing Updates and Working on Change Icon Functionality #15
+
+commit 6cfb8b86957edd3b1137062b396fcb320903b9df
+Merge: 6dd1681 4a7a067
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sat Nov 9 22:56:22 2024 -0500
+
+    Merge branch 'player-ui'
+
+commit 4a7a0676bd3f87c43f199f162064e3ec3dbb0b98
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sat Nov 9 22:53:11 2024 -0500
+
+    Redundant code cleanup
+
+commit 696ca48f08bc9fc83d3610253e5ec9653dd5b108
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sat Nov 9 22:48:58 2024 -0500
+
+    Testing: Guest (new) = 68%, Home = 81.5%, JoinPrivate = 87.8%, JoinPublic = 75%, Lobby (new) = 62.2%, Login = 94.7%, SignUp = 80.6%
+
+commit ba55973447ddc99310741d133059a669f3b58b6a
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sat Nov 9 20:29:04 2024 -0500
+
+    Added more rules for the tutorial to explain full game.. added deck size limitations to speed up gameplay testing in the long run
+
+commit 6b61471aa54932a4a10b09aaabb8ea2f7b4e8fdd
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sat Nov 9 20:04:39 2024 -0500
+
+    Added change icons for GUEST ONLY, glitches with Authorized users for now.. working on fix. Fixed Lobby Name glitch with Signup
+
+commit 6dd1681606e0e24012c7cfb4ecd8f41378c2feae
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Fri Nov 8 12:32:01 2024 -0500
+
+    Create App.test.jsx
+
+commit de40d05db3d3691d7ffe931fef8f434996470cbd
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Fri Nov 8 12:31:17 2024 -0500
+
+    Create JoinPrivate.test.jsx
+
+commit e962352ee118745c98379914633e5e03c1876b95
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Fri Nov 8 12:30:50 2024 -0500
+
+    Create JoinPublic.test.jsx
+
+commit 0b70b57d85ae4fa49c3ba6efe822d1f973e477a7
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Fri Nov 8 12:29:13 2024 -0500
+
+    Create Support.test.jsx
+
+commit 1f3ca41af477bfa7a64c4ca6a092a5d4d1263c0f
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Nov 7 13:10:05 2024 -0500
+
+    WIP, fix the logged in and created user change icon UI
+
+commit b21f319013ea57d3d4d89a23a69da1821de70f08
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 15:10:08 2024 -0500
+
+    CHECK THIS OUT (Marley)
+
+commit 89c82cae698f2353da24bfde81a35893ba738f04
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 15:08:11 2024 -0500
+
+    CHECK THIS OUT <Marley>
+
+commit 3b242d74365a51d918d909202d98c988ebb23e8b
+Merge: 1478ec4 f8168aa
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Nov 6 14:12:32 2024 -0500
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 1478ec4694f652e94cd798bcbdd3dd468e39f6d7
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Nov 6 14:12:27 2024 -0500
+
+    Fixed Folders for game and bet
+
+commit f8168aaa133029f5ed6a8127eb351d9f365c91a9
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Wed Nov 6 13:56:39 2024 -0500
+
+    Shop AI Usage
+
+commit 32262bc5c1e20d1db07a34f69812ed209b223b8c
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Nov 6 13:51:48 2024 -0500
+
+    Added some funny bot names
+
+commit 71e05a84629039d612d8df71f47aac11d7f7c417
+Merge: 7698dbb 333aec3
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Nov 6 13:45:28 2024 -0500
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 7698dbbaa058c1ca55d48ca19b6ad49587dc02f3
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Nov 6 13:45:21 2024 -0500
+
+    Adding AI Documentation
+
+commit 333aec3bdcb4e9bdfe5c7eaefa2cc5c248ec888c
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Nov 6 12:50:06 2024 -0500
+
+    CHECK THIS OUT (Ryland)
+
+commit e34a3b42c40b3f7accfa9db1f44c2aa70657da95
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Nov 6 12:42:44 2024 -0500
+
+    Added teamspeed
+
+commit 70a431322691659b82f1327cc9c6ddd825403471
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 12:16:35 2024 -0500
+
+    Purchase sound effects implemented https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit d4aefe8be278e4e7505f4502b23e3e523c9d91dd
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Wed Nov 6 11:57:34 2024 -0500
+
+    Purchase sound effects
+
+commit 3a3aec6981e2d2cadb8b67e253927fdc62a02238
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 10:57:54 2024 -0500
+
+    Modify local storage https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit dc0639756570d754493f480af0205c9c23d9aea9
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 10:44:46 2024 -0500
+
+    Added back some comments originaly thought to be redundant https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 1d2864b4179dd817d9acb06eb5baf9793df870e5
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 10:36:55 2024 -0500
+
+    Fixed guest balance with spinning update https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit b0bdfe9c09d65486224fbf67dfdbbdb222725681
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 10:32:16 2024 -0500
+
+    Solution to shop crash https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit c0a5fbf86ce3efd2d6cb4a65aa4f772195a7f738
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 10:23:21 2024 -0500
+
+    Fully integrated all previous components https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 0dbf450000c2988d4336aa5fb316887e8ced525b
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 10:18:37 2024 -0500
+
+    Stop spinning if purchased https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 69fc37d51714c1b65f840db1adc30cc20500d03f
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 10:03:48 2024 -0500
+
+    Spinning animation for icons https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit e25cd2f68fd63809eb5938954aa07f10ec8f01bb
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 09:57:17 2024 -0500
+
+    Reverting the CSS back to original style https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit efce9d3f3683f2127a3059bb487ab11b44d5dd37
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 09:43:40 2024 -0500
+
+    From images to icons(why not let it fly!) https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 1420b294f7f8a6289bcdb2ab77fe334e10832b56
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 01:37:50 2024 -0500
+
+    CSS for the shop https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 97b3d7c1a5bce447f111ba6d26e7bae857c45d58
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 01:29:17 2024 -0500
+
+    From cards to icons https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 84ae41cabeff14e7480dd02841fd5267b882e930
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 01:26:32 2024 -0500
+
+    Home currency https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 871c6db538efa5bc2e14d5f9eb8ee1170e282ace
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 01:08:24 2024 -0500
+
+    Persist the balance https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit c6d9c57bf1c23df38cf4179813516d8c21bcbb18
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 01:01:21 2024 -0500
+
+    Displays "Purchased" https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit bd98520a120a3b6bf9008822bd3f47d5b372c5e3
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 00:55:03 2024 -0500
+
+    Inventory storage for guests https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 2fa9ccf631999d2f8992012aa7b254d83e4df223
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 00:28:08 2024 -0500
+
+    Fetching for authenticated users https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 6cec9fcbd93d42e5c106f97054bd8a35587838f3
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Wed Nov 6 00:22:42 2024 -0500
+
+    Guest balance working with shop https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 316f879eb97a060917d6da413ed6f6f87aa45bbf
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Tue Nov 5 21:23:09 2024 -0500
+
+    Added LaTeX documentation for Sprint 2
+
+commit 28f8519e1c42e5c4887402563d5c19d8ad6d03d6
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Tue Nov 5 15:33:22 2024 -0500
+
+    Create JoinPublic.test.jsx
+    
+    5/6 current test cases working
+
+commit e91d6e688395844e56e4d60ab744156e48963d07
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Tue Nov 5 15:21:04 2024 -0500
+
+    Create JoinPrivate.test.jsx
+
+commit 519b01cef19fe23dd5517e50c269c423401de668
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Tue Nov 5 15:13:51 2024 -0500
+
+    Create Support.test.jsx
+
+commit 00109f6efc33e46a6d961c90c1ba34bd08f8ac08
+Merge: 6d0f8b2 311c8f7
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Tue Nov 5 15:10:21 2024 -0500
+
+    Merge branch 'main' of https://github.com/rbmata22/CS482-Triangle-Project-GoFish
+
+commit 6d0f8b2a09e25c2c358f7ed8ba5893c65ba16d6b
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Tue Nov 5 15:10:17 2024 -0500
+
+    Testcases for Home, SignUp, and Login
+
+commit 311c8f7faa1b72bf750d471afe1d05f742097cb7
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Tue Nov 5 15:09:09 2024 -0500
+
+    Update Shop.test.jsx
+    
+    Started work on shop test cases, running into issues with music files
+
+commit 2685d6ed464a411999bf75beb9249de42e9c6340
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Tue Nov 5 15:00:16 2024 -0500
+
+    Create Shop.test.jsx
+    
+    Ideas for testing shop
+
+commit 6009764a3996c1fbb588d198df11a8e675e5d1f0
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 5 13:34:56 2024 -0500
+
+    Looping the shop music https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit cab8e375acf45b7f097d92eadc3f0c8b26888016
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Nov 5 13:02:00 2024 -0500
+
+    Fixed shadow in Lobby.css (small commit for my OCD lmao)
+
+commit b095280c5abf09ac0a3c70167c34070e808fb33e
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Nov 5 12:54:21 2024 -0500
+
+    Fixed small card issue in tutorial, step 4
+
+commit e4091bdc41edb3c4e69de8701d2d6f657011287c
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 5 12:15:03 2024 -0500
+
+    Better visually looking buttons https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 7b298128f75e6eadbf42af6edda3217c31dc5253
+Merge: 2fc3817 fbb6c6a
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Tue Nov 5 11:51:24 2024 -0500
+
+    Merge pull request #40 from rbmata22/jest-testing
+    
+    Testcases for Signing Up and Creating an Account
+
+commit 2fc38172921178a10071854e2f9a7f2ce03fd2a3
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Nov 5 11:21:43 2024 -0500
+
+    Addded music and music button https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit aafbe5d833c062204a5015600d91ff7078b0e844
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Tue Nov 5 11:08:54 2024 -0500
+
+    Shop Music
+
+commit 0da53cd9156b201b322ec4aeea6c01a5e6db975b
+Merge: 8cd8669 b7be068
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Nov 5 10:19:53 2024 -0500
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 8cd86693afe0cf34434047bc6264e7717a1140c8
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Nov 5 10:19:46 2024 -0500
+
+    added more details to tutorial (icons and animation)
+
+commit fbb6c6adb0e29c84803f69310dc8f03fa75af247
+Merge: 8f7b31a 0b27645
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Tue Nov 5 07:35:42 2024 -0500
+
+    Merge branch 'jest-testing' of https://github.com/rbmata22/CS482-Triangle-Project-GoFish into jest-testing
+
+commit 8f7b31a14e9faf0c29dfba22ff24b9e6f7148750
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Tue Nov 5 07:35:36 2024 -0500
+
+    Finished testcases for signing up and creating an account
+
+commit b7be068138897a770ac3ddc0b1cca1ba39130160
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Tue Nov 5 07:33:30 2024 -0500
+
+    Documentation for testcases
+
+commit 552df2d5317aab514e6948e692d40a5a26079e17
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Nov 4 22:27:18 2024 -0500
+
+    The Lobby.jsx is a mess, we gotta fix the redirection to Bet.jsx not Game.jsx - note for tmmw
+
+commit cc243e74f2a4417b61cc154b6d33eac64980e2ae
+Merge: 9760058 1679b1f
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Nov 4 22:20:38 2024 -0500
+
+    Updated create-join
+
+commit 1679b1f084b87aa87da10ebe8233de3b36a70c08
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Nov 4 21:47:31 2024 -0500
+
+    Everything
+
+commit efcda9889cf33b8db9275b0f28386c7e09f67e70
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Nov 4 21:44:21 2024 -0500
+
+    Working on Bet, doesnt redirect to game yet
+
+commit f5ff2c235cce056b183ef969c9f6266877dd4714
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Nov 4 18:58:01 2024 -0500
+
+    Fixed Tutorial path... wasnt showing. Also moved the folder into Home
+
+commit 9760058c0fb9b7cfb9b9e2d2a7865ff0c94e00af
+Merge: 4b00502 0b27645
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Mon Nov 4 18:17:43 2024 -0500
+
+    Merge pull request #38 from rbmata22/jest-testing
+    
+    Beginning code of Jest + React Testing Library testcases
+
+commit 0b27645cfc62dec735083b9cf66517814d0ea2be
+Merge: 4f50348 4b00502
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Mon Nov 4 18:17:30 2024 -0500
+
+    Merge branch 'main' into jest-testing
+
+commit 4b0050258b5ce37919982935eea68ce6e955ee90
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Mon Nov 4 14:48:52 2024 -0500
+
+    Documentation for testcases
+
+commit d64724e029fd99c201bf900eac71e29f537ee1b9
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Nov 4 13:50:00 2024 -0500
+
+    Bet logic way off, work in progress though
+
+commit 35c8571a564898d1f16452e0cc6cf6331f76022b
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Nov 4 13:36:29 2024 -0500
+
+    Added Back button to the Join Private
+
+commit cd5310a15d7de6791dc2b839fc0c4ed8cb467b59
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Nov 4 13:20:58 2024 -0500
+
+    Added Back button to JoinPublic #20
+
+commit 62c03f0eb220f6741c6a9e5d6de142a4c4a19a8d
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Nov 4 13:03:14 2024 -0500
+
+    Fixed filtering of private lobbies
+
+commit e7f28dc9cc7c4ff968c68693cd85b71f80476d80
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 12:56:45 2024 -0500
+
+    Added game over support https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/28
+
+commit ba3f6192e4ce13bbc74c41b31a97f302dbd8c859
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Mon Nov 4 12:48:56 2024 -0500
+
+    Placed cards in new path
+
+commit d1a5bfafa327e561c332233de6cec6ee7a13a406
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Nov 4 12:48:10 2024 -0500
+
+    Updated Login requirements
+
+commit b322a90f570b22eaeff3f3b25195829df573ac34
+Merge: 635e438 cf4c276
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Nov 4 12:47:01 2024 -0500
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 635e43864ffa72777bab7157ff8fb39a4eee0759
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Nov 4 12:46:53 2024 -0500
+
+    Removed redundant tutorial button
+
+commit cf4c276da161410677cd48e8a3b6cf26e986a4b4
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 12:42:12 2024 -0500
+
+    Back to basics(changing image location) https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/28
+
+commit 2603c570592521b324f078d2e9dd199ad36634d8
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 12:36:59 2024 -0500
+
+    Readjusting path logic https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/28
+
+commit 49fd3b0ae6126363a3070e92f1cfd2ad0fe1cbf0
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 12:32:43 2024 -0500
+
+    Removed fix(didnt work) https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/28
+
+commit 3ea08ebe4e1496f798fa48c8483433bb0ff69644
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 12:31:10 2024 -0500
+
+    Fixing path mistake https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/28
+
+commit 2d1f826701e90cb91b5502def80d2fa97c34af01
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 12:26:08 2024 -0500
+
+    Fixed error in game functioning https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/28
+
+commit 3bf514a79e443fa7239dc330285293cef1d4bae5
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 12:24:39 2024 -0500
+
+    Added images for the cards https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/28
+
+commit dc8b0936e613b61f8a7b9fc118de396365662576
+Author: MarleyHW <90741828+MarleyHW@users.noreply.github.com>
+Date:   Mon Nov 4 12:19:50 2024 -0500
+
+    Add files via upload
+
+commit 8066357c0cf0e495fe4d7c49d99ba1918235ce06
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 12:13:28 2024 -0500
+
+    Folder for card images https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/28
+
+commit 04100bfde55a3d71f248079e399900efd2870562
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Mon Nov 4 11:59:03 2024 -0500
+
+    Update Tutorial.jsx
+
+commit 8a75a8eee90c912f77f634e57c9e5ef6e158fb1b
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 11:52:29 2024 -0500
+
+    Shows players' their hands https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/26
+
+commit df08d652f4aeac576c740ec38a7f40c30999ba20
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Mon Nov 4 11:45:36 2024 -0500
+
+    Update Home.jsx
+
+commit 6b07b711566abef36628443630be4ec955c2dcc0
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Mon Nov 4 11:44:48 2024 -0500
+
+    Update main.jsx
+
+commit edf23e495a53decdff43cb43a9033080796101ea
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 11:41:16 2024 -0500
+
+    Added bot logic https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/26
+
+commit 1cf153ce36fc07da8b51778187dca0e70ba25c0f
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 11:35:42 2024 -0500
+
+    Improved basic functioning https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/26
+
+commit 94894b33c5f9ec6f9de5dd518b179771bc080a6c
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 11:30:23 2024 -0500
+
+    Pull lobby size from lobby https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/26
+
+commit cabedec28c24bae3c75f79add091da1a4f61a708
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 11:25:55 2024 -0500
+
+    Should dynamicaly change for lobby size https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/26
+
+commit aac419759d752b6c1340266f77addd3c72a14375
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 11:08:47 2024 -0500
+
+    Supports 6 potential players https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/26
+
+commit 00ae3b9ff8dd57775d6064c05abbe87a8426d464
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 10:44:26 2024 -0500
+
+    Game basic functioning https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/26
+
+commit 53959ead5c143b77771f03cc97243ad1b0bd068e
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Mon Nov 4 10:24:20 2024 -0500
+
+    Started the main game https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/21
+
+commit 4f50348e0179d094ef5b795432b1a7fc08363968
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Mon Nov 4 06:02:51 2024 -0500
+
+    Beginning code of Jest + React Testing Library testcases
+
+commit b0058be9effbf0f9c579190f30fd185be4f30837
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 21:28:28 2024 -0400
+
+    Fixed the text that messed up sizing https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 10883f3e9912e4fdf30f52c7ee6e9b031aa4e680
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 21:21:27 2024 -0400
+
+    Working home and changed titles https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 9db6a43d169eeabae41cb42ca4edef2375a01f23
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 21:10:31 2024 -0400
+
+    Made home button better https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit a7fcb87f0d26bc0ecf90b669414072b227155d83
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 20:42:30 2024 -0400
+
+    Routed home button https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 4f9545e91f58758f24e18cbcba72d9da43bd36d4
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 20:28:58 2024 -0400
+
+    Added shop home button https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit c7cc269d7cf1a68db2d96fa02a94548514126328
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 20:09:57 2024 -0400
+
+    Additional padding https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit ff49a3470eb2180af5f40c665b393456e1ad7e17
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 20:01:03 2024 -0400
+
+    Maybe fixed the top buttons https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 1ee292e993040afdea722faa6aef953f3afa54e8
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 19:52:59 2024 -0400
+
+    Chnaged item border color https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 6e0255315d24f8587ad8e0ba3acc9c71a0eb0898
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Fri Nov 1 15:36:09 2024 -0400
+
+    Update Tutorial.jsx
+    
+    Tutorial running properly in its own project, need to add functionality to bring it into our app
+
+commit bd5c3d54c1972cdba3e109a20b265d8cb5d50288
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Fri Nov 1 15:35:32 2024 -0400
+
+    Update Tutorial.css
+
+commit 295e0e3cf8bc1a0176bc6f38c9986b891a00e40f
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 14:26:40 2024 -0400
+
+    Reverted to standard layout https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 4a4bbbcf45520842c2059af1babff5a24eb2b4fc
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 13:41:47 2024 -0400
+
+    Fixed the visability I think https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit dec1ba96c814fe67a3c833b8f54f2c1af9f3eb5e
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 13:37:13 2024 -0400
+
+    Last didnt work, this might https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 9da88cfb930f304273ea23d1a0f49707840b98c7
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 13:24:33 2024 -0400
+
+    Trying different looks https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 2f7c5969de48b8971ad7bdf2c63c6b996f47a3f7
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 13:17:08 2024 -0400
+
+    Removed the snow https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 647373ba4450d07aac6c6fdffe42adb8af40f2e9
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 13:09:14 2024 -0400
+
+    Fancy Shop CSS https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit b0d39a3fa1ad6354bac93df0b61b21fde5712ff8
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 10:39:50 2024 -0400
+
+    Should now reflect the right order https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 313266646358543908b4712af6c639d87987a01b
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 10:34:39 2024 -0400
+
+    Added Dragon Ball https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 037878f1089c73e2e0b1996617bf01435c009d08
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 10:30:10 2024 -0400
+
+    Added Marvel Trophy https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit d7f9345c11ded9476e0de12b915d612b13148dc2
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 10:25:01 2024 -0400
+
+    Added some more themes(Switching to virtual trophy)
+    https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit cad543e3f93fdc77b176a574fb7469a345ff0138
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 10:08:56 2024 -0400
+
+    Comments of doom https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 479e0ee633fe6d6da44b2856b79de4b644499e6a
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 09:58:20 2024 -0400
+
+    Maybe fixed the path error https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit e36adb68a315687a353e84864df95ead5c18bf92
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 09:52:24 2024 -0400
+
+    New change to path https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit 30313efc95474eb436feaa0d750aa2744356cd17
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Fri Nov 1 09:48:52 2024 -0400
+
+    Shop https://github.com/rbmata22/CS482-Triangle-Project-GoFish/issues/14
+
+commit ae7e7629c9e644c489bafb951e73ae81888e6797
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Oct 31 17:19:38 2024 -0400
+
+    Merging create-join to main
+
+commit 4d541455c9528206d3115710c8091ec6e6b38134
+Merge: 76ab369 ca49cef
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Oct 31 17:18:33 2024 -0400
+
+    Merge branch 'create-join'
+
+commit ca49cefd71bd4ebeac58c9f8a0481ceb73791d0e
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Oct 31 17:14:20 2024 -0400
+
+    S19-S20 - Adding join features for Public and Private
+
+commit 76ab3692601a463ea6f6f19b227d87f34833164a
+Merge: 0b3e9ae c0fff0d
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Oct 31 16:40:19 2024 -0400
+
+    Merge pull request #37 from rbmata22/create-join
+    
+    S17 and S18 - created the Lobbies
+
+commit c0fff0d7282609836c6f18e5fcfbf8f6ad0beadd
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Oct 31 16:39:23 2024 -0400
+
+    S17 and S18 - created the Lobbies
+
+commit 0b3e9ae8c59d3742e1c1d2366d09809a5f5d2bd8
+Merge: 3000536 34b5591
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Oct 31 13:30:09 2024 -0400
+
+    Merge pull request #36 from rbmata22/create-join
+    
+    Stories 17-20 file placeholders
+
+commit 34b5591180acf18ba20d25beb31af325b44c8c92
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Oct 31 13:28:45 2024 -0400
+
+    Stories 17-20 file placeholders
+
+commit 300053600853da22bf6cfdc61077b0439a0dc42b
+Merge: f165484 bcd0247
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Oct 30 20:38:01 2024 -0400
+
+    Merge pull request #35 from rbmata22/friends-menu-(S7-S11)
+    
+    Friends menu (S7 through S11)
+
+commit bcd0247d9c0cd134cc30602161cd646a674de5d9
+Merge: 7e93d72 f165484
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Oct 30 20:37:34 2024 -0400
+
+    Merge branch 'main' into friends-menu-(S7-S11)
+
+commit 7e93d727e2d3c5904c30d5c6f5918784729a91b1
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Wed Oct 30 20:34:04 2024 -0400
+
+    Finished basic functionality of friend requests
+
+commit f1654846aac676aff6f7cc4c5f9704143db94a18
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Wed Oct 30 16:26:40 2024 -0400
+
+    Create Tutorial.jsx
+
+commit 4e3c5f3a9988c953c97037b4d669a2c5032411ca
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Wed Oct 30 16:26:16 2024 -0400
+
+    Create Tutorial.css
+
+commit 6c7cb9ee6c0a5a6f9778efbda89ce44bc30f1b21
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Wed Oct 30 16:25:12 2024 -0400
+
+    Delete go-fish/src/components/Tutorial.css
+
+commit 60c0b70c970c8c93495059464f48e0eb6624e66b
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Wed Oct 30 16:24:35 2024 -0400
+
+    Create Tutorial.css
+
+commit 8219625acca85c7701734f1501caf353ec98eb66
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Wed Oct 30 16:23:47 2024 -0400
+
+    Create Friends.jsx
+
+commit e567cd12978edb2ba1e0babdc8c74893d700319f
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Wed Oct 30 16:23:17 2024 -0400
+
+    Create Friends.css
+
+commit 09b1a63b9b264d762d43ddc33e3e478a528919c4
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Oct 30 14:37:23 2024 -0400
+
+    Update to LaTeX documentation for Sprint 1
+
+commit 884f9d1d852f33164ba286ba3d0db2b96bae2093
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Oct 30 14:36:28 2024 -0400
+
+    Update for installing packages
+
+commit bfe9366d70b42abaf1dca1922e01f5c51d987ac4
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Wed Oct 30 04:22:52 2024 -0400
+
+    General functionality of friend requests implemented. Just need to clean things up
+
+commit 78e95170bf4d67aa89c2f3fb53b182748166b102
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Tue Oct 29 19:10:02 2024 -0400
+
+    Updated messages to display user logos
+
+commit ba5a1fc424b42a0032b33dd5e9470c34b913d94d
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Tue Oct 29 17:46:37 2024 -0400
+
+    Rename SignUp:Guest Home Redirection p2.png to SignUp-Guest Home Redirection p2.png
+
+commit e3c76cefab2c237d14b53e39ad2f5b0394e7d2e5
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Tue Oct 29 17:46:25 2024 -0400
+
+    Rename SignUp:Guest Home Redirection p1.png to SignUp-Guest Home Redirection p1.png
+
+commit f17dde8de935d55ddec9a56f5c940b52e7f9957b
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Mon Oct 28 10:34:29 2024 -0400
+
+    Update testing.tex
+
+commit ff36ed4419f64008433736eb1e9d3cfb23b7982e
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Mon Oct 28 10:33:40 2024 -0400
+
+    Updated documentation with testcases
+
+commit a5529685050e5293d67d9d86756624a3f61586f8
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Mon Oct 28 10:32:30 2024 -0400
+
+    Add files via upload
+
+commit 6e14aab0a4ac612ba086f0094fedc53af9efcfac
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Fri Oct 25 13:24:31 2024 -0400
+
+    Added Tests
+
+commit 97f3d5908710afbeaaf0334a109b558dea9b1de0
+Merge: 120bb9e bc37793
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Fri Oct 25 09:46:53 2024 -0400
+
+    Merge pull request #34 from rbmata22/user-auth
+    
+    User auth
+
+commit bc37793db7d290ffcbde819a1a0e290e35a88a89
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Fri Oct 25 09:45:49 2024 -0400
+
+    Fixed Front Page
+
+commit 289161d0fce330116274e38daa1cbabfeecc01ea
+Merge: 03d4a7c 120bb9e
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Fri Oct 25 09:09:36 2024 -0400
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish into user-auth
+
+commit 03d4a7ccfa3bf762e36f57cd41dbead24d722491
+Merge: a4c2628 fc9f38d
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Fri Oct 25 09:05:25 2024 -0400
+
+    Merge branch 'main' into user-auth
+
+commit a4c262855e92e9dfcd6d295a2af0986ceb787f0f
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Fri Oct 25 09:04:29 2024 -0400
+
+    updated
+
+commit 120bb9e6fd9a5cc14917f0f07c15cf8f7d0fb646
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Fri Oct 25 05:24:47 2024 -0400
+
+    Update teamspeed.tex
+
+commit 36e03a39c2f2682e6d202fddc0b60351be48e973
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Fri Oct 25 05:23:04 2024 -0400
+
+    Added admin support
+
+commit 16e1dfc9278780f8f49e6138cd263d963ffd672e
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Fri Oct 25 05:20:52 2024 -0400
+
+    Update to Support.css
+
+commit 253ae5c6f6924bbc6b477d9dac281b176f2399c1
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Fri Oct 25 05:20:29 2024 -0400
+
+    Update to Support.jsx
+
+commit e4a1ecc0b7f924294aaf4ce86560b9010dd9802a
+Merge: 88eaa50 8c4aabd
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Fri Oct 25 04:39:11 2024 -0400
+
+    Merge pull request #33 from rbmata22/MessagesUpdated
+    
+    Updated messages, now working
+
+commit 8c4aabd553a1c4a6c1a909dba49edc2c28647875
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Fri Oct 25 04:32:14 2024 -0400
+
+    Messages now working
+
+commit 944682d9102b372631f88c220a2cd5dc2efed4d5
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Fri Oct 25 03:36:30 2024 -0400
+
+    Messages now working, just need to clean up UI and code
+
+commit 03b2d728cb7163cd9227e975f32b2cbe0622c61f
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Fri Oct 25 00:14:19 2024 -0400
+
+    Got the messages working, just need to fix UI
+
+commit 80d876e3d24863c06c8797394959143cebc274f4
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Thu Oct 24 23:13:31 2024 -0400
+
+    Added ability to send messages to Firestore and track timestamps
+
+commit 88eaa50fb1ab738449476701ffeed8aebaac0b6f
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Thu Oct 24 18:18:37 2024 -0400
+
+    Update and rename acceptFriendRequest.js to FriendRequests.jsx
+
+commit d8269db5353c9560c8863ed99c8b57d6c7787f3c
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Thu Oct 24 18:17:48 2024 -0400
+
+    Update Lobby.css
+
+commit 40a0fcd9227af49654551699e98a8677485dfec2
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Thu Oct 24 18:17:26 2024 -0400
+
+    Update and rename privateLobby.jsx to Lobby.jsx
+
+commit 9449c9ab63ba909de09df3bceb41eb78905cec54
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Thu Oct 24 15:42:15 2024 -0400
+
+    Create Lobby.css
+
+commit 28da440fd04fd00ecc86fa314485c3afff991392
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Thu Oct 24 15:41:41 2024 -0400
+
+    Create privateLobby.jsx
+
+commit c59d1ab9c76e0acf7f1d8df2bf3dc7ecbb8eeecd
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Thu Oct 24 15:22:04 2024 -0400
+
+    Update teamspeed.tex
+
+commit fc9f38d6d90bd3fa0d40721c84dded4b3c6279d9
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Wed Oct 23 14:19:21 2024 -0400
+
+    Create FriendRequests.css
+
+commit 34979e156d337df1e95c5c9e6ce4288fc92580ed
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Oct 23 13:54:05 2024 -0400
+
+    Added some more tests
+
+commit 50c5b88aa50f8611cba3db37d45fef77d55d44f2
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Oct 23 13:30:57 2024 -0400
+
+    Adding clarification comments to Signup and fixing logo sizes
+
+commit 7449cca225ca713e954c9b67aa4b2e88e0076fa3
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Oct 23 12:42:21 2024 -0400
+
+    Moved Support Files
+
+commit 783ef7396312e560910114a41d48f77e5807ab54
+Merge: e6b06d5 b51f1c8
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Oct 23 12:39:37 2024 -0400
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit e6b06d5b68129069af54b683445d54541d696516
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Oct 23 12:31:53 2024 -0400
+
+    Added more Login info
+
+commit b51f1c876e0006b1db36a460a7421a36a109d0ba
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Oct 23 12:20:18 2024 -0400
+
+    Update teamspeed.tex
+
+commit 9fa0b5a42e231447f6aa16f6e580ba36284cd9b8
+Merge: 6afc778 1ae0210
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Oct 23 12:07:16 2024 -0400
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 6afc778d7d642364047c583ee961434c36e0eff0
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Wed Oct 23 12:07:03 2024 -0400
+
+    Added Documentation - a lot of it didnt work/changed on my own but heres what i was asking it
+
+commit 1ae021060fc35fa073ad64f6e3bd7d3c7f52674c
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Oct 23 09:50:14 2024 -0400
+
+    Delete sprint-1/test
+
+commit aeda146146f9d989dad1c3523923b06ec9a34419
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Oct 23 09:49:32 2024 -0400
+
+    Add files via upload
+
+commit 279202d64b7a44c087ac94087fd3a92dc4231ccd
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Oct 23 09:47:58 2024 -0400
+
+    Added folder for Sprint 1
+
+commit 97447a3475afa72e5568adf6bcc9928c855199db
+Merge: 61fb194 e6f7030
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Oct 23 05:02:29 2024 -0400
+
+    Merge pull request #32 from rbmata22/messaging
+    
+    Messaging Merge into Main
+
+commit e6f7030056493fa68897caad38b39b30b8e911ba
+Merge: a13e4d4 61fb194
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Oct 23 05:02:02 2024 -0400
+
+    Merge branch 'main' into messaging
+
+commit a13e4d410e15dd28b5594d84a838b30b3e0b88b7
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Wed Oct 23 04:15:37 2024 -0400
+
+    Nearly finished messaging
+
+commit 61fb1945fe6eb3293b3c11a52a850202745a381b
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Tue Oct 22 18:47:20 2024 -0400
+
+    Create acceptFriendRequest.js
+    
+    Accept sent friend request currently stored on Firebase Server
+
+commit c9718d722146c6133b59835e9affbaef752be7f3
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Oct 22 13:20:28 2024 -0400
+
+    Fixed Login - typo
+
+commit 6b48f1d2c49b26f45f430a176da4c2b1b7157977
+Merge: 3a4904b e24fc00
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Oct 22 13:16:48 2024 -0400
+
+    Merge branch 'user-auth'
+
+commit e24fc00d9eb34f9b21c18d1f6f61ad2cc6eeb891
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Oct 22 13:16:23 2024 -0400
+
+    Fixed Guest - doc gets removed once user Logs out
+
+commit 3a4904b129af45d8853b5db32406768c8cdbd7b1
+Merge: 1658044 95720f1
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Oct 22 12:52:21 2024 -0400
+
+    Merge pull request #31 from rbmata22/user-auth
+    
+    Fixed Guest and Home
+
+commit 95720f1471893d19503d226ad35b822abff26104
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Oct 22 12:50:07 2024 -0400
+
+    Fixed Guest and Home
+
+commit 16580449eeec96f950a9f1d827c37ce59617222b
+Merge: 0d0de4e 1f6dbf4
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Oct 22 12:28:45 2024 -0400
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 0d0de4e5aea702b0ff339ae6e95255f7de720f29
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Tue Oct 22 12:27:00 2024 -0400
+
+    Working Login and SignUp
+
+commit 1f6dbf45055b5f9fc593df2a16d6fa3351a9f748
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Tue Oct 22 12:18:45 2024 -0400
+
+    Renamed user stories spreadsheet
+
+commit 3129f4775408f1885513ae803474390ebabbe578
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Tue Oct 22 04:37:41 2024 -0400
+
+    Cleaned up UI and began working on messaging database
+
+commit 72d34d5a1065d05e51074d91352b3a9b5e2385db
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Tue Oct 22 00:46:36 2024 -0400
+
+    Created messages UI, still need to work on actual messaging with database
+
+commit e89fb670915fd476767b305aa4011fde4566a3bc
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Oct 21 21:17:57 2024 -0400
+
+    Fixed UI and Login (almost)
+
+commit e402964cbda1ddd1cccf7a4f9a515d76283cb58b
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Oct 21 19:24:07 2024 -0400
+
+    Fixed screen
+
+commit 200344ac8ed3321f68f740732c4cbc2bb8f8a483
+Merge: 5213b67 4ba30c7
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sun Oct 20 18:40:08 2024 -0400
+
+    Added lucide installation step
+
+commit 5213b67a23c6c194970038d31f01a6a7fa9c910a
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sun Oct 20 18:38:54 2024 -0400
+
+    Forgot to add these other requirements to main my bad
+
+commit 865d1fc65e3cba55776fc59c509bae8e4430f245
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Sat Oct 19 19:35:04 2024 -0400
+
+    Added message input and display for admin support
+
+commit 4ba30c77ba58f94ae12a192eb8683c51df751c8d
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Sat Oct 19 18:50:48 2024 -0400
+
+    Update to Documentation.md
+
+commit d6092c47bb24059b3551ecb22aee2cd2666a1e9d
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Sat Oct 19 18:50:00 2024 -0400
+
+    Added admin support button and chat screen
+
+commit cab75a34023d2220b04b99d0e7e8a69febb6ffbd
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Sat Oct 19 15:34:06 2024 -0400
+
+    Update to Documentation.md
+
+commit 1d0bb0716f0e2288445f119e3ff5e9c80a5690f4
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Sat Oct 19 14:44:56 2024 -0400
+
+    Initial commit for messaging
+
+commit 15e1cdcd30de2e91d09df3cf08dc0f3d72ab583b
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Oct 17 21:08:56 2024 -0400
+
+    Work in progress on Auth / UI
+
+commit b379c939e8a75c7a9bd39a7baa5bf3df5b9e8dda
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Oct 17 18:30:15 2024 -0400
+
+    Working on design
+
+commit 4690b45078cd9fe74cd1c760f9399819a8daebcd
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Oct 17 14:22:24 2024 -0400
+
+    Adding Documentation
+
+commit 4b82d9de310b9a8ad4806f904c14c34d840a5b26
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Thu Oct 17 14:16:12 2024 -0400
+
+    Added Dependencies
+
+commit eb1e40a57703a74eb804b9c178d3044fa54d9f01
+Author: davebinkley <binkley@cs.loyola.edu>
+Date:   Wed Oct 16 07:38:38 2024 -0400
+
+    grading of design
+
+commit 7c0520c533c72de4bfcbafb600eb8c1c64b773dd
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Mon Oct 14 15:42:00 2024 -0400
+
+    Updated user stories based on feedback from Discord
+
+commit 73893cd74fad07ae10a76ad647ae5c8ca836c539
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Mon Oct 14 15:36:46 2024 -0400
+
+    Add files via upload
+
+commit 0d64fb73357ad0ac50d4a7ccda737530c67e14c5
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Oct 14 10:35:51 2024 -0400
+
+    Add files via upload
+    
+    Revised User Stories
+
+commit 57e54718af3851927db6fee656cf4dfd8237483c
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sat Oct 12 12:38:57 2024 -0400
+
+    Updated README
+
+commit 0a8da64f69600e6835a8f6f88afeb3d873b741e3
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Fri Oct 11 15:16:59 2024 -0400
+
+    Rename Blank diagram.jpeg to bets-use-case.jpeg
+
+commit f203d7e72849efa49910a25e512f935945f57373
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Fri Oct 11 15:16:26 2024 -0400
+
+    Added use-case diagram
+
+commit 73f998e0d034caec9336872f16ed151284cdc57b
+Merge: 66bc440 8e16c4e
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Fri Oct 11 14:55:29 2024 -0400
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 66bc4405afc5e4c7b9fca2adc29413a4fd8c2db0
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Fri Oct 11 14:55:20 2024 -0400
+
+    Added Full Monty - Silas
+
+commit 8e16c4e63b4d5de3c3980f258e77f4f843411519
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Fri Oct 11 14:46:28 2024 -0400
+
+    Added use-case for processing bets
+
+commit 2b176395a00eb48354e106722dfa785096d8c5d8
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Fri Oct 11 14:45:15 2024 -0400
+
+    Added use-case for processing bets
+
+commit 5f4b8a736585aaf913ee254623490c0e9cf83ac9
+Merge: 32db3f0 a9e6878
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Fri Oct 11 14:22:35 2024 -0400
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 32db3f01de07f7e6cde8bd22dec58a6eab272b6a
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Fri Oct 11 14:22:21 2024 -0400
+
+    Added Use Cases Folder
+
+commit a9e6878cdeb352d46d30021ecb2ea63d6314dcef
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Oct 9 00:15:47 2024 -0400
+
+    Finished uploading to LaTeX folder
+
+commit 59d9d2a9ec9ed6150c8d5e7c7a1944685e96aed4
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Oct 9 00:15:11 2024 -0400
+
+    Added files for LaTeX document
+
+commit f074b13775dda603c5f5b99bcb585dd7c3fb17ce
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Oct 9 00:14:17 2024 -0400
+
+    Added LaTeX folder
+
+commit f1593bfbd1855a055212fdac608990daa66ad36b
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Tue Oct 8 20:29:32 2024 -0400
+
+    Added three tier architecture figure
+
+commit 3b768824826c307319381b570a395c9bb1b02dca
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Tue Oct 8 20:27:29 2024 -0400
+
+    Updated directory name
+
+commit 3cbe05f2b6d500226ab32ecc7735dfef1e94d5c2
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Oct 7 18:44:04 2024 -0400
+
+    Added UI Drawup
+
+commit dfcd77f1e8802639a620252c5ffc7f0767ef450d
+Merge: 39e4d73 d158421
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sun Oct 6 19:42:55 2024 -0400
+
+    Merge branch 'main' of github.com:rbmata22/CS482-Triangle-Project-GoFish
+
+commit 39e4d73206efafe14056346dae4d66e6d17a4bcb
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Sun Oct 6 19:42:48 2024 -0400
+
+    Added Figures folder
+
+commit d15842147911869b27255b6c953a101bded99183
+Author: davebinkley <binkley@cs.loyola.edu>
+Date:   Sun Sep 29 15:08:06 2024 -0400
+
+    graded user stories for real!
+
+commit bd79197ac6ba8b6f266bbdcfa6a1d1321b6ee375
+Author: davebinkley <binkley@cs.loyola.edu>
+Date:   Sun Sep 29 06:36:53 2024 -0400
+
+    grading of requirements
+
+commit 12fa7e7ad3620187b684ef1d943ce872ca9422fb
+Author: cwmorrone <70601877+cwmorrone@users.noreply.github.com>
+Date:   Wed Sep 25 08:41:13 2024 -0400
+
+    Update Halloween.java
+
+commit bdf424dbfa1bd467b34049f94cf0dcf5cbd2d511
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Tue Sep 24 19:31:56 2024 -0400
+
+    Added comments
+
+commit f94a3d4d5057337f0814ebd2ecc84399d78c3866
+Author: MarleyHW <maholt-williams@loyola.edu>
+Date:   Tue Sep 24 12:32:32 2024 -0400
+
+    Marley's Update
+
+commit 8b6e70f4c44b23c670c69fd916437314c52a2dfb
+Author: SGreen24 <113150613+SGreen24@users.noreply.github.com>
+Date:   Mon Sep 23 18:00:24 2024 -0400
+
+    Silas fav Halloween Costume
+
+commit d621fac64110343a407c545cb5d76376a2e92539
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Mon Sep 23 16:12:17 2024 -0400
+
+    Added Excel sheet for User Stories
+
+commit 21957f5d5859850a302bed8bfaa6a3e72939f2b1
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Mon Sep 23 15:58:22 2024 -0400
+
+    Added Halloween.java and my favorite halloween costume
+
+commit a642d0e47d110823214befd081c7472be7291435
+Author: rbmata22 <ry.mata22@gmail.com>
+Date:   Mon Sep 23 15:56:26 2024 -0400
+
+    Added Halloween.java and my favorite halloween costume
+
+commit b885e479c9a725af70d2445e1b18d12b07c53663
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Sep 18 10:24:25 2024 -0400
+
+    Update README.md
+
+commit 191e9cb682df55b81dc845c694ec72ec98ac859d
+Author: rbmata22 <112995027+rbmata22@users.noreply.github.com>
+Date:   Wed Sep 18 09:23:33 2024 -0400
+
+    Initial commit
