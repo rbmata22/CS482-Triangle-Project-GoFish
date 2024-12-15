@@ -5,6 +5,7 @@ import { setDoc, doc } from 'firebase/firestore'
 import SignUp from './SignUp'
 import { act } from 'react'
 
+
 /* 
 *  Mock Firebase modules and functions for testing 
 *  
@@ -75,7 +76,7 @@ describe('SignUp Component', () => {
         moveToStepTwo()
         
         // Select a logo but leave username empty
-        fireEvent.click(screen.getByTestId('dog-icon'))
+        fireEvent.click(screen.getByTestId('ghost-icon'))
         fireEvent.click(screen.getByText('Create Account'))
         
         expect(screen.getByText('Please choose a logo and enter a username')).toBeInTheDocument()
@@ -102,6 +103,48 @@ describe('SignUp Component', () => {
         
         expect(screen.getByText('Please enter your email and password')).toBeInTheDocument()
     })
+    it('handles Google username and logo submission correctly', async () => {
+        const selectedLogo = 'Cat';  // Example selected logo
+        const username = 'testuser';  // Example username
+        const setError = jest.fn();
+        const navigate = jest.fn();
+      
+        // Mock Firebase auth and Firestore functions
+        const userMock = { uid: 'mockUserUID' };
+        const setDocMock = jest.fn().mockResolvedValue({});
+        const navigateMock = jest.fn();
+      
+        // Simulate component rendering
+        render(
+          <SignUp 
+            selectedLogo={selectedLogo}
+            username={username}
+            setError={setError}
+            navigate={navigate}
+            setDoc={setDocMock}
+          />
+        );
+      
+        // Call the function
+        await handleGoogleUsernameLogoSubmit();
+      
+        // Assertions
+        expect(setDocMock).toHaveBeenCalledWith(doc(db, 'Users', userMock.uid), {
+          username,
+          logo: selectedLogo,
+          emailAccount: false,
+          googleAccount: true,
+          virtualCurrency: 500,
+          friends: [],
+          gamesPlayed: 0,
+          gamesWon: 0,
+        });
+      
+        expect(localStorage.setItem).toHaveBeenCalledWith('authType', 'SignUp');
+        expect(navigate).toHaveBeenCalledWith('/home');
+        expect(setError).not.toHaveBeenCalled();
+      });
+    
 
     // Testcase 4: Email with no '@' symbol
     it('Shows error for invalid email format', async () => {
@@ -133,6 +176,8 @@ describe('SignUp Component', () => {
         moveToStepTwo()
         
         const dogIcon = screen.getByTestId('dog-icon')
+        const birdIcon=screen.getByTestId('bird-icon')
+        const catIcon = screen.getByTestId('cat-icon')
         fireEvent.click(dogIcon)
         
         expect(dogIcon.className).toContain('selected')
