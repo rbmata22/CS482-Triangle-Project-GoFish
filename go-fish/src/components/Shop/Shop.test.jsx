@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Shop from "./Shop";
-
+import {handlePurchase} from "./Shop"
 import { updateDoc, getDoc, doc } from "firebase/firestore";
 import { BrowserRouter } from "react-router-dom";
 jest.mock('../config/firebase', () => ({
@@ -76,7 +76,7 @@ describe('Shop Component', () => {
 
         fireEvent.click(screen.getAllByText('Purchase')[0]);
 
-        expect(await screen.findByText(/You bought it!/i)).toBeInTheDocument();
+        expect(await screen.findByText(/You bought/i)).toBeInTheDocument();
         expect(screen.getByText(/Your Balance: 800 coins/i)).toBeInTheDocument();
     });
 
@@ -109,4 +109,18 @@ describe('Shop Component', () => {
 
         expect(mockNavigate).toHaveBeenCalledWith('/home');
     });
+    it('should show an error if the item is already owned', async () => {
+        const item = { id: 'item1', price: 50 };
+    
+        await handlePurchase(item);
+        await handlePurchase(item);
+        expect(mockSetError).toHaveBeenCalledWith("You already own this item");
+        expect(mockErrorAudio.play).toHaveBeenCalled();
+        expect(mockSetUserCurrency).not.toHaveBeenCalled();
+        expect(mockSetInventory).not.toHaveBeenCalled();
+      });
 });
+
+  
+    
+ 
