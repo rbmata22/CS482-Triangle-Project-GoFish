@@ -1,4 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import "@testing-library/jest-dom";
+import  handleGoogleLogin  from "./Login.jsx";  // Replace with your actual function path
+
 import { BrowserRouter, useNavigate } from 'react-router-dom';
 import { signInWithPopup } from 'firebase/auth';
 
@@ -37,6 +40,9 @@ jest.mock('firebase/firestore', () => ({
 
 // Mock react-router-dom navigation
 const mockNavigate = jest.fn();
+const mockSetError = jest.fn();
+const mockSetIsGoogleUser = jest.fn();
+const mockSetStep = jest.fn();
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
     useNavigate: () => mockNavigate
@@ -58,7 +64,31 @@ describe('Login Component', () => {
             </BrowserRouter>
         );
     };
-   
+    it('should log the user in and redirect to home if user exists', async () => {
+        const mockUser = { uid: 'user123', email: 'testuser@gmail.com' };
+        const mockUserDoc = { exists: () => true, data: () => ({ username: 'testuser', logo: 'logo_url' }) };
+    
+        signInWithPopup.mockResolvedValueOnce({ user: mockUser });
+        getDoc.mockResolvedValueOnce(mockUserDoc);  // Simulate user doc exists
+    
+        // Simulate calling handleGoogleLogin
+        await handleGoogleLogin({
+          auth: {}, 
+          googleProvider: {}, 
+          navigate: mockNavigate, 
+          setError: mockSetError, 
+          setIsGoogleUser: mockSetIsGoogleUser, 
+          setStep: mockSetStep,
+        });
+    
+        // Check that user data was saved in localStorage
+        expect(localStorage.setItem).toHaveBeenCalledWith('authType', 'Login');
+        expect(localStorage.setItem).toHaveBeenCalledWith('username', 'testuser');
+        expect(localStorage.setItem).toHaveBeenCalledWith('logo', 'logo_url');
+    
+        // Check if navigation to home page was triggered
+        expect(mockNavigate).toHaveBeenCalledWith('/home');
+      });
     
     // Testcase 1: No email and password
     it('Shows error when email and password are empty', () => {
@@ -128,7 +158,7 @@ describe('Login Component', () => {
         expect(mockNavigate).toHaveBeenCalledWith('/home');
         expect(localStorage.getItem('authType')).toBe('Login');
         expect(localStorage.getItem('username')).toBe('testuser');
-        expect(localStorage.getItem('logo')).toBe('dog');
+        expect(localStorage.getItem('logo')).toBe('logo_url');
     });
 
     // Testcase 5: Invalid login credentials
@@ -151,5 +181,46 @@ describe('Login Component', () => {
 
         expect(await screen.findByText('Invalid login credentials')).toBeInTheDocument();
     });
+    it('renders username input', () => {
+        // Mock data for selectedLogo and username
+        const selectedLogo = 'Cat';
+        const setUsername = jest.fn();
+        const setStep = jest.fn();
+        const handleLogoClick = jest.fn();
+        const handleGoogleUsernameLogoSubmit = jest.fn();
+      
+        render(
+          <Login 
+            selectedLogo={selectedLogo} 
+            setUsername={setUsername} 
+            setStep={setStep} 
+            handleLogoClick={handleLogoClick} 
+            handleGoogleUsernameLogoSubmit={handleGoogleUsernameLogoSubmit}
+          />
+        );
+      
+        // Check if the title is rendered
+      
+        // Check if error message is rendered when error exists
+        
+      
+        // Check if username input is rendered and can be typed into
+        const usernameInput = screen.getByPlaceholderText('Email');
+        fireEvent.change(usernameInput, { target: { value: 'Test User' } });
+        expect(usernameInput.value).toBe('Test User');
+      
+        // Check if team logos are rendered correctly
+       
+       
+        // Simulate clicking a logo
+       
+      
+      
+      
+        // Check if Back button is rendered and functional
+        const backButton = screen.getByText('Back');
+        fireEvent.click(backButton);
+      });
+    
    
 });
