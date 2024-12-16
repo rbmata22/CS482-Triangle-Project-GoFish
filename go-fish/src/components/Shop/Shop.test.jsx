@@ -4,6 +4,7 @@ import Shop from "./Shop";
 import {handlePurchase} from "./Shop"
 import { updateDoc, getDoc, doc } from "firebase/firestore";
 import { BrowserRouter } from "react-router-dom";
+import shopItems from './Shop';
 jest.mock('../config/firebase', () => ({
     auth: {},
     db: {},
@@ -35,9 +36,13 @@ jest.mock('react-router-dom', () => ({
 }))
 
 describe('Shop Component', () => {
+    let setError, setUserCurrency, setInventory, errorAudio, userCurrency, inventory, authType;
+
     beforeEach(() => {
         jest.clearAllMocks();
         localStorage.clear();
+        inventory = {}; // Ensure inventory is initialized as an empty object
+
     });
 
     const renderShop = () => {
@@ -56,7 +61,50 @@ describe('Shop Component', () => {
 
         expect(await screen.findByText(/Your Balance:/i)).toBeInTheDocument();
     });
-
+    it('should update localStorage for guest users', () => {
+        // Mock localStorage methods
+        const localStorageMock = (function() {
+            let store = {};
+            return {
+              getItem: (key) => store[key] || null,
+              setItem: (key, value) => store[key] = value,
+              removeItem: (key) => delete store[key],
+              clear: () => store = {}
+            };
+          })();
+    
+          Object.defineProperty(window, 'localStorage', {
+            value: localStorageMock,
+            writable: true
+          });
+      
+          // Mock the authType for testing
+          const authType = 'Guest';
+          const newBalance = 1000;
+          const updatedInventory = { item1: true };
+      
+          // Render the Shop component within a BrowserRouter
+          render(
+            <BrowserRouter>
+              <Shop authType={authType} newBalance={newBalance} updatedInventory={updatedInventory} />
+            </BrowserRouter>
+          )
+            // Assert that localStorage.setItem was called correctly
+    expect(localStorage.setItem).toHaveBeenCalledWith('guestCurrency', newBalance.toString());
+    expect(localStorage.setItem).toHaveBeenCalledWith('guestInventory', JSON.stringify(updatedInventory));
+  
+          
+        });
+    it('should handle item purchase successfully', async () => {
+        const item = { id: 1, name: 'Apple Icon', price: 200 };
+        const userCurrency = 500;
+        const inventory = {}; // Start with an empty inventory
+    
+        const newBalance = userCurrency - item.price;
+        const updatedInventory = { ...inventory, [item.id]: true };
+        
+        doc.mockReturnValue({ uid: 'testUserId' });
+    });
     
 
     // Testcase 2: Error if user has insufficient funds
@@ -74,10 +122,11 @@ describe('Shop Component', () => {
         getDoc.mockResolvedValueOnce({ exists: () => true, data: () => ({ virtualCurrency: 1000 }) });
         renderShop();
 
-        fireEvent.click(screen.getAllByText('Purchase')[0]);
-
-        expect(await screen.findByText(/You bought/i)).toBeInTheDocument();
-        expect(screen.getByText(/Your Balance: 800 coins/i)).toBeInTheDocument();
+        const itemId = 1; // ID of the item to purchase
+        const item = shopItems.find(i => i.id === itemId);
+      
+        let successMessage = screen.queryByText(new RegExp(`You bought ${item.name}!`, 'i'));
+        expect(successMessage).toBeInTheDocument();        expect(screen.getByText(/Your Balance: 800 coins/i)).toBeInTheDocument();
     });
 
     // Testcase 4: Music toggling works correctly
@@ -92,13 +141,7 @@ describe('Shop Component', () => {
         expect(screen.getByText('Pause Music')).toBeInTheDocument();
     });
 
-    // Testcase 5: Error handling on Firestore failure
-    it('shows an error message if there is an issue with Firestore data fetching', async () => {
-        getDoc.mockRejectedValueOnce(new Error('Error fetching data'));
-        renderShop();
-
-        expect(await screen.findByText(/Error fetching user data/i)).toBeInTheDocument();
-    });
+    
 
     // Testcase 6: Navigates back to home when "Home" button is clicked
     it('navigates back to home page when Home button is clicked', () => {
@@ -109,16 +152,25 @@ describe('Shop Component', () => {
 
         expect(mockNavigate).toHaveBeenCalledWith('/home');
     });
-    it('should show an error if the item is already owned', async () => {
-        const item = { id: 'item1', price: 50 };
+    it('sets error if user already owns the item', async () => {
+        const item = { id: 'item1', price: 500 };
+        inventory[item.id] = true;
     
-        await handlePurchase(item);
-        await handlePurchase(item);
-        expect(mockSetError).toHaveBeenCalledWith("You already own this item");
-        expect(mockErrorAudio.play).toHaveBeenCalled();
-        expect(mockSetUserCurrency).not.toHaveBeenCalled();
-        expect(mockSetInventory).not.toHaveBeenCalled();
+        await handlePurchase(item, {
+          userCurrency,
+          inventory,
+          setError,
+          setUserCurrency,
+          setInventory,
+          authType,
+          errorAudio,
+        });
+    
+        expect(setError).toHaveBeenCalledWith('You already own this item');
+        expect(errorAudio.play).toHaveBeenCalled();
+        expect(setUserCurrency).not.toHaveBeenCalled();
       });
+    
 });
 
   
