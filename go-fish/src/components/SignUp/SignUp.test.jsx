@@ -5,7 +5,6 @@ import { setDoc, doc } from 'firebase/firestore'
 import SignUp from './SignUp'
 import { act } from 'react'
 
-
 /* 
 *  Mock Firebase modules and functions for testing 
 *  
@@ -81,7 +80,30 @@ describe('SignUp Component', () => {
         
         expect(screen.getByText('Please choose a logo and enter a username')).toBeInTheDocument()
     })
-
+    it('calls setError with the correct message when sign-up fails', async () => {
+        // Mock the Firebase function to throw an error
+        const mockErrorMessage = 'Invalid email';
+        createUserWithEmailAndPassword.mockRejectedValue(new Error(mockErrorMessage));
+    
+        // Mock useState for error
+        const setError = jest.fn();
+    
+        // Render the component, passing setError as a prop or mocking it
+        render(<SignUp />);
+    
+        // Simulate user input for required fields
+        fireEvent.change(screen.getByPlaceholderText(/email/i), { target: { value: 'test@example.com' } });
+        fireEvent.change(screen.getByPlaceholderText(/password/i), { target: { value: 'password123' } });
+    
+        // Simulate form submission or button click
+        fireEvent.click(screen.getByRole('button', { name: /sign up/i }));
+    
+        // Wait for the error handling to occur
+        await waitFor(() => {
+          // Check if setError is called with the expected error message
+          expect(screen.getByText(mockErrorMessage)).toBeInTheDocument();
+        });
+      });
     // Testcase 2: User inputs username but no logo
     it('Shows error when logo is not selected', async () => {
         renderSignUp()
